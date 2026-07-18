@@ -1,0 +1,75 @@
+# Render Blueprint — deploys 4 independent services, each with its own domain.
+#   buildmyitch-api        → the shared backend (Node web service)
+#   meridukaan             → MeriDukaan Online  (voice → website)
+#   quickpay / stocksense  → the other two apps
+#
+# Each frontend is a separate Static Site pointed at its own directory, so you can
+# attach a custom domain to each one independently in the Render dashboard.
+#
+# After the first deploy: set VITE_API_BASE on each static site to the backend's URL
+# (e.g. https://buildmyitch-api.onrender.com/api) and paste your ANTHROPIC_API_KEY
+# into the backend service's Environment tab.
+
+services:
+  # ---------- Backend API ----------
+  - type: web
+    name: buildmyitch-api
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install --include=dev
+    startCommand: npm run start
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false            # paste your real key in the dashboard (never commit it)
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_EMAIL
+        value: meetjethwa3@gmail.com
+      - key: PORT
+        value: "4000"
+
+  # ---------- MeriDukaan Online (voice → website) ----------
+  - type: web
+    runtime: static
+    name: meridukaan
+    rootDir: voicestore
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_BASE
+        sync: false            # set to https://<backend>.onrender.com/api
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+  # ---------- QuickPay (payroll) ----------
+  - type: web
+    runtime: static
+    name: quickpay
+    rootDir: quickpay
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_BASE
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+  # ---------- StockSense (restock forecasts) ----------
+  - type: web
+    runtime: static
+    name: stocksense
+    rootDir: stocksense
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_BASE
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

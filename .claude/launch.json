@@ -1,0 +1,9 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "backend", "runtimeExecutable": "npm", "runtimeArgs": ["run", "backend"], "port": 4000 },
+    { "name": "voicestore", "runtimeExecutable": "npm", "runtimeArgs": ["run", "voicestore"], "port": 5173 },
+    { "name": "quickpay", "runtimeExecutable": "npm", "runtimeArgs": ["run", "quickpay"], "port": 5174 },
+    { "name": "stocksense", "runtimeExecutable": "npm", "runtimeArgs": ["run", "stocksense"], "port": 5175 }
+  ]
+}

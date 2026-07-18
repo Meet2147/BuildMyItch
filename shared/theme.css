@@ -1,0 +1,130 @@
+/* Neumorphism design system — shared across VoiceStore, QuickPay, StockSense.
+   Each app sets --accent on :root to tint itself. */
+
+:root {
+  --bg: #e8ebf2;
+  --bg-dark: #dfe3ec;
+  --text: #4a5169;
+  --text-soft: #8b90a6;
+  --text-strong: #333a56;
+  --accent: #6d7cff;
+  --accent-soft: #6d7cff22;
+  --danger: #e07a5f;
+  --ok: #4caf87;
+  --radius: 18px;
+  --shadow-light: #ffffff;
+  --shadow-dark: #c4c9d6;
+  --sh-out: -6px -6px 12px var(--shadow-light), 6px 6px 14px var(--shadow-dark);
+  --sh-out-sm: -3px -3px 7px var(--shadow-light), 3px 3px 7px var(--shadow-dark);
+  --sh-in: inset -4px -4px 8px var(--shadow-light), inset 5px 5px 10px var(--shadow-dark);
+  --sh-in-sm: inset -2px -2px 5px var(--shadow-light), inset 3px 3px 6px var(--shadow-dark);
+  font-family: "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { color: var(--text-strong); font-weight: 800; margin: 0; }
+a { color: var(--accent); }
+
+.neo-card {
+  background: var(--bg);
+  border-radius: var(--radius);
+  box-shadow: var(--sh-out);
+  padding: 22px;
+}
+.neo-inset {
+  background: var(--bg);
+  border-radius: var(--radius);
+  box-shadow: var(--sh-in);
+}
+
+.neo-btn {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--text-strong);
+  background: var(--bg);
+  border-radius: 14px;
+  padding: 12px 20px;
+  box-shadow: var(--sh-out-sm);
+  transition: box-shadow 0.12s ease, transform 0.05s ease, color 0.12s ease;
+}
+.neo-btn:hover { color: var(--accent); }
+.neo-btn:active { box-shadow: var(--sh-in-sm); transform: translateY(1px); }
+.neo-btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: var(--sh-in-sm); }
+.neo-btn.primary { color: #fff; background: var(--accent);
+  box-shadow: -4px -4px 9px var(--shadow-light), 4px 4px 10px var(--shadow-dark); }
+.neo-btn.primary:hover { color: #fff; filter: brightness(1.05); }
+.neo-btn.ghost { box-shadow: none; padding: 8px 12px; }
+.neo-btn.ghost:active { box-shadow: none; }
+.neo-btn.danger { color: var(--danger); }
+
+.neo-input, .neo-textarea, .neo-select {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--text-strong);
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 13px 16px;
+  box-shadow: var(--sh-in-sm);
+}
+.neo-textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
+.neo-input::placeholder, .neo-textarea::placeholder { color: var(--text-soft); }
+
+.neo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 5px 11px;
+  border-radius: 20px;
+  background: var(--bg);
+  box-shadow: var(--sh-in-sm);
+  color: var(--text-soft);
+}
+.neo-badge.accent { color: var(--accent); }
+.neo-badge.ok { color: var(--ok); }
+.neo-badge.danger { color: var(--danger); }
+.neo-badge.high { color: var(--danger); }
+.neo-badge.medium { color: #d69b43; }
+.neo-badge.low { color: var(--ok); }
+
+.neo-chip {
+  cursor: pointer;
+  user-select: none;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 12px;
+  box-shadow: var(--sh-out-sm);
+  color: var(--text-soft);
+  transition: all 0.12s ease;
+}
+.neo-chip.on { box-shadow: var(--sh-in-sm); color: var(--accent); }
+
+.muted { color: var(--text-soft); }
+.row { display: flex; gap: 14px; align-items: center; }
+.col { display: flex; flex-direction: column; gap: 14px; }
+.grow { flex: 1; }
+.wrap { flex-wrap: wrap; }
+.spin { animation: spin 0.8s linear infinite; display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.fade-in { animation: fade 0.35s ease; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--shadow-dark); border-radius: 8px; }
