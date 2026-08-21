@@ -2,19 +2,21 @@
   "name": "razorpay-itch",
   "private": true,
   "version": "0.1.0",
-  "description": "Three neumorphic SaaS tools for small shop owners, unified under an admin-managed access layer.",
+  "description": "Four neumorphic SaaS tools unified under an admin-managed access layer.",
   "workspaces": [
     "backend",
     "voicestore",
     "quickpay",
-    "stocksense"
+    "stocksense",
+    "shortcutforge"
   ],
   "scripts": {
     "backend": "npm --workspace backend run dev",
     "voicestore": "npm --workspace voicestore run dev",
     "quickpay": "npm --workspace quickpay run dev",
     "stocksense": "npm --workspace stocksense run dev",
-    "dev": "concurrently -n backend,voice,pay,stock -c blue,green,magenta,cyan \"npm run backend\" \"npm run voicestore\" \"npm run quickpay\" \"npm run stocksense\""
+    "shortcutforge": "npm --workspace shortcutforge run dev",
+    "dev": "concurrently -n backend,voice,pay,stock,forge -c blue,green,magenta,cyan,yellow \"npm run backend\" \"npm run voicestore\" \"npm run quickpay\" \"npm run stocksense\" \"npm run shortcutforge\""
   },
   "devDependencies": {
     "concurrently": "^9.1.0"

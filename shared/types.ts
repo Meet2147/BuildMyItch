@@ -1,4 +1,4 @@
-export type AppKey = "voicestore" | "quickpay" | "stocksense";
+export type AppKey = "voicestore" | "quickpay" | "stocksense" | "shortcutforge";
 
 export interface User {
   id: number;
@@ -13,6 +13,7 @@ export const APP_META: Record<AppKey, { name: string; tagline: string; accent: s
   voicestore: { name: "MeriDukaan Online", tagline: "Boliye, aur apni dukaan ki website ban jaaye", accent: "#6d7cff", icon: "🏪" },
   quickpay: { name: "QuickPay", tagline: "One-tap payroll for tiny teams", accent: "#4caf87", icon: "💸" },
   stocksense: { name: "StockSense", tagline: "Know what to reorder, before you run out", accent: "#e08a3c", icon: "📦" },
+  shortcutforge: { name: "ShortcutForge", tagline: "Say what your iPhone should do — get the Shortcut", accent: "#8a6dff", icon: "⚡" },
 };
 
 export function isAdmin(u: User | null) {

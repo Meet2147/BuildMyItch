@@ -65,6 +65,16 @@ CREATE TABLE IF NOT EXISTS sales (
   day        TEXT NOT NULL,                 -- YYYY-MM-DD
   qty        INTEGER NOT NULL DEFAULT 0
 );
+
+-- ShortcutForge: generated iOS shortcut plans
+CREATE TABLE IF NOT EXISTS shortcuts (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  owner_id   INTEGER NOT NULL,
+  name       TEXT NOT NULL,
+  request    TEXT,
+  spec       TEXT NOT NULL,                 -- JSON shortcut plan
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
 `);
 
 // Seed the super-admin (no password yet — they claim it on first login).

@@ -8,6 +8,7 @@ import adminRoutes from "./routes/admin.js";
 import voicestoreRoutes from "./routes/voicestore.js";
 import quickpayRoutes from "./routes/quickpay.js";
 import stocksenseRoutes from "./routes/stocksense.js";
+import shortcutforgeRoutes from "./routes/shortcutforge.js";
 
 const app = express();
 app.use(cors());
@@ -20,6 +21,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/voicestore", voicestoreRoutes);
 app.use("/api/quickpay", quickpayRoutes);
 app.use("/api/stocksense", stocksenseRoutes);
+app.use("/api/shortcutforge", shortcutforgeRoutes);
 
 const PORT = Number(process.env.PORT) || 4000;
 app.listen(PORT, () => {

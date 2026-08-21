@@ -1,7 +1,7 @@
-// The three apps and the fine-grained actions each exposes.
+// The apps and the fine-grained actions each exposes.
 // Admin (role === 'admin') implicitly has every app + every action.
 
-export const APPS = ["voicestore", "quickpay", "stocksense"] as const;
+export const APPS = ["voicestore", "quickpay", "stocksense", "shortcutforge"] as const;
 export type AppKey = (typeof APPS)[number];
 
 export const PERMISSIONS: Record<AppKey, { key: string; label: string }[]> = {
@@ -19,6 +19,10 @@ export const PERMISSIONS: Record<AppKey, { key: string; label: string }[]> = {
     { key: "stocksense:view", label: "View inventory" },
     { key: "stocksense:manage", label: "Manage products & sales" },
     { key: "stocksense:forecast", label: "Run demand forecasts" },
+  ],
+  shortcutforge: [
+    { key: "shortcutforge:view", label: "View & download shortcuts" },
+    { key: "shortcutforge:create", label: "Generate shortcuts" },
   ],
 };
 

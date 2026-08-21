@@ -1,7 +1,7 @@
-# Render Blueprint — deploys 4 independent services, each with its own domain.
-#   buildmyitch-api        → the shared backend (Node web service)
-#   meridukaan             → MeriDukaan Online  (voice → website)
-#   quickpay / stocksense  → the other two apps
+# Render Blueprint — deploys 5 independent services, each with its own domain.
+#   buildmyitch-api                        → the shared backend (Node web service)
+#   meridukaan                             → MeriDukaan Online  (voice → website)
+#   quickpay / stocksense / shortcutforge  → the other three apps
 #
 # Each frontend is a separate Static Site pointed at its own directory, so you can
 # attach a custom domain to each one independently in the Render dashboard.
@@ -64,6 +64,21 @@ services:
     runtime: static
     name: stocksense
     rootDir: stocksense
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_BASE
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+  # ---------- ShortcutForge (idea → iOS Shortcut) ----------
+  - type: web
+    runtime: static
+    name: shortcutforge
+    rootDir: shortcutforge
     buildCommand: npm install && npm run build
     staticPublishPath: dist
     envVars:
