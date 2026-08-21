@@ -15,9 +15,11 @@ struct RootView: View {
                 .tabItem { Label("Progress", systemImage: "chart.line.uptrend.xyaxis") }
         }
         .tint(Theme.accent)
+        // Show the quiz until a profile exists — this also catches installs
+        // upgraded from a build whose onboarding predated the quiz.
         .fullScreenCover(isPresented: .init(
-            get: { !hasOnboarded },
-            set: { hasOnboarded = !$0 }
+            get: { !hasOnboarded || store.profile == nil },
+            set: { _ in }   // dismissed only by completing the quiz
         )) {
             OnboardingFlowView { profile in
                 store.setProfile(profile)
