@@ -1,0 +1,782 @@
+<title>JawForge</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap">
+<style>
+  :root{
+    --stage-bg:#eef0f4; --stage-ink:#20242c; --stage-mut:#6a7180;
+    --stage-card:#ffffff; --stage-line:#d9dde4; --accent:#128aa6;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --stage-bg:#0a0c12; --stage-ink:#e8eaf0; --stage-mut:#8b93a4;
+      --stage-card:#141824; --stage-line:#252b3a; --accent:#3bc9e6;
+    }
+  }
+  :root[data-theme="dark"]{
+    --stage-bg:#0a0c12; --stage-ink:#e8eaf0; --stage-mut:#8b93a4;
+    --stage-card:#141824; --stage-line:#252b3a; --accent:#3bc9e6;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{
+    background:var(--stage-bg); color:var(--stage-ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    min-height:100vh; display:flex; flex-direction:column; align-items:center;
+    padding:28px 16px 48px; gap:18px;
+  }
+  .stage-head{text-align:center; max-width:600px}
+  .stage-head h1{font-family:Nunito,-apple-system,sans-serif;font-weight:900;font-size:28px;letter-spacing:-.5px}
+  .stage-head h1 .bone{color:var(--accent)}
+  .stage-head p{color:var(--stage-mut);font-size:13.5px;margin-top:4px;line-height:1.5}
+  .tour{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .tour button{font:600 12.5px/1 -apple-system,sans-serif;color:var(--stage-mut);background:var(--stage-card);border:1px solid var(--stage-line);border-radius:999px;padding:8px 14px;cursor:pointer}
+  .tour button:hover,.tour button:focus-visible{color:var(--accent);border-color:var(--accent);outline:none}
+  .stage-note{color:var(--stage-mut);font-size:12px;max-width:500px;text-align:center;line-height:1.55}
+
+  /* ---------- Phone: neumorphic soft-UI, committed light look ---------- */
+  .phone{
+    --bg:#e3e8f2; --ink:#293047; --mut:#6d768e;
+    --cy:#17a0bf; --vi:#735ddb; --good:#1f9e61; --warn:#cf8f18; --bad:#cf4444;
+    --sd:rgba(163,177,198,.55); --sl:rgba(255,255,255,.92);
+    --grad:linear-gradient(135deg,var(--cy),var(--vi));
+    width:min(392px,100%); aspect-ratio:392/812;
+    background:var(--bg); color:var(--ink);
+    border-radius:52px; border:10px solid #1d2230;
+    box-shadow:0 24px 60px rgba(20,26,40,.35);
+    position:relative; overflow:hidden; display:flex; flex-direction:column;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  }
+  .nr{background:var(--bg);box-shadow:7px 7px 14px var(--sd),-7px -7px 14px var(--sl)}
+  .ni{background:var(--bg);box-shadow:inset 5px 5px 10px rgba(163,177,198,.5),inset -5px -5px 10px var(--sl)}
+  .island{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:112px;height:30px;background:#1d2230;border-radius:999px;z-index:40}
+  .statusbar{display:flex;justify-content:space-between;align-items:center;padding:14px 30px 2px;font-size:13px;font-weight:700;flex:none}
+  .home-ind{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:120px;height:4px;border-radius:4px;background:rgba(41,48,71,.3);z-index:40}
+
+  .navbar{padding:10px 20px 8px;font-size:24px;font-weight:800;letter-spacing:-.4px;display:flex;align-items:center;gap:8px;flex:none}
+  .navbar .pro-badge{margin-left:auto;font:800 10px -apple-system,sans-serif;color:var(--cy);padding:7px 12px;border-radius:12px;cursor:pointer;display:flex;gap:5px;align-items:center;border:none}
+  .navbar.inline{font-size:16px;justify-content:center;position:relative;padding-top:12px}
+  .backbtn{position:absolute;left:14px;top:8px;border:none;color:var(--cy);font:700 13px -apple-system,sans-serif;cursor:pointer;padding:8px 12px;border-radius:12px;background:var(--bg)}
+
+  .content{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:4px 16px 90px;scrollbar-width:none}
+  .content::-webkit-scrollbar{display:none}
+
+  .tabbar{position:absolute;left:0;right:0;bottom:0;height:76px;z-index:30;background:var(--bg);box-shadow:0 -6px 16px rgba(163,177,198,.35);display:flex;justify-content:space-around;align-items:flex-start;padding-top:9px}
+  .tabbar button{background:none;border:none;color:var(--mut);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font:600 10px -apple-system,sans-serif;width:80px;padding:2px}
+  .tabbar button.on{color:var(--cy)}
+  .tabbar button:focus-visible{outline:2px solid var(--cy);border-radius:8px}
+
+  .card{border-radius:20px;padding:15px 16px;margin-bottom:13px}
+  .muted{color:var(--mut)}
+  .pill{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px}
+  .cta{width:100%;border:none;border-radius:18px;padding:15px;background:var(--grad);color:#fff;font:700 15px -apple-system,sans-serif;cursor:pointer;box-shadow:0 8px 18px rgba(23,160,191,.4);display:flex;gap:8px;align-items:center;justify-content:center}
+  .cta.saved{background:var(--good);box-shadow:0 8px 18px rgba(31,158,97,.4)}
+
+  /* Onboarding */
+  .ob{position:absolute;inset:0;background:var(--bg);z-index:45;display:flex;flex-direction:column;padding:54px 0 0}
+  .ob-head{display:flex;align-items:center;gap:10px;padding:6px 22px 12px}
+  .ob-back{border:none;background:var(--bg);color:var(--mut);width:38px;height:38px;border-radius:12px;cursor:pointer;font-size:15px;flex:none}
+  .ob-track{flex:1;height:8px;border-radius:8px}
+  .ob-fill{height:100%;border-radius:8px;background:var(--grad);transition:width .3s}
+  .ob-count{font:700 11px -apple-system,sans-serif;color:var(--mut)}
+  .ob-body{flex:1;overflow-y:auto;padding:8px 22px 16px;scrollbar-width:none}
+  .ob-body::-webkit-scrollbar{display:none}
+  .ob-body h2{font-family:Nunito,sans-serif;font-weight:900;font-size:26px;letter-spacing:-.4px}
+  .ob-body .sub{font-size:12.5px;color:var(--mut);line-height:1.5;margin:6px 0 16px}
+  .ob-foot{padding:12px 22px 26px}
+  .q{border-radius:20px;padding:15px 16px;margin-bottom:14px}
+  .q h5{font-size:13px;font-weight:700;margin-bottom:10px}
+  .chipgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .chip{border:none;border-radius:14px;padding:13px 8px;font:600 12px -apple-system,sans-serif;color:var(--ink);cursor:pointer;background:var(--bg);box-shadow:6px 6px 12px var(--sd),-6px -6px 12px var(--sl)}
+  .chip.sel{box-shadow:inset 4px 4px 9px rgba(163,177,198,.5),inset -4px -4px 9px var(--sl);color:var(--cy);font-weight:800;outline:1.5px solid rgba(23,160,191,.45)}
+  .stepper{display:flex;flex-direction:column;align-items:center;gap:7px;flex:1}
+  .stepper .well{display:flex;align-items:center;gap:10px;border-radius:14px;padding:9px 10px;width:100%;justify-content:center}
+  .stepper .well b{font-variant-numeric:tabular-nums;min-width:40px;text-align:center;font-size:16px}
+  .stepper button{border:none;width:30px;height:30px;border-radius:10px;color:var(--cy);font-weight:800;cursor:pointer;background:var(--bg);box-shadow:4px 4px 8px var(--sd),-4px -4px 8px var(--sl)}
+  .feat{display:flex;gap:13px;margin-top:14px}
+  .feat .fi{flex:none;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;color:var(--cy)}
+  .feat h4{font-size:13px;font-weight:700}
+  .feat p{font-size:11.5px;color:var(--mut);line-height:1.5;margin-top:2px}
+  .toggle{width:46px;height:28px;border-radius:999px;border:none;cursor:pointer;position:relative;transition:background .2s}
+  .toggle::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.25);transition:left .2s}
+  .toggle.on{background:var(--cy)}
+  .toggle:not(.on){background:rgba(163,177,198,.6)}
+  .toggle.on::after{left:21px}
+
+  /* Paywall */
+  .pw{position:absolute;inset:0;background:var(--bg);z-index:44;display:flex;flex-direction:column;padding-top:50px}
+  .pw-x{position:absolute;top:54px;right:18px;border:none;width:34px;height:34px;border-radius:12px;color:var(--mut);cursor:pointer;background:var(--bg);box-shadow:5px 5px 10px var(--sd),-5px -5px 10px var(--sl)}
+  .pw-body{flex:1;overflow-y:auto;padding:6px 20px;scrollbar-width:none}
+  .pw-body::-webkit-scrollbar{display:none}
+  .plan{display:flex;align-items:center;gap:10px;border-radius:16px;padding:14px 15px;margin-bottom:12px;cursor:pointer;background:var(--bg);box-shadow:6px 6px 12px var(--sd),-6px -6px 12px var(--sl)}
+  .plan.sel{box-shadow:inset 4px 4px 9px rgba(163,177,198,.5),inset -4px -4px 9px var(--sl);outline:1.5px solid rgba(23,160,191,.45)}
+  .plan .badge{font:800 8px -apple-system,sans-serif;color:#fff;background:var(--grad);padding:3px 7px;border-radius:999px;letter-spacing:.3px}
+
+  /* Scan */
+  .camwrap{position:relative;border-radius:26px;overflow:hidden;aspect-ratio:3/3.5;margin:8px 4px 0;background:#cfd6e4}
+  .camframe{padding:7px;border-radius:32px;margin:4px 2px 0}
+  .camwrap canvas{width:100%;height:100%;display:block}
+  .cam-hints{display:flex;flex-direction:column;gap:5px;margin:12px 2px;font-size:11.5px;color:var(--mut);align-items:center}
+  .shutter-row{display:flex;align-items:center;justify-content:center;gap:22px;margin-top:2px}
+  .shutter{width:82px;height:82px;border-radius:50%;border:none;cursor:pointer;position:relative;background:var(--bg);box-shadow:7px 7px 14px var(--sd),-7px -7px 14px var(--sl);display:grid;place-items:center}
+  .shutter i{width:62px;height:62px;border-radius:50%;background:var(--grad);box-shadow:0 6px 14px rgba(23,160,191,.45);display:grid;place-items:center;color:#fff}
+  .side-btn{width:52px;height:52px;border-radius:50%;border:none;color:var(--ink);cursor:pointer;display:grid;place-items:center;background:var(--bg);box-shadow:6px 6px 12px var(--sd),-6px -6px 12px var(--sl)}
+  .quota{font-size:10.5px;color:var(--mut);text-align:center;margin-top:10px}
+
+  .analyzing{position:absolute;inset:0;background:rgba(227,232,242,.96);z-index:35;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:0 40px}
+  .an-badge{width:104px;height:104px;border-radius:50%;display:grid;place-items:center;position:relative;color:var(--cy)}
+  .an-ring{position:absolute;inset:12px;border-radius:50%;border:5px solid transparent;border-top-color:var(--cy);border-right-color:var(--vi);animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .an-dots{display:flex;gap:8px}
+  .an-dots i{width:8px;height:8px;border-radius:50%;background:rgba(163,177,198,.6)}
+  .an-dots i.on{background:var(--grad);background:linear-gradient(135deg,var(--cy),var(--vi))}
+  @media (prefers-reduced-motion: reduce){ .an-ring{animation:none} }
+
+  /* Results */
+  .ringbox{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 0 10px}
+  .score-num{font-family:Nunito,-apple-system,sans-serif;font-weight:900;font-variant-numeric:tabular-nums}
+  .metric{cursor:pointer}
+  .metric .bar{height:7px;border-radius:7px;overflow:hidden;margin-top:10px}
+  .metric .bar i{display:block;height:100%;border-radius:7px}
+  .metric .why{font-size:11.5px;color:var(--mut);line-height:1.5;margin-top:10px;display:none}
+  .metric.open .why{display:block}
+  .chips{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding:4px 2px 6px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chips button{flex:none;border:none;color:var(--cy);font:700 11px -apple-system,sans-serif;padding:8px 12px;border-radius:999px;cursor:pointer;display:flex;gap:6px;align-items:center;background:var(--bg);box-shadow:4px 4px 9px var(--sd),-4px -4px 9px var(--sl)}
+  .savebar{position:absolute;left:16px;right:16px;bottom:88px;z-index:20}
+  .sectionttl{font-size:16px;font-weight:800;margin:14px 4px 10px}
+
+  /* Train */
+  .exrow{display:flex;gap:13px;align-items:center;cursor:pointer}
+  .exicon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:var(--cy);flex:none}
+  .checkbtn{background:none;border:none;cursor:pointer;color:var(--mut);padding:4px;flex:none}
+  .checkbtn.done{color:var(--good)}
+
+  /* Exercise detail */
+  .timerbox{display:flex;flex-direction:column;align-items:center;gap:14px;padding:16px 0 4px}
+  .timer-num{font-family:Nunito,-apple-system,sans-serif;font-weight:800;font-variant-numeric:tabular-nums}
+  .timer-controls{display:flex;gap:12px;width:100%}
+  .btn-ghost{width:52px;height:48px;border:none;border-radius:14px;color:var(--ink);cursor:pointer;display:grid;place-items:center;background:var(--bg);box-shadow:5px 5px 10px var(--sd),-5px -5px 10px var(--sl)}
+  .step{display:flex;gap:11px;margin-top:11px;font-size:13px;line-height:1.45}
+  .step b{flex:none;width:23px;height:23px;border-radius:50%;background:rgba(23,160,191,.14);color:var(--cy);font-size:11px;display:grid;place-items:center}
+  .caution{display:flex;gap:9px;font-size:11.5px;color:var(--mut);line-height:1.5}
+  .caution svg{flex:none;color:var(--warn)}
+
+  /* Progress */
+  .empty{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:80px 30px;color:var(--mut);font-size:12.5px;line-height:1.5}
+  .scanrow{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .lockrow{display:flex;align-items:center;gap:12px;cursor:pointer}
+  .lockrow .unlock{font:700 11px -apple-system,sans-serif;color:#fff;background:var(--grad);padding:7px 13px;border-radius:999px;box-shadow:0 4px 10px rgba(23,160,191,.35)}
+  .toast{position:absolute;left:50%;bottom:170px;transform:translateX(-50%);color:var(--ink);font:700 12.5px -apple-system,sans-serif;padding:11px 18px;border-radius:999px;z-index:50;opacity:0;transition:opacity .25s;pointer-events:none;background:var(--bg);box-shadow:7px 7px 14px var(--sd),-7px -7px 14px var(--sl);white-space:nowrap}
+  .toast.show{opacity:1}
+</style>
+
+<div class="stage-head">
+  <h1><span class="bone">Jaw</span>Forge</h1>
+  <p>Interactive preview of the iOS app in <code>jawforge/</code> — now in its neumorphic redesign, with the onboarding quiz, animated scanning, and the JawForge Pro paywall. All logic is a 1:1 port of the Swift code.</p>
+</div>
+
+<div class="tour" role="group" aria-label="Jump to screen">
+  <button onclick="tour('onboarding')">Onboarding</button>
+  <button onclick="tour('scan')">Scan</button>
+  <button onclick="tour('results')">Results</button>
+  <button onclick="tour('train')">Train</button>
+  <button onclick="tour('progress')">Progress</button>
+  <button onclick="tour('paywall')">Paywall</button>
+</div>
+
+<div class="phone" id="phone">
+  <div class="island"></div>
+  <div class="statusbar">
+    <span>9:41</span>
+    <span style="display:flex;gap:5px;align-items:center">
+      <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg>
+      <svg width="24" height="12" viewBox="0 0 25 12" fill="none" stroke="currentColor"><rect x=".5" y=".5" width="21" height="11" rx="3.5"/><rect x="2.5" y="2.5" width="16" height="7" rx="1.5" fill="currentColor" stroke="none"/><path d="M23.5 4v4" stroke-linecap="round" stroke-width="2"/></svg>
+    </span>
+  </div>
+  <div id="screen" style="flex:1;display:flex;flex-direction:column;min-height:0"></div>
+  <div class="tabbar" id="tabbar"></div>
+  <div class="toast" id="toast" role="status"></div>
+  <div class="home-ind"></div>
+</div>
+
+<p class="stage-note">Scans here are <b>simulated measurements</b> — on a real iPhone, Apple's Vision framework traces your actual face landmarks on-device. The "purchase" on the paywall is the demo flow (StoreKit 2 slots in for release). Data persists in this browser only.</p>
+
+<script>
+/* ============ Icons ============ */
+const I = {
+  faceid:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3M8.5 9v1.5M15.5 9v1.5M12 9v4h-1M8.5 16s1.2 1.3 3.5 1.3 3.5-1.3 3.5-1.3"/></svg>',
+  dumbbell:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>',
+  chart:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M4 16l5-6 4 3 6-8"/></svg>',
+  mouth:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12c4-4 6 1 9 1s5-5 9-1c-3 5-6 6-9 6s-6-1-9-6z"/></svg>',
+  down:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>',
+  hand:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12V5.5a1.5 1.5 0 0 1 3 0V11m0-5.5v-1a1.5 1.5 0 0 1 3 0V11m0-4.5a1.5 1.5 0 0 1 3 0V13m-9-1v6a4 4 0 0 0 4 4h1a4 4 0 0 0 4-4v-2"/></svg>',
+  gum:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="8" r="2.4"/><circle cx="16" cy="8" r="2.4"/><circle cx="8" cy="16" r="2.4"/><circle cx="16" cy="16" r="2.4"/></svg>',
+  wave:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12v0M7 8v8M11 5v14M15 8v8M19 11v2"/></svg>',
+  bolt:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>',
+  lr:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8l-4 4 4 4M17 8l4 4-4 4M3 12h18"/></svg>',
+  check:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  checkFill:'<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="m8 12 2.7 2.7L16.5 9" fill="none" stroke="#e3e8f2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  flame:'<svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c4.4 0 7-2.8 7-6.5 0-4.5-4-6.2-4.5-9.5-2 1.5-2.6 3.3-2.5 5-1.6-.4-2.6-2-2.5-4C6.7 8.7 5 11.3 5 15.5 5 19.2 7.6 22 12 22z"/></svg>',
+  warn:'<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 1 21h22L12 2zm1 14h-2v2h2v-2zm0-7h-2v5h2V9z"/></svg>',
+  photo:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="10" r="1.6"/><path d="m5.5 18 4.5-4.5 3 3 3.5-3.5L21 17.5" stroke-linecap="round"/></svg>',
+  chev:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>',
+  play:'<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg>',
+  pause:'<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="4" width="5" height="16" rx="1.5"/><rect x="14" y="4" width="5" height="16" rx="1.5"/></svg>',
+  redo:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10a8 8 0 1 1 2 6.5M4 10V4m0 6h6"/></svg>',
+  crown:'<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M3 8l4 4 5-7 5 7 4-4v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8z"/></svg>',
+  lock:'<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="10" width="14" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg>',
+  infinity:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8.5 15.5c-2 2-5.5.5-5.5-3.5s3.5-5.5 5.5-3.5l7 7c2 2 5.5.5 5.5-3.5s-3.5-5.5-5.5-3.5"/></svg>',
+  wand:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m5 19 9-9m2.5-2.5L19 5M15 3v2M19 9h2M15 9l1.5 1.5"/></svg>',
+  bell:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 1 1 12 0c0 5 2 6 2 6H4s2-1 2-6M10 20a2 2 0 0 0 4 0"/></svg>',
+  clip:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4a3 3 0 0 1 6 0M9 11h6M9 15h4"/></svg>'
+};
+
+/* ============ Ported: JawlineMetrics.swift ============ */
+function bandScore(v,iLo,iHi,fLo,fHi){
+  if(v>=iLo&&v<=iHi)return 100;
+  let d,s;
+  if(v<iLo){d=iLo-v;s=Math.max(iLo-fLo,1e-9);}else{d=v-iHi;s=Math.max(fHi-iHi,1e-9);}
+  return Math.min(100,Math.max(25,100-(d/s)*75));
+}
+function scores(m){
+  const angle=bandScore(m.gonialAngle,112,127,96,152);
+  const width=bandScore(m.widthRatio,.80,.94,.62,1.08);
+  const lower=bandScore(m.lowerFace,.45,.55,.32,.68);
+  const sym=bandScore(m.symmetry,.92,1.0,.68,1.0);
+  return {angle,width,lower,sym,overall:angle*.35+width*.25+sym*.25+lower*.15};
+}
+const band=s=>s>=85?"Sharp":s>=70?"Defined":s>=55?"Developing":"Needs work";
+const scol=s=>s>=80?"var(--good)":s>=60?"var(--cy)":s>=45?"var(--warn)":"var(--bad)";
+function readings(m){
+  const s=scores(m);
+  return [
+    {name:"Jaw angle",val:Math.round(m.gonialAngle)+"°",score:s.angle,why:"The corner angle of your jaw. Around 112–127° reads as a sharp, chiseled hinge; larger angles read as a softer slope from ear to chin."},
+    {name:"Jaw width",val:Math.round(m.widthRatio*100)+"% of face",score:s.width,why:"How wide your jaw corners sit relative to your upper face. 80–94% gives the classic tapered-but-strong look."},
+    {name:"Lower-face balance",val:Math.round(m.lowerFace*100)+"%",score:s.lower,why:"Nose-to-chin height as a share of eyes-to-chin height. Close to 50% is the balanced classical proportion."},
+    {name:"Symmetry",val:Math.round(m.symmetry*100)+"%",score:s.sym,why:"How evenly your jaw sits around your facial midline. One-sided chewing and sleeping habits show up here first."}
+  ];
+}
+
+/* ============ Ported: Exercise.swift ============ */
+const EX=[
+  {id:"mewing",name:"Mewing (tongue posture)",icon:"mouth",tag:"The foundation — proper resting tongue posture.",targets:"Lower-face balance · overall definition",dur:120,sets:"Hold 2 min · practice until it's your default",steps:["Close your lips, teeth lightly touching or slightly apart.","Press the ENTIRE tongue — tip, middle and back — flat against the roof of your mouth.","The tip sits just behind the front teeth, not touching them.","Breathe through your nose and hold. Your goal is for this to become your resting posture all day."],caution:null},
+  {id:"chin_tucks",name:"Chin tucks",icon:"down",tag:"Fixes forward-head posture that hides your jawline.",targets:"Jaw angle · under-chin area",dur:60,sets:"3 sets × 10 reps",steps:["Sit or stand tall, shoulders relaxed, gaze straight ahead.","Draw your chin straight back, as if making a double chin on purpose.","You should feel a stretch at the base of the skull and tension under the chin.","Hold 3 seconds, release. That's one rep."],caution:null},
+  {id:"jaw_resistance",name:"Resistance press",icon:"hand",tag:"Strength work for the muscles that shape the jaw corner.",targets:"Jaw angle · jaw width",dur:90,sets:"3 sets × 8 slow reps",steps:["Place a fist under your chin.","Slowly open your mouth while your fist resists the movement.","Open over a 3-second count, then close over 3 seconds, keeping tension the whole way.","Rest 15 seconds between sets."],caution:"Stop if you feel clicking or pain in the jaw joint (TMJ)."},
+  {id:"chewing",name:"Chewing training",icon:"gum",tag:"Progressive overload for the masseter — the jaw's 'bicep'.",targets:"Jaw width · jaw angle",dur:300,sets:"5–10 min · alternate sides evenly",steps:["Use a firm sugar-free gum (or mastic gum once conditioned).","Chew with slow, deliberate full closures — quality over speed.","Switch sides every minute so both masseters grow evenly.","Build up duration over weeks like any other muscle."],caution:"Overdoing it causes TMJ soreness — start with 5 minutes a day."},
+  {id:"neck_curls",name:"Neck curls",icon:"dumbbell",tag:"Builds the neck that frames a sharp jawline.",targets:"Under-chin area · overall definition",dur:90,sets:"2 sets × 10 reps",steps:["Lie on your back, knees bent, tongue pressed to the roof of your mouth.","Tuck your chin, then curl just your head up toward your chest.","Lower back down with control. Keep shoulders on the floor.","Only the neck moves — no jerking."],caution:"Skip this one if you have any neck injury history."},
+  {id:"vowel_stretch",name:"O-E vowel stretch",icon:"wave",tag:"Dynamic stretch that wakes up the whole lower face.",targets:"Symmetry · lower-face balance",dur:60,sets:"3 sets × 15 reps",steps:["Exaggerate saying “O” — lips in a tight round shape.","Snap to an exaggerated “E” — corners of the mouth pulled wide.","Keep every movement symmetric; watch yourself in a mirror.","Alternate O-E at one rep per second."],caution:null},
+  {id:"platysma_flex",name:"Platysma flex",icon:"bolt",tag:"Tightens the sheet muscle running from jaw to collarbone.",targets:"Under-chin area · jaw angle",dur:60,sets:"3 holds × 10 seconds",steps:["Tilt your head back slightly and jut the lower jaw forward.","Pull the corners of your mouth down hard — the neck bands should pop out.","Hold 10 seconds, feeling tension from jawline to collarbone.","Relax fully between holds."],caution:null},
+  {id:"side_glide",name:"Side-to-side glide",icon:"lr",tag:"Evens out left/right imbalance in jaw musculature.",targets:"Symmetry",dur:60,sets:"2 sets × 12 glides per side",steps:["Relax your jaw with lips gently closed.","Glide the lower jaw slowly to the left as far as comfortable.","Return to center, then glide right. Keep it slow and controlled.","If one side feels tighter, give it two extra glides."],caution:"Keep the range comfortable — never force the glide."}
+];
+const exById=id=>EX.find(e=>e.id===id);
+
+/* ============ Ported: GuidanceEngine.swift ============ */
+function recommendations(m){
+  const s=scores(m),recs=[];
+  if(s.angle<75)recs.push({title:"Sharpen your jaw angle",detail:`Your jaw corner measures ${Math.round(m.gonialAngle)}°, on the softer side. The masseter muscle sits right on that corner — training it adds visible width and hardness there.`,ex:["chewing","jaw_resistance","platysma_flex"]});
+  if(s.width<75){
+    if(m.widthRatio<.80)recs.push({title:"Build jaw width",detail:"Your jaw sits narrow relative to your upper face. Progressive chewing work grows the masseters — this is the most trainable metric of all.",ex:["chewing","jaw_resistance"]});
+    else recs.push({title:"Refine rather than build",detail:"Your jaw is already wide relative to your upper face — focus on definition through posture and under-chin tightening instead.",ex:["chin_tucks","platysma_flex","neck_curls"]});
+  }
+  if(s.lower<75)recs.push({title:"Rebalance the lower face",detail:"Your lower-face proportion sits outside the classical balance point. Consistent tongue posture (mewing) and chin tucks improve how the lower third carries.",ex:["mewing","chin_tucks","vowel_stretch"]});
+  if(s.sym<78)recs.push({title:"Even out left/right balance",detail:"Your jaw sits slightly off your facial midline. Usual culprits: one-sided chewing, sleeping on one side, leaning on one hand.",ex:["side_glide","chewing","vowel_stretch"]});
+  recs.push({title:"The two things that matter most",detail:"1) Body-fat percentage: the jawline you're building is revealed, not created, by leanness. 2) Posture: forward-head posture visually erases up to half your jawline.",ex:["mewing","chin_tucks"]});
+  return recs;
+}
+function dailyRoutine(m,p){
+  const ids=["mewing","chin_tucks"];
+  let ranked;
+  if(m){const s=scores(m);
+    ranked=[["chewing",s.width],["jaw_resistance",s.angle],["side_glide",s.sym],["vowel_stretch",s.lower],["platysma_flex",(s.angle+s.lower)/2],["neck_curls",s.angle]];
+  }else ranked=[["chewing",60],["jaw_resistance",62],["side_glide",70],["vowel_stretch",72],["platysma_flex",66],["neck_curls",68]];
+  if(p){
+    const boost=(id,a)=>{const r=ranked.find(x=>x[0]===id);if(r)r[1]-=a;};
+    if(p.chew==="Mostly left"||p.chew==="Mostly right")boost("side_glide",15);
+    if(p.sleep==="Left side"||p.sleep==="Right side")boost("side_glide",8);
+    if(p.screen==="8+ h")boost("neck_curls",12);
+    if(p.goal==="Sharper jaw angle"){boost("jaw_resistance",10);boost("chewing",8);}
+    if(p.goal==="Reduce double chin"){boost("platysma_flex",12);boost("neck_curls",10);}
+    if(p.goal==="Fix asymmetry"){boost("side_glide",14);boost("vowel_stretch",8);}
+  }
+  const slots=p?.mins===5?1:p?.mins===15?3:2;
+  ranked.sort((a,b)=>a[1]-b[1]);
+  ids.push(...ranked.slice(0,slots).map(x=>x[0]));
+  return ids.map(exById);
+}
+
+/* ============ Store ============ */
+function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(_){return d;}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(_){}}
+let scans=lsGet("jf_scans",[]);
+let completions=lsGet("jf_done",{});
+let onboarded=lsGet("jf_onboarded2",false);
+let isPro=lsGet("jf_pro",false);
+let profile=lsGet("jf_profile",null);
+const FREE_SCANS_PER_WEEK=1, FREE_HISTORY=3;
+const dateKey=(d=new Date())=>d.toISOString().slice(0,10);
+const latest=()=>scans.length?scans[scans.length-1]:null;
+const scansLast7=()=>scans.filter(s=>Date.now()-s.date<7*864e5).length;
+function streak(){
+  let n=0,d=new Date();
+  if(!(completions[dateKey(d)]||[]).length)d.setDate(d.getDate()-1);
+  while((completions[dateKey(d)]||[]).length){n++;d.setDate(d.getDate()-1);}
+  return n;
+}
+
+/* ============ State & router ============ */
+let tab="scan",pushed=null,obPage=0,payVisible=false,paySel="annual";
+let draft=profile||{age:"18–29",height:null,weight:null,sleep:"It varies",chew:"Never noticed",mouth:"Sometimes",screen:"4–8 h",freq:"1–2× a week",mins:10,goal:"Overall definition",remind:true};
+let pendingMetrics=null,timerId=null,timerLeft=0,timerRun=false;
+const $=id=>document.getElementById(id);
+
+function setTab(t){stopTimer();pushed=null;tab=t;render();}
+function push(p){stopTimer();pushed=p;render();}
+function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),1800);}
+
+function tour(where){
+  stopTimer();pushed=null;payVisible=false;
+  if(where==="onboarding"){onboarded=false;obPage=0;lsSet("jf_onboarded2",false);tab="scan";}
+  else{
+    if(!onboarded){onboarded=true;lsSet("jf_onboarded2",true);if(!profile){profile=draft;lsSet("jf_profile",profile);}}
+    if(where==="paywall"){payVisible=true;tab="scan";}
+    else if(where==="results"){tab="scan";pendingMetrics=pendingMetrics||demoMetrics();pushed={kind:"results",m:pendingMetrics,saved:false};}
+    else tab=where;
+  }
+  render();
+  $("phone").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+window.tour=tour;
+
+function demoMetrics(){
+  const r=(a,b)=>a+Math.random()*(b-a);
+  return {gonialAngle:r(112,146),widthRatio:r(.72,.99),lowerFace:r(.42,.60),symmetry:r(.80,.99)};
+}
+
+/* ============ Render ============ */
+function render(){
+  const scr=$("screen");
+  $("tabbar").innerHTML=[["scan","Scan",I.faceid],["train","Train",I.dumbbell],["progress","Progress",I.chart]]
+    .map(([id,label,ic])=>`<button class="${tab===id&&!pushed?"on":""}" onclick="setTab('${id}')" aria-label="${label}">${ic}${label}</button>`).join("");
+
+  let html="";
+  if(pushed&&pushed.kind==="results"){html=resultsHTML(pushed);}
+  else if(pushed&&pushed.kind==="exercise"){html=exerciseHTML(exById(pushed.id));}
+  else if(tab==="scan")html=scanHTML();
+  else if(tab==="train")html=trainHTML();
+  else html=progressHTML();
+  scr.innerHTML=html;
+
+  if(!onboarded)scr.insertAdjacentHTML("beforeend",onboardHTML());
+  if(payVisible)scr.insertAdjacentHTML("beforeend",paywallHTML());
+  if(pushed&&pushed.kind==="results")requestAnimationFrame(animateRing);
+  if(tab==="scan"&&!pushed)startFaceMesh();
+}
+
+/* ---------- Onboarding (5 screens) ---------- */
+const OB_TOTAL=5;
+const chipQ=(title,key,options)=>`
+  <div class="q nr"><h5>${title}</h5><div class="chipgrid">
+    ${options.map(o=>`<button class="chip ${draft[key]===o?"sel":""}" onclick="draft['${key}']=${typeof o==="number"?o:`'${o}'`};render()">${typeof o==="number"?o+" min / day":o}</button>`).join("")}
+  </div></div>`;
+
+function onboardHTML(){
+  const pages=[
+    // 1 — welcome
+    `<div style="text-align:center;margin-top:14px">
+      <div class="nr" style="width:112px;height:112px;border-radius:34px;display:inline-grid;place-items:center;color:var(--cy)">${I.faceid.replace('width="26" height="26"','width="54" height="54"')}</div>
+      <h2 style="font-size:34px;margin-top:16px">JawForge</h2>
+      <p class="muted" style="font-weight:700;font-size:13px;margin-top:2px">Scan. Measure. Sculpt.</p>
+     </div>
+     <div class="nr" style="border-radius:20px;padding:6px 16px 16px;margin-top:20px">
+      <div class="feat"><span class="fi ni">${I.faceid.replace('width="26" height="26"','width="18" height="18"')}</span><div><h4>Scan your face</h4><p>One selfie, measured on-device. Photos never leave your phone.</p></div></div>
+      <div class="feat"><span class="fi ni">${I.chart.replace('width="26" height="26"','width="18" height="18"')}</span><div><h4>Know your numbers</h4><p>Jaw angle, width, proportion and symmetry — scored and explained.</p></div></div>
+      <div class="feat"><span class="fi ni">${I.flame.replace('width="30" height="30"','width="18" height="18"')}</span><div><h4>Train with a plan</h4><p>A routine built from your scan and the answers you're about to give.</p></div></div>
+     </div>
+     <p class="muted" style="font-size:10.5px;text-align:center;line-height:1.5;margin-top:14px;padding:0 10px">A fitness aid, not medical advice. Bone structure is genetic — training shapes muscle, posture and habits.</p>`,
+    // 2 — about you
+    `<h2>About you</h2><p class="sub">Age changes how fast muscle and posture respond — we tune expectations, not judgment.</p>
+     ${chipQ("Your age","age",["13–17","18–29","30–39","40–49","50+"])}
+     <div class="q nr"><h5>Height &amp; weight — optional</h5>
+      <p class="muted" style="font-size:11px;line-height:1.5;margin-bottom:12px">Jawline visibility tracks body-fat level more than any exercise. Sharing this helps us give honest guidance.</p>
+      <div style="display:flex;gap:14px">
+        <div class="stepper"><span class="muted" style="font:700 10.5px -apple-system">Height</span>
+          <div class="well ni"><button onclick="draft.height=Math.max(130,(draft.height||172)-1);render()">−</button><b>${draft.height??"—"}</b><button onclick="draft.height=Math.min(220,(draft.height||172)+1);render()">+</button></div>
+          <span class="muted" style="font-size:10px">cm</span></div>
+        <div class="stepper"><span class="muted" style="font:700 10.5px -apple-system">Weight</span>
+          <div class="well ni"><button onclick="draft.weight=Math.max(35,(draft.weight||70)-1);render()">−</button><b>${draft.weight??"—"}</b><button onclick="draft.weight=Math.min(180,(draft.weight||70)+1);render()">+</button></div>
+          <span class="muted" style="font-size:10px">kg</span></div>
+      </div></div>`,
+    // 3 — lifestyle
+    `<h2>Your lifestyle</h2><p class="sub">Daily habits quietly shape the lower face — these tell us where to look.</p>
+     ${chipQ("How do you usually sleep?","sleep",["On my back","Left side","Right side","Stomach","It varies"])}
+     ${chipQ("Which side do you chew on?","chew",["Mostly left","Mostly right","Both evenly","Never noticed"])}
+     ${chipQ("Do you breathe through your mouth?","mouth",["Often","Sometimes","Rarely / never"])}
+     ${chipQ("Screen time per day","screen",["Under 4 h","4–8 h","8+ h"])}`,
+    // 4 — training
+    `<h2>Your training</h2><p class="sub">We match the routine to the time you'll actually give it — small and daily beats big and abandoned.</p>
+     ${chipQ("How often do you work out?","freq",["Not currently","1–2× a week","3–4× a week","5+× a week"])}
+     ${chipQ("Time for jaw training each day","mins",[5,10,15])}`,
+    // 5 — goal
+    `<h2>Your goal</h2><p class="sub">One primary focus — the routine leans toward it while still covering the fundamentals.</p>
+     ${chipQ("What matters most to you?","goal",["Sharper jaw angle","Reduce double chin","Fix asymmetry","Overall definition"])}
+     <div class="q nr" style="display:flex;align-items:center;gap:10px">
+       <div style="flex:1"><h5 style="margin:0">Daily reminder</h5><p class="muted" style="font-size:11px;margin-top:3px">A nudge at the time you usually train</p></div>
+       <button class="toggle ${draft.remind?"on":""}" aria-label="Daily reminder" onclick="draft.remind=!draft.remind;render()"></button>
+     </div>`
+  ];
+  return `<div class="ob">
+    <div class="ob-head">
+      ${obPage>0?`<button class="ob-back nr" onclick="obPage--;render()">‹</button>`:""}
+      <div class="ob-track ni"><div class="ob-fill" style="width:${(obPage+1)/OB_TOTAL*100}%"></div></div>
+      <span class="ob-count">${obPage+1}/${OB_TOTAL}</span>
+    </div>
+    <div class="ob-body">${pages[obPage]}</div>
+    <div class="ob-foot"><button class="cta" onclick="obNext()">${obPage===OB_TOTAL-1?"✦ Build my plan":"Continue"}</button></div>
+  </div>`;
+}
+function obNext(){
+  if(obPage<OB_TOTAL-1){obPage++;render();return;}
+  profile=draft;lsSet("jf_profile",profile);
+  onboarded=true;lsSet("jf_onboarded2",true);
+  payVisible=true;
+  render();toast("Plan built from your answers");
+}
+
+/* ---------- Paywall ---------- */
+const PLANS=[
+  {id:"weekly",title:"Weekly",price:"$3.99",per:"per week"},
+  {id:"annual",title:"Annual",price:"$29.99",per:"per year · $0.58/wk",badge:"BEST VALUE · 7-DAY FREE TRIAL"},
+  {id:"lifetime",title:"Lifetime",price:"$79.99",per:"one time"}
+];
+const PRO_FEATURES=[
+  ["infinity","Unlimited scans","Free tier is 1 scan a week — Pro catches every change."],
+  ["chart","Full progress history","Every scan kept forever with trends, not just your last 3."],
+  ["wand","Adaptive routine","Re-personalizes after every scan and quiz answer."],
+  ["clip","Complete breakdowns","All four metrics, explanations and a targeted game plan."],
+  ["bell","Smart reminders","Nudges tuned to the time you actually train."]
+];
+function paywallHTML(){
+  return `<div class="pw">
+    <button class="pw-x" onclick="payVisible=false;render()">✕</button>
+    <div style="text-align:center;padding:8px 20px 4px">
+      <div class="nr" style="width:84px;height:84px;border-radius:26px;display:inline-grid;place-items:center;color:var(--cy)">${I.crown}</div>
+      <h2 style="font-family:Nunito,sans-serif;font-weight:900;font-size:27px;margin-top:10px">JawForge Pro</h2>
+      <p class="muted" style="font-size:12.5px;margin-top:2px">The full toolkit for a sharper jawline</p>
+    </div>
+    <div class="pw-body">
+      <div class="nr" style="border-radius:20px;padding:16px;margin:12px 0 16px">
+        ${PRO_FEATURES.map(([ic,t,d])=>`
+          <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:13px">
+            <span class="ni" style="flex:none;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;color:var(--cy)">${I[ic]}</span>
+            <div><b style="font-size:12.5px">${t}</b><p class="muted" style="font-size:11px;line-height:1.45;margin-top:1px">${d}</p></div>
+          </div>`).join("")}
+      </div>
+      ${PLANS.map(p=>`
+        <div class="plan ${paySel===p.id?"sel":""}" onclick="paySel='${p.id}';render()">
+          <div style="flex:1"><div style="display:flex;gap:8px;align-items:center"><b style="font-size:13px">${p.title}</b>${p.badge?`<span class="badge">${p.badge}</span>`:""}</div>
+            <span class="muted" style="font-size:11px">${p.per}</span></div>
+          <b style="font-size:15px;font-variant-numeric:tabular-nums">${p.price}</b>
+          <span style="color:${paySel===p.id?"var(--cy)":"var(--mut)"}">${paySel===p.id?"●":"○"}</span>
+        </div>`).join("")}
+      <p class="muted" style="font-size:9.5px;text-align:center;line-height:1.5;padding:4px 14px 8px">Cancel anytime in Settings. The annual plan starts with a 7-day free trial — you won't be charged until it ends.</p>
+    </div>
+    <div style="padding:10px 20px 26px">
+      <button class="cta" onclick="isPro=true;lsSet('jf_pro',true);payVisible=false;render();toast('Welcome to JawForge Pro 👑')">${I.lock} ${paySel==="annual"?"Start 7-day free trial":"Unlock JawForge Pro"}</button>
+      <p style="text-align:center;margin-top:10px"><button style="border:none;background:none;color:var(--mut);font:600 11px -apple-system,sans-serif;cursor:pointer" onclick="isPro=true;lsSet('jf_pro',true);payVisible=false;render();toast('Purchases restored')">Restore purchases</button>
+      <span class="muted" style="font-size:11px"> · Terms · Privacy</span></p>
+    </div>
+  </div>`;
+}
+
+/* ---------- Scan ---------- */
+function scanHTML(){
+  const quotaOK=isPro||scansLast7()<FREE_SCANS_PER_WEEK;
+  return `
+  <div class="navbar">Scan ${isPro?"":`<button class="pro-badge nr" onclick="payVisible=true;render()">👑 PRO</button>`}</div>
+  <div class="content">
+    <div class="camframe nr"><div class="camwrap"><canvas id="mesh" width="660" height="770"></canvas></div></div>
+    <div class="cam-hints">
+      <span>👤 Face the camera straight on, hair off the jaw</span>
+      <span>😐 Neutral expression, teeth gently closed</span>
+    </div>
+    <div class="shutter-row">
+      <button class="side-btn" title="Analyze a library photo (demo)" onclick="capture()">${I.photo}</button>
+      <button class="shutter" aria-label="Capture and analyze" onclick="capture()"><i>${I.faceid}</i></button>
+      <span style="width:52px"></span>
+    </div>
+    ${isPro?"":`<p class="quota">${quotaOK?`Free plan: ${FREE_SCANS_PER_WEEK} scan per week`:"Weekly free scan used — Pro unlocks unlimited scans"}</p>`}
+  </div>`;
+}
+function capture(){
+  if(!(isPro||scansLast7()<FREE_SCANS_PER_WEEK)){payVisible=true;render();return;}
+  const stages=["Detecting your face…","Tracing 60+ landmarks…","Measuring jaw angles…","Scoring your jawline…"];
+  const ov=document.createElement("div");
+  ov.className="analyzing";
+  ov.innerHTML=`
+    <div class="an-badge nr"><div class="an-ring"></div>${I.faceid.replace('width="26" height="26"','width="34" height="34"')}</div>
+    <div><b id="an-stage" style="font-size:15px">${stages[0]}</b>
+    <p class="muted" style="font-size:11.5px;margin-top:5px">Analysis runs entirely on this device</p></div>
+    <div class="an-dots">${stages.map((_,i)=>`<i class="${i===0?"on":""}"></i>`).join("")}</div>`;
+  $("phone").appendChild(ov);
+  let i=0;
+  const step=setInterval(()=>{
+    i++;
+    if(i<stages.length){
+      ov.querySelector("#an-stage").textContent=stages[i];
+      ov.querySelectorAll(".an-dots i")[i].classList.add("on");
+    }else{
+      clearInterval(step);ov.remove();
+      pendingMetrics=demoMetrics();
+      push({kind:"results",m:pendingMetrics,saved:false});
+    }
+  },560);
+}
+window.capture=capture;
+
+let meshRAF=null;
+function startFaceMesh(){
+  cancelAnimationFrame(meshRAF);
+  const cv=$("mesh");if(!cv)return;
+  const ctx=cv.getContext("2d"),W=cv.width,H=cv.height;
+  const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const cx=W/2,cy=H*.46,rx=W*.30,ry=H*.335;
+  const pts=[];
+  for(let i=0;i<46;i++){const a=i/46*2*Math.PI;pts.push([cx+rx*Math.sin(a)*(1-.08*Math.max(0,Math.cos(a))),cy-ry*Math.cos(a)*(a>Math.PI*.5&&a<Math.PI*1.5?1.06:1)]);}
+  const feats=[[cx-rx*.42,cy-ry*.18],[cx+rx*.42,cy-ry*.18],[cx,cy+ry*.12],[cx-rx*.2,cy+ry*.42],[cx+rx*.2,cy+ry*.42],[cx,cy+ry*.5]];
+  let t=0;
+  function frame(){
+    if(!cv.isConnected){cancelAnimationFrame(meshRAF);return;}
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle="#cfd6e4";ctx.fillRect(0,0,W,H);
+    // corner brackets
+    ctx.strokeStyle="rgba(41,48,71,.55)";ctx.lineWidth=5;ctx.lineCap="round";
+    const m=34,L=46;
+    [[m,m,1,1],[W-m,m,-1,1],[W-m,H-m,-1,-1],[m,H-m,1,-1]].forEach(([x,y,sx,sy])=>{
+      ctx.beginPath();ctx.moveTo(x,y+sy*L);ctx.lineTo(x,y);ctx.lineTo(x+sx*L,y);ctx.stroke();
+    });
+    // dashed guide oval (pulsing)
+    const pulse=reduced?0:.015*Math.sin(t/40);
+    ctx.save();ctx.setLineDash([14,10]);ctx.strokeStyle="rgba(41,48,71,.45)";ctx.lineWidth=3;
+    ctx.beginPath();ctx.ellipse(cx,cy,rx*1.16*(1+pulse),ry*1.12*(1+pulse),0,0,2*Math.PI);ctx.stroke();ctx.restore();
+    // jaw arc emphasized
+    ctx.strokeStyle="#17a0bf";ctx.lineWidth=5;
+    ctx.shadowColor="rgba(23,160,191,.7)";ctx.shadowBlur=10;
+    ctx.beginPath();ctx.ellipse(cx,cy,rx*1.16,ry*1.12,0,Math.PI*.2,Math.PI*.8);ctx.stroke();
+    ctx.shadowBlur=0;
+    // face mesh dots
+    ctx.fillStyle="rgba(41,48,71,.4)";
+    for(const [x,y] of pts){ctx.beginPath();ctx.arc(x,y,3,0,7);ctx.fill();}
+    ctx.fillStyle="rgba(41,48,71,.6)";
+    for(const [x,y] of feats){ctx.beginPath();ctx.arc(x,y,3.5,0,7);ctx.fill();}
+    // scan line sweep
+    const sy=cy-ry+((reduced?.5:(Math.sin(t/90)*.5+.5)))*2*ry;
+    const g=ctx.createLinearGradient(0,sy-42,0,sy+42);
+    g.addColorStop(0,"rgba(23,160,191,0)");g.addColorStop(.5,"rgba(23,160,191,.30)");g.addColorStop(1,"rgba(23,160,191,0)");
+    ctx.fillStyle=g;ctx.fillRect(cx-rx*1.35,sy-42,rx*2.7,84);
+    ctx.strokeStyle="rgba(23,160,191,.9)";ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(cx-rx*1.35,sy);ctx.lineTo(cx+rx*1.35,sy);ctx.stroke();
+    t++;
+    if(!reduced)meshRAF=requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+/* ---------- Results ---------- */
+const RING_R=74,RING_C=2*Math.PI*RING_R;
+function resultsHTML(p){
+  const s=scores(p.m),o=s.overall;
+  return `
+  <div class="navbar inline"><button class="backbtn nr" onclick="pushed=null;render()">‹ Back</button>Your results</div>
+  <div class="content" style="padding-bottom:155px">
+    <div class="ringbox">
+      <div class="nr" style="width:190px;height:190px;border-radius:50%;display:grid;place-items:center">
+      <svg width="180" height="180" viewBox="0 0 180 180" role="img" aria-label="Jawline score ${Math.round(o)}">
+        <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#17a0bf"/><stop offset="1" stop-color="#735ddb"/></linearGradient></defs>
+        <circle cx="90" cy="90" r="${RING_R}" fill="none" stroke="rgba(163,177,198,.45)" stroke-width="13"/>
+        <circle id="ring" cx="90" cy="90" r="${RING_R}" fill="none" stroke="url(#rg)" stroke-width="13" stroke-linecap="round"
+          transform="rotate(-90 90 90)" stroke-dasharray="${RING_C}" stroke-dashoffset="${p.saved?RING_C*(1-o/100):RING_C}"
+          style="transition:stroke-dashoffset 1s cubic-bezier(.2,.7,.3,1)" data-to="${RING_C*(1-o/100)}"/>
+        <text x="90" y="88" text-anchor="middle" class="score-num" fill="var(--ink)" style="font-size:46px">${Math.round(o)}</text>
+        <text x="90" y="112" text-anchor="middle" fill="${scol(o)}" style="font:700 13px -apple-system,sans-serif">${band(o)}</text>
+      </svg>
+      </div>
+      <span class="muted" style="font-size:11px;margin-top:6px">Jawline score</span>
+    </div>
+    ${readings(p.m).map(r=>`
+      <div class="card nr metric" onclick="this.classList.toggle('open')">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="flex:1"><b style="font-size:13.5px">${r.name}</b><div class="muted" style="font-size:11px;margin-top:2px">${r.val}</div></div>
+          <span class="pill" style="color:${scol(r.score)};background:color-mix(in srgb,${scol(r.score)} 14%,transparent)">${band(r.score)}</span>
+        </div>
+        <div class="bar ni"><i style="width:${r.score}%;background:${scol(r.score)}"></i></div>
+        <div class="why">${r.why}</div>
+      </div>`).join("")}
+    <div class="sectionttl">Your game plan</div>
+    ${recommendations(p.m).map(rec=>`
+      <div class="card nr">
+        <b style="font-size:13.5px">${rec.title}</b>
+        <p class="muted" style="font-size:11.5px;line-height:1.55;margin-top:6px">${rec.detail}</p>
+        <div class="chips">${rec.ex.map(id=>{const e=exById(id);return `<button onclick="event.stopPropagation();push({kind:'exercise',id:'${id}'})">${I[e.icon]}${e.name}</button>`;}).join("")}</div>
+      </div>`).join("")}
+    <p class="muted" style="font-size:10px;line-height:1.5;text-align:center;padding:4px 14px">Measurements are frontal-photo estimates — scan under similar conditions and watch the trend, not a single number. Not medical advice.</p>
+  </div>
+  <div class="savebar"><button class="cta ${p.saved?"saved":""}" onclick="saveScan()">${p.saved?"✓ Saved":"Save scan to progress"}</button></div>`;
+}
+function animateRing(){const r=$("ring");if(r)requestAnimationFrame(()=>{r.style.strokeDashoffset=r.dataset.to;});}
+function saveScan(){
+  if(pushed.saved)return;
+  scans.push({date:Date.now(),m:pushed.m,score:scores(pushed.m).overall});
+  lsSet("jf_scans",scans);
+  pushed.saved=true;render();toast("Scan saved to Progress");
+  setTimeout(()=>{if(pushed&&pushed.saved){pushed=null;tab="progress";render();}},900);
+}
+window.saveScan=saveScan;
+
+/* ---------- Train ---------- */
+function trainHTML(){
+  const routine=dailyRoutine(latest()?.m,profile);
+  const today=completions[dateKey()]||[];
+  const done=routine.filter(e=>today.includes(e.id)).length;
+  const rIds=new Set(routine.map(e=>e.id));
+  const lib=EX.filter(e=>!rIds.has(e.id));
+  const row=(e,check)=>`
+    <div class="card nr exrow" onclick="push({kind:'exercise',id:'${e.id}'})" style="${check&&today.includes(e.id)?"opacity:.6":""}">
+      <div class="exicon ni">${I[e.icon]}</div>
+      <div style="flex:1"><b style="font-size:13px;${check&&today.includes(e.id)?"text-decoration:line-through":""}">${e.name}</b>
+        <div class="muted" style="font-size:11px;margin-top:2px">${e.sets}</div></div>
+      ${check
+        ?`<button class="checkbtn ${today.includes(e.id)?"done":""}" aria-label="Mark ${e.name} done" onclick="event.stopPropagation();toggleDone('${e.id}')">${today.includes(e.id)?I.checkFill:I.check}</button>`
+        :`<span class="muted">${I.chev}</span>`}
+    </div>`;
+  return `
+  <div class="navbar">Train ${isPro?"":`<button class="pro-badge nr" onclick="payVisible=true;render()">👑 PRO</button>`}</div>
+  <div class="content">
+    <div class="card nr" style="display:flex;align-items:center;gap:12px">
+      <div style="flex:1"><b style="font-size:17px">${streak()} day streak</b>
+        <div class="muted" style="font-size:11px;margin-top:3px">${done}/${routine.length} exercises done today${profile?` · tuned for “${profile.goal}”`:""}</div></div>
+      <span class="ni" style="width:52px;height:52px;border-radius:16px;display:grid;place-items:center;color:${streak()>0?"var(--warn)":"var(--mut)"}">${I.flame}</span>
+    </div>
+    ${latest()?"":`<p class="muted" style="font-size:11px;line-height:1.5;padding:0 4px 8px">This routine is tuned to your quiz answers — scan your face and it also adapts to your weakest metrics.</p>`}
+    <div class="sectionttl">Today's routine</div>
+    ${routine.map(e=>row(e,true)).join("")}
+    <div class="sectionttl">Exercise library</div>
+    ${lib.map(e=>row(e,false)).join("")}
+  </div>`;
+}
+function toggleDone(id){
+  const k=dateKey();const day=new Set(completions[k]||[]);
+  day.has(id)?day.delete(id):day.add(id);
+  completions[k]=[...day];lsSet("jf_done",completions);render();
+}
+window.toggleDone=toggleDone;
+
+/* ---------- Exercise detail ---------- */
+function exerciseHTML(e){
+  timerLeft=timerLeft>0&&pushed._init===e.id?timerLeft:e.dur;
+  pushed._init=e.id;
+  const prog=(e.dur-timerLeft)/e.dur,C=2*Math.PI*64;
+  return `
+  <div class="navbar inline"><button class="backbtn nr" onclick="stopTimer();pushed=null;render()">‹ Back</button>${e.name}</div>
+  <div class="content">
+    <div style="display:flex;gap:13px;margin:8px 2px 14px">
+      <div class="exicon nr" style="width:60px;height:60px;border-radius:17px">${I[e.icon].replace('width="20" height="20"','width="28" height="28"')}</div>
+      <div style="flex:1"><p style="font-size:12.5px;line-height:1.4">${e.tag}</p>
+        <p style="font-size:11px;color:var(--cy);margin-top:4px;font-weight:700">Targets: ${e.targets}</p>
+        <p class="muted" style="font-size:11px;margin-top:2px">${e.sets}</p></div>
+    </div>
+    <div class="card nr timerbox">
+      <div class="ni" style="width:152px;height:152px;border-radius:50%;display:grid;place-items:center">
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <defs><linearGradient id="rg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#17a0bf"/><stop offset="1" stop-color="#735ddb"/></linearGradient></defs>
+        <circle cx="70" cy="70" r="64" fill="none" stroke="rgba(163,177,198,.4)" stroke-width="9"/>
+        <circle id="tring" cx="70" cy="70" r="64" fill="none" stroke="url(#rg2)" stroke-width="9" stroke-linecap="round"
+          transform="rotate(-90 70 70)" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-prog)}" style="transition:stroke-dashoffset .95s linear"/>
+        <text id="tnum" x="70" y="80" text-anchor="middle" class="timer-num" fill="var(--ink)" style="font-size:29px">${fmt(timerLeft)}</text>
+      </svg>
+      </div>
+      <div class="timer-controls">
+        <button class="cta" style="flex:1;padding:13px" onclick="toggleTimer(${e.dur},'${e.id}')">${timerRun?I.pause+" Pause":I.play+(timerLeft===e.dur?" Start":" Resume")}</button>
+        <button class="btn-ghost" aria-label="Reset timer" onclick="resetTimer(${e.dur})">${I.redo}</button>
+      </div>
+    </div>
+    <div class="card nr">
+      <b style="font-size:14px">How to do it</b>
+      ${e.steps.map((s,i)=>`<div class="step"><b>${i+1}</b><span>${s}</span></div>`).join("")}
+    </div>
+    ${e.caution?`<div class="card nr caution">${I.warn}<span>${e.caution}</span></div>`:""}
+  </div>`;
+}
+const fmt=s=>`${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
+function toggleTimer(dur,id){
+  if(timerRun){stopTimer();render();return;}
+  timerRun=true;render();
+  timerId=setInterval(()=>{
+    timerLeft--;
+    const n=$("tnum"),r=$("tring");
+    if(n)n.textContent=fmt(timerLeft);
+    if(r)r.style.strokeDashoffset=(2*Math.PI*64)*(timerLeft/dur);
+    if(timerLeft<=0){
+      stopTimer();
+      const k=dateKey();const day=new Set(completions[k]||[]);day.add(id);
+      completions[k]=[...day];lsSet("jf_done",completions);
+      toast("Nice — marked complete ✓");timerLeft=dur;render();
+    }
+  },1000);
+}
+function stopTimer(){clearInterval(timerId);timerId=null;timerRun=false;}
+function resetTimer(dur){stopTimer();timerLeft=dur;render();}
+window.toggleTimer=toggleTimer;window.resetTimer=resetTimer;
+
+/* ---------- Progress ---------- */
+function progressHTML(){
+  const head=`<div class="navbar">Progress ${isPro?"":`<button class="pro-badge nr" onclick="payVisible=true;render()">👑 PRO</button>`}</div>`;
+  if(!scans.length)return head+`
+    <div class="content"><div class="empty">
+      <span class="nr" style="width:84px;height:84px;border-radius:26px;display:grid;place-items:center;color:var(--mut)">${I.chart.replace('width="26" height="26"','width="40" height="40"')}</span>
+      <b style="color:var(--ink);font-size:15px">No scans yet</b>
+      Save your first scan and your score history will chart here. Re-scan weekly under similar lighting for the cleanest trend.
+    </div></div>`;
+  const sorted=[...scans].sort((a,b)=>a.date-b.date);
+  const W=320,H=170,px=34,py=16;
+  const xs=i=>sorted.length===1?W/2:px+(W-2*px)*i/(sorted.length-1);
+  const ys=v=>py+(H-2*py)*(1-v/100);
+  const line=sorted.map((s,i)=>`${xs(i).toFixed(1)},${ys(s.score).toFixed(1)}`).join(" ");
+  const delta=sorted.length>1?sorted[sorted.length-1].score-sorted[0].score:null;
+  const dcol=delta>=0?"var(--good)":"var(--bad)";
+  const newestFirst=[...sorted].reverse();
+  const visible=isPro?newestFirst:newestFirst.slice(0,FREE_HISTORY);
+  const locked=newestFirst.length-visible.length;
+  return head+`
+  <div class="content">
+    <div class="card nr">
+      <b style="font-size:14px">Jawline score over time</b>
+      <svg viewBox="0 0 ${W} ${H}" style="width:100%;margin-top:8px" role="img" aria-label="Score history chart">
+        ${[25,50,75,100].map(v=>`<line x1="${px}" x2="${W-px}" y1="${ys(v)}" y2="${ys(v)}" stroke="rgba(41,48,71,.08)"/><text x="${px-6}" y="${ys(v)+3.5}" text-anchor="end" fill="var(--mut)" style="font-size:8.5px;font-variant-numeric:tabular-nums">${v}</text>`).join("")}
+        <polygon points="${xs(0)},${ys(0)} ${line} ${xs(sorted.length-1)},${ys(0)}" fill="rgba(23,160,191,.10)"/>
+        <polyline points="${line}" fill="none" stroke="var(--cy)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+        ${sorted.map((s,i)=>`<circle cx="${xs(i)}" cy="${ys(s.score)}" r="${i===sorted.length-1?5:3.5}" fill="${i===sorted.length-1?"var(--vi)":"var(--cy)"}"/>`).join("")}
+      </svg>
+    </div>
+    ${delta!==null?`<div class="card nr" style="display:flex;align-items:center;gap:12px">
+      <div style="flex:1"><span class="muted" style="font-size:11px">Since your first scan</span>
+        <div style="font-size:17px;font-weight:800;color:${dcol};margin-top:2px">${delta>=0?"+":""}${delta.toFixed(1)} points</div></div>
+      <span style="color:${dcol};font-size:24px">${delta>=0?"↗":"↘"}</span>
+    </div>`:""}
+    <div class="sectionttl">All scans</div>
+    ${visible.map(s=>`
+      <div class="card nr scanrow">
+        <div><b style="font-size:12.5px">${new Date(s.date).toLocaleDateString(undefined,{month:"short",day:"numeric"})} · ${new Date(s.date).toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"})}</b>
+          <div class="muted" style="font-size:10.5px;margin-top:3px">Angle ${Math.round(s.m.gonialAngle)}° · Width ${Math.round(s.m.widthRatio*100)}% · Sym ${Math.round(s.m.symmetry*100)}%</div></div>
+        <b style="font-size:18px;color:${scol(s.score)};font-variant-numeric:tabular-nums">${Math.round(s.score)}</b>
+      </div>`).join("")}
+    ${locked>0?`
+      <div class="card nr lockrow" onclick="payVisible=true;render()">
+        <span style="color:var(--cy)">${I.lock}</span>
+        <div style="flex:1"><b style="font-size:12.5px">${locked} older scan${locked===1?"":"s"} locked</b>
+          <div class="muted" style="font-size:10.5px;margin-top:2px">JawForge Pro keeps your full history and trends</div></div>
+        <span class="unlock">Unlock</span>
+      </div>`:""}
+    <button class="cta" style="background:var(--bg);color:var(--bad);box-shadow:6px 6px 12px var(--sd),-6px -6px 12px var(--sl);margin-top:6px" onclick="if(confirm('Clear all demo data (scans, Pro, profile)?')){scans=[];isPro=false;profile=null;lsSet('jf_scans',scans);lsSet('jf_pro',false);lsSet('jf_profile',null);render()}">Clear demo data</button>
+  </div>`;
+}
+
+render();
+</script>
