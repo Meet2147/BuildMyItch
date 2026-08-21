@@ -140,6 +140,7 @@ struct ScanView: View {
             }
         }
         .padding(.top, 4)
+        .readableWidth()
     }
 
     @ViewBuilder

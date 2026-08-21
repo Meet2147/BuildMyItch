@@ -21,6 +21,7 @@ struct ExerciseDetailView: View {
                     }
                 }
                 .padding()
+                .readableWidth()
             }
         }
         .navigationTitle(exercise.name)

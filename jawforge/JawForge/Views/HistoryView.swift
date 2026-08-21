@@ -31,6 +31,7 @@ struct HistoryView: View {
                             scanList
                         }
                         .padding()
+                        .readableWidth()
                     }
                 }
             }

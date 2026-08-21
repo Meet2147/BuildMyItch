@@ -13,7 +13,7 @@ struct OnboardingFlowView: View {
         ZStack {
             Theme.background.ignoresSafeArea()
             VStack(spacing: 0) {
-                progressHeader
+                progressHeader.readableWidth()
                 TabView(selection: $page) {
                     welcomePage.tag(0)
                     aboutYouPage.tag(1)
@@ -74,6 +74,7 @@ struct OnboardingFlowView: View {
         }
         .padding(.horizontal, 22)
         .padding(.bottom, 20)
+        .readableWidth()
     }
 
     private func pageLayout<Content: View>(
@@ -90,6 +91,7 @@ struct OnboardingFlowView: View {
             }
             .padding(.horizontal, 22)
             .padding(.bottom, 20)
+            .readableWidth()
         }
         .scrollIndicators(.hidden)
     }

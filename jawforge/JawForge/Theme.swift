@@ -128,8 +128,19 @@ struct CardBackground: ViewModifier {
     }
 }
 
+/// Caps content width on iPad so the phone-first layout reads as a
+/// deliberate centered column instead of stretching edge to edge.
+struct ReadableWidth: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .frame(maxWidth: 640)
+            .frame(maxWidth: .infinity)
+    }
+}
+
 extension View {
     func card() -> some View { modifier(CardBackground()) }
+    func readableWidth() -> some View { modifier(ReadableWidth()) }
     func neuRaised(cornerRadius: CGFloat = 20) -> some View { modifier(NeuRaised(cornerRadius: cornerRadius)) }
     func neuInset(cornerRadius: CGFloat = 16) -> some View { modifier(NeuInset(cornerRadius: cornerRadius)) }
 }

@@ -1,0 +1,95 @@
+{
+  "identifier" : "5A0C4B2E-9F31-4E2A-B8D0-1C6A7E42F901",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "79.99",
+      "familyShareable" : false,
+      "internalID" : "6F000003-0000-0000-0000-000000000003",
+      "localizations" : [
+        {
+          "description" : "All Pro features, yours forever.",
+          "displayName" : "JawForge Pro Lifetime",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.buildmyitch.jawforge.pro.lifetime",
+      "referenceName" : "Pro Lifetime",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21000001-0000-0000-0000-000000000001",
+      "localizations" : [
+
+      ],
+      "name" : "JawForge Pro",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "3.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6F000001-0000-0000-0000-000000000001",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "All Pro features, billed weekly.",
+              "displayName" : "JawForge Pro Weekly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.buildmyitch.jawforge.pro.weekly",
+          "recurringSubscriptionPeriod" : "P1W",
+          "referenceName" : "Pro Weekly",
+          "subscriptionGroupID" : "21000001-0000-0000-0000-000000000001",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "29.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6F000002-0000-0000-0000-000000000002",
+          "introductoryOffer" : {
+            "internalID" : "6F000004-0000-0000-0000-000000000004",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
+          "localizations" : [
+            {
+              "description" : "All Pro features, billed yearly. 7-day free trial.",
+              "displayName" : "JawForge Pro Annual",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.buildmyitch.jawforge.pro.annual",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Pro Annual",
+          "subscriptionGroupID" : "21000001-0000-0000-0000-000000000001",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

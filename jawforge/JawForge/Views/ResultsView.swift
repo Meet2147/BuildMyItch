@@ -41,11 +41,12 @@ struct ResultsView: View {
                         .padding(.horizontal, 24)
                         .padding(.bottom, 90)
                 }
+                .readableWidth()
             }
 
             VStack {
                 Spacer()
-                saveButton
+                saveButton.readableWidth()
             }
         }
         .navigationTitle("Your results")

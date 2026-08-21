@@ -32,12 +32,24 @@ struct PaywallView: View {
                     }
                     .padding(.horizontal, 20)
                     .padding(.bottom, 12)
+                    .readableWidth()
                 }
                 .scrollIndicators(.hidden)
-                footer
+                footer.readableWidth()
             }
         }
         .foregroundStyle(Theme.ink)
+        .alert("Purchase issue", isPresented: .init(
+            get: { entitlements.purchaseError != nil },
+            set: { if !$0 { entitlements.purchaseError = nil } }
+        )) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(entitlements.purchaseError ?? "")
+        }
+        .onChange(of: entitlements.isPro) { _, pro in
+            if pro { dismiss() }
+        }
     }
 
     private var header: some View {
@@ -115,7 +127,7 @@ struct PaywallView: View {
                             Text(plan.per).font(.caption).foregroundStyle(Theme.textSecondary)
                         }
                         Spacer()
-                        Text(plan.price).font(.headline.monospacedDigit())
+                        Text(entitlements.displayPrice(for: plan)).font(.headline.monospacedDigit())
                         Image(systemName: selected ? "checkmark.circle.fill" : "circle")
                             .foregroundStyle(selected ? Theme.accent : Theme.textSecondary)
                     }
@@ -133,19 +145,29 @@ struct PaywallView: View {
 
     private var footer: some View {
         VStack(spacing: 10) {
-            NeuPrimaryButton(
-                title: selectedPlan == .annual ? "Start 7-day free trial" : "Unlock JawForge Pro",
-                icon: "lock.open.fill"
-            ) {
-                entitlements.purchase(selectedPlan)
-                dismiss()
+            ZStack {
+                NeuPrimaryButton(
+                    title: selectedPlan == .annual ? "Start 7-day free trial" : "Unlock JawForge Pro",
+                    icon: "lock.open.fill"
+                ) {
+                    Task { await entitlements.purchase(selectedPlan) }
+                }
+                .opacity(entitlements.isPurchasing ? 0.35 : 1)
+                if entitlements.isPurchasing {
+                    ProgressView().tint(.white)
+                }
             }
+            .disabled(entitlements.isPurchasing)
+
             HStack(spacing: 18) {
-                Button("Restore purchases") { entitlements.restore(); dismiss() }
+                Button("Restore purchases") {
+                    Task { await entitlements.restore() }
+                }
+                .disabled(entitlements.isPurchasing)
                 Text("·").foregroundStyle(Theme.textSecondary)
-                Button("Terms") {}
+                Link("Terms", destination: Entitlements.termsURL)
                 Text("·").foregroundStyle(Theme.textSecondary)
-                Button("Privacy") {}
+                Link("Privacy", destination: Entitlements.privacyURL)
             }
             .font(.caption)
             .foregroundStyle(Theme.textSecondary)

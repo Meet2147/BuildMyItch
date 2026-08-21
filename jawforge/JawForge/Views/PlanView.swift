@@ -31,6 +31,7 @@ struct PlanView: View {
                         section("Exercise library", exercises: otherExercises, showCheck: false)
                     }
                     .padding(.vertical)
+                    .readableWidth()
                 }
             }
             .navigationTitle("Train")
