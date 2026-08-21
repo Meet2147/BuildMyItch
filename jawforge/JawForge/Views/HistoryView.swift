@@ -3,10 +3,19 @@ import Charts
 
 struct HistoryView: View {
     @Environment(ScanStore.self) private var store
+    @Environment(Entitlements.self) private var entitlements
+    @State private var showPaywall = false
 
     private var sortedScans: [FaceScan] {
         store.scans.sorted { $0.date > $1.date }
     }
+
+    /// Free tier keeps the latest few scans visible; the rest sit behind Pro.
+    private var visibleScans: [FaceScan] {
+        entitlements.isPro ? sortedScans : Array(sortedScans.prefix(Entitlements.freeHistoryLimit))
+    }
+
+    private var lockedCount: Int { sortedScans.count - visibleScans.count }
 
     var body: some View {
         NavigationStack {
@@ -27,7 +36,9 @@ struct HistoryView: View {
             }
             .navigationTitle("Progress")
             .toolbarBackground(Theme.background, for: .navigationBar)
+            .sheet(isPresented: $showPaywall) { PaywallView() }
         }
+        .tint(Theme.accent)
     }
 
     private var emptyState: some View {
@@ -96,7 +107,7 @@ struct HistoryView: View {
         VStack(alignment: .leading, spacing: 10) {
             Text("All scans")
                 .font(.headline)
-            ForEach(sortedScans) { scan in
+            ForEach(visibleScans) { scan in
                 HStack {
                     VStack(alignment: .leading, spacing: 3) {
                         Text(scan.date.formatted(date: .abbreviated, time: .shortened))
@@ -119,6 +130,31 @@ struct HistoryView: View {
                     }
                 }
             }
+            if lockedCount > 0 {
+                Button {
+                    showPaywall = true
+                } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: "lock.fill")
+                            .foregroundStyle(Theme.accent)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("\(lockedCount) older scan\(lockedCount == 1 ? "" : "s") locked")
+                                .font(.subheadline.bold())
+                            Text("JawForge Pro keeps your full history and trends")
+                                .font(.caption)
+                                .foregroundStyle(Theme.textSecondary)
+                        }
+                        Spacer()
+                        Text("Unlock")
+                            .font(.caption.bold())
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 13).padding(.vertical, 7)
+                            .background(Theme.accentGradient, in: Capsule())
+                    }
+                    .card()
+                }
+                .buttonStyle(.plain)
+            }
         }
     }
 }
@@ -126,5 +162,5 @@ struct HistoryView: View {
 #Preview {
     HistoryView()
         .environment(ScanStore())
-        .preferredColorScheme(.dark)
+        .environment(Entitlements())
 }

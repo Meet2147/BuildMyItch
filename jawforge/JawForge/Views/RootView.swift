@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct RootView: View {
+    @Environment(ScanStore.self) private var store
     @AppStorage("hasOnboarded") private var hasOnboarded = false
+    @State private var showPostOnboardingPaywall = false
 
     var body: some View {
         TabView {
@@ -17,7 +19,17 @@ struct RootView: View {
             get: { !hasOnboarded },
             set: { hasOnboarded = !$0 }
         )) {
-            OnboardingView { hasOnboarded = true }
+            OnboardingFlowView { profile in
+                store.setProfile(profile)
+                hasOnboarded = true
+                // Give the cover a beat to dismiss before the paywall slides up.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    showPostOnboardingPaywall = true
+                }
+            }
+        }
+        .sheet(isPresented: $showPostOnboardingPaywall) {
+            PaywallView()
         }
     }
 }
@@ -25,5 +37,5 @@ struct RootView: View {
 #Preview {
     RootView()
         .environment(ScanStore())
-        .preferredColorScheme(.dark)
+        .environment(Entitlements())
 }

@@ -53,7 +53,7 @@ struct ExerciseDetailView: View {
     private var timerCard: some View {
         VStack(spacing: 14) {
             ZStack {
-                Circle().stroke(Theme.surfaceRaised, lineWidth: 10)
+                Circle().stroke(Theme.shadowDark.opacity(0.28), lineWidth: 10)
                 Circle()
                     .trim(from: 0, to: progress)
                     .stroke(Theme.accentGradient, style: StrokeStyle(lineWidth: 10, lineCap: .round))
@@ -74,7 +74,8 @@ struct ExerciseDetailView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 13)
                         .background(Theme.accentGradient, in: RoundedRectangle(cornerRadius: 14))
-                        .foregroundStyle(.black)
+                        .foregroundStyle(.white)
+                        .shadow(color: Theme.accent.opacity(0.4), radius: 8, y: 5)
                 }
                 Button {
                     stopTimer()
@@ -83,9 +84,9 @@ struct ExerciseDetailView: View {
                     Image(systemName: "arrow.counterclockwise")
                         .font(.headline)
                         .frame(width: 50, height: 50)
-                        .background(Theme.surfaceRaised, in: RoundedRectangle(cornerRadius: 14))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(Theme.ink)
                 }
+                .buttonStyle(NeuButtonStyle(cornerRadius: 14))
             }
         }
         .frame(maxWidth: .infinity)
@@ -163,5 +164,4 @@ struct ExerciseDetailView: View {
         ExerciseDetailView(exercise: ExerciseCatalog.all[2])
     }
     .environment(ScanStore())
-    .preferredColorScheme(.dark)
 }

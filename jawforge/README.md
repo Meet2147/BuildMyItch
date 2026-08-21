@@ -6,6 +6,20 @@ follow a personalized daily training routine to sharpen it.
 Unlike the rest of this repo (web apps), JawForge is a **native SwiftUI iOS
 app** — open `JawForge.xcodeproj` in Xcode and run.
 
+**Design**: full neumorphic ("soft UI") system — one pale surface tone
+(`#E3E8F2`) with depth carved by paired light/dark shadows (`NeuRaised`,
+`NeuInset`, `NeuButtonStyle` in `Theme.swift`), a teal→violet gradient
+reserved for the single call-to-action per screen, and an animated scan
+experience (pulsing face guide, sweeping scan line, staged
+"Detecting → Tracing → Measuring → Scoring" analysis overlay).
+
+**Monetization**: freemium with a **JawForge Pro** subscription.
+Free = 1 scan/week, 3-scan history, standard routine. Pro = unlimited scans,
+full history + trends, adaptive routine, complete metric breakdowns, smart
+reminders. Plans: $3.99/wk · $29.99/yr (7-day free trial, anchor) · $79.99
+lifetime. The paywall (`PaywallView.swift`) ships with a demo purchase flow;
+`Entitlements.swift` marks exactly where StoreKit 2 goes live.
+
 ## What it does
 
 1. **Scan** — take a selfie (guided by a face-alignment overlay) or pick a
@@ -38,25 +52,30 @@ app** — open `JawForge.xcodeproj` in Xcode and run.
 
 ```
 JawForge/
-  JawForgeApp.swift          App entry, dark theme
-  Theme.swift                Palette + card styling
+  JawForgeApp.swift          App entry (light scheme for neumorphism)
+  Theme.swift                Neumorphic design system: palette + NeuRaised/
+                             NeuInset/NeuButtonStyle/NeuPrimaryButton
   Models/
     JawlineMetrics.swift     Raw measurements → banded 0–100 scores
     FaceScan.swift           One saved scan (metrics only, no photo)
     Exercise.swift           The 8-exercise catalog
+    UserProfile.swift        Onboarding quiz answers (age, lifestyle, goal…)
     ScanStore.swift          @Observable state + JSON persistence + streak
   Services/
     FaceAnalyzer.swift       Vision landmarks → metrics (pure geometry)
     CameraService.swift      AVCaptureSession front-camera wrapper
-    GuidanceEngine.swift     Metrics → recommendations + daily routine
+    GuidanceEngine.swift     Metrics + profile → recommendations + routine
+    Entitlements.swift       Pro state, plans, free-tier limits (StoreKit 2 stub)
   Views/
-    RootView.swift           Tabs: Scan / Train / Progress (+ onboarding)
-    OnboardingView.swift
-    ScanView.swift           Live preview, face guide overlay, photo picker
+    RootView.swift           Tabs: Scan / Train / Progress (+ onboarding, paywall)
+    OnboardingFlowView.swift 5-screen quiz: welcome, about you, lifestyle,
+                             training, goal — every answer feeds the engine
+    PaywallView.swift        JawForge Pro paywall (3 plans, feature list)
+    ScanView.swift           Live preview, animated scan overlay, photo picker
     ResultsView.swift        Score ring, metric breakdown, game plan
     PlanView.swift           Today's routine, streak, exercise library
     ExerciseDetailView.swift Steps + countdown timer (auto-marks complete)
-    HistoryView.swift        Score chart + scan list
+    HistoryView.swift        Score chart + scan list (history gated for free)
 ```
 
 ## Requirements & running

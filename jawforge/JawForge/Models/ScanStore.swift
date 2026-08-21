@@ -8,6 +8,8 @@ final class ScanStore {
     private(set) var scans: [FaceScan] = []
     /// dateKey ("2026-08-21") → completed exercise ids that day.
     private(set) var completions: [String: Set<String>] = [:]
+    /// Answers from the onboarding quiz; nil until onboarding completes.
+    private(set) var profile: UserProfile?
 
     private let fileURL: URL = {
         let dir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
@@ -19,6 +21,7 @@ final class ScanStore {
     private struct Snapshot: Codable {
         var scans: [FaceScan]
         var completions: [String: Set<String>]
+        var profile: UserProfile?
     }
 
     init() {
@@ -26,6 +29,17 @@ final class ScanStore {
     }
 
     var latestScan: FaceScan? { scans.max(by: { $0.date < $1.date }) }
+
+    /// Saved scans in the trailing 7 days — the free tier's scan quota window.
+    var scansInLast7Days: Int {
+        let cutoff = Calendar.current.date(byAdding: .day, value: -7, to: .now) ?? .now
+        return scans.filter { $0.date > cutoff }.count
+    }
+
+    func setProfile(_ newProfile: UserProfile) {
+        profile = newProfile
+        save()
+    }
 
     func add(_ scan: FaceScan) {
         scans.append(scan)
@@ -92,10 +106,11 @@ final class ScanStore {
               let snapshot = try? JSONDecoder().decode(Snapshot.self, from: data) else { return }
         scans = snapshot.scans
         completions = snapshot.completions
+        profile = snapshot.profile
     }
 
     private func save() {
-        let snapshot = Snapshot(scans: scans, completions: completions)
+        let snapshot = Snapshot(scans: scans, completions: completions, profile: profile)
         guard let data = try? JSONEncoder().encode(snapshot) else { return }
         try? data.write(to: fileURL, options: .atomic)
     }

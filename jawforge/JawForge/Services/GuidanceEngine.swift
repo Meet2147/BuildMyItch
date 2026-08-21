@@ -67,21 +67,60 @@ enum GuidanceEngine {
         return recs
     }
 
-    /// Picks today's 4-exercise routine: foundations first, then whatever
-    /// targets the weakest metrics.
-    static func dailyRoutine(for metrics: JawlineMetrics?) -> [Exercise] {
+    /// Picks today's routine: foundations first, then whatever targets the
+    /// weakest metrics, tuned by the onboarding profile.
+    ///
+    /// Profile effects:
+    /// - `dailyMinutes` sets routine size (5 min → 3 exercises, 10 → 4, 15 → 5).
+    /// - Frequent mouth breathing promotes mewing emphasis (it already leads).
+    /// - A one-sided chewing habit or side sleeping pulls in the side glide.
+    /// - Heavy screen hours pull in chin tucks emphasis (already a foundation)
+    ///   plus neck curls for the posture chain.
+    /// - The stated goal breaks ranking ties in its favor.
+    static func dailyRoutine(for metrics: JawlineMetrics?, profile: UserProfile? = nil) -> [Exercise] {
         var ids: [String] = ["mewing", "chin_tucks"]
+
+        var ranked: [(String, Double)]
         if let m = metrics {
-            let ranked: [(String, Double)] = [
+            ranked = [
                 ("chewing", m.widthRatioScore),
                 ("jaw_resistance", m.gonialAngleScore),
                 ("side_glide", m.symmetryScore),
                 ("vowel_stretch", m.lowerFaceScore),
-            ].sorted { $0.1 < $1.1 }
-            ids.append(contentsOf: ranked.prefix(2).map(\.0))
+                ("platysma_flex", (m.gonialAngleScore + m.lowerFaceScore) / 2),
+                ("neck_curls", m.gonialAngleScore),
+            ]
         } else {
-            ids.append(contentsOf: ["chewing", "jaw_resistance"])
+            ranked = [
+                ("chewing", 60), ("jaw_resistance", 62), ("side_glide", 70),
+                ("vowel_stretch", 72), ("platysma_flex", 66), ("neck_curls", 68),
+            ]
         }
+
+        if let p = profile {
+            func boost(_ id: String, _ amount: Double) {
+                if let i = ranked.firstIndex(where: { $0.0 == id }) { ranked[i].1 -= amount }
+            }
+            if p.chewingSide == .left || p.chewingSide == .right { boost("side_glide", 15) }
+            if p.sleepPosition == .left || p.sleepPosition == .right { boost("side_glide", 8) }
+            if p.screenHours == .high { boost("neck_curls", 12) }
+            switch p.goal {
+            case .sharper: boost("jaw_resistance", 10); boost("chewing", 8)
+            case .doubleChin: boost("platysma_flex", 12); boost("neck_curls", 10)
+            case .symmetry: boost("side_glide", 14); boost("vowel_stretch", 8)
+            case .overall: break
+            }
+        }
+
+        let slots: Int = {
+            switch profile?.dailyMinutes {
+            case .five: return 1
+            case .fifteen: return 3
+            default: return 2
+            }
+        }()
+        ranked.sort { $0.1 < $1.1 }
+        ids.append(contentsOf: ranked.prefix(slots).map(\.0))
         return ids.compactMap(ExerciseCatalog.byID)
     }
 }

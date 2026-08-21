@@ -57,11 +57,17 @@ struct ResultsView: View {
         return VStack(spacing: 10) {
             ZStack {
                 Circle()
-                    .stroke(Theme.surface, lineWidth: 14)
+                    .fill(Theme.surface)
+                    .shadow(color: Theme.shadowDark.opacity(0.5), radius: 10, x: 7, y: 7)
+                    .shadow(color: Theme.shadowLight.opacity(0.9), radius: 10, x: -7, y: -7)
+                Circle()
+                    .stroke(Theme.shadowDark.opacity(0.28), lineWidth: 14)
+                    .padding(10)
                 Circle()
                     .trim(from: 0, to: score / 100)
                     .stroke(Theme.accentGradient, style: StrokeStyle(lineWidth: 14, lineCap: .round))
                     .rotationEffect(.degrees(-90))
+                    .padding(10)
                 VStack(spacing: 2) {
                     Text("\(Int(score.rounded()))")
                         .font(.system(size: 52, weight: .black, design: .rounded))
@@ -92,10 +98,12 @@ struct ResultsView: View {
                 .padding(.vertical, 15)
                 .background(
                     saved ? AnyShapeStyle(Theme.good) : AnyShapeStyle(Theme.accentGradient),
-                    in: RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    in: RoundedRectangle(cornerRadius: 18, style: .continuous)
                 )
-                .foregroundStyle(.black)
+                .foregroundStyle(.white)
+                .shadow(color: (saved ? Theme.good : Theme.accent).opacity(0.45), radius: 10, y: 6)
         }
+        .buttonStyle(.plain)
         .padding(.horizontal)
         .padding(.bottom, 8)
     }
@@ -128,7 +136,7 @@ struct MetricRow: View {
 
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
-                    Capsule().fill(Theme.surfaceRaised)
+                    Capsule().fill(Theme.shadowDark.opacity(0.3))
                     Capsule()
                         .fill(Theme.scoreColor(reading.score))
                         .frame(width: geo.size.width * reading.score / 100)
@@ -175,6 +183,7 @@ struct RecommendationCard: View {
                                     .padding(.horizontal, 12)
                                     .padding(.vertical, 7)
                                     .background(Theme.surfaceRaised, in: Capsule())
+                                    .overlay(Capsule().stroke(Theme.shadowDark.opacity(0.35), lineWidth: 1))
                                     .foregroundStyle(Theme.accent)
                             }
                         }
@@ -196,5 +205,4 @@ struct RecommendationCard: View {
         ))
     }
     .environment(ScanStore())
-    .preferredColorScheme(.dark)
 }

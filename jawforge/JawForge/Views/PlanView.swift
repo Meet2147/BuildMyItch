@@ -4,7 +4,7 @@ struct PlanView: View {
     @Environment(ScanStore.self) private var store
 
     private var routine: [Exercise] {
-        GuidanceEngine.dailyRoutine(for: store.latestScan?.metrics)
+        GuidanceEngine.dailyRoutine(for: store.latestScan?.metrics, profile: store.profile)
     }
 
     private var otherExercises: [Exercise] {
@@ -21,7 +21,7 @@ struct PlanView: View {
                         streakHeader
 
                         if store.latestScan == nil {
-                            Text("This is the general starter routine — scan your face and it gets personalized to your weakest metrics.")
+                            Text("This routine is tuned to your quiz answers — scan your face and it also adapts to your weakest metrics.")
                                 .font(.caption)
                                 .foregroundStyle(Theme.textSecondary)
                                 .padding(.horizontal)
@@ -124,5 +124,4 @@ struct ExerciseRow: View {
 #Preview {
     PlanView()
         .environment(ScanStore())
-        .preferredColorScheme(.dark)
 }
