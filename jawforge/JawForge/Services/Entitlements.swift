@@ -23,9 +23,9 @@ final class Entitlements {
         var productID: String { "com.buildmyitch.jawforge.pro.\(rawValue)" }
         var title: String {
             switch self {
-            case .weekly: return "Weekly"
-            case .annual: return "Annual"
-            case .lifetime: return "Lifetime"
+            case .weekly: return String(localized: "Weekly")
+            case .annual: return String(localized: "Annual")
+            case .lifetime: return String(localized: "Lifetime")
             }
         }
         /// Shown until live products load (and in previews).
@@ -38,14 +38,14 @@ final class Entitlements {
         }
         var per: String {
             switch self {
-            case .weekly: return "per week"
-            case .annual: return "per year · 7-day free trial"
-            case .lifetime: return "one time"
+            case .weekly: return String(localized: "per week")
+            case .annual: return String(localized: "per year · 7-day free trial")
+            case .lifetime: return String(localized: "one time")
             }
         }
         var badge: String? {
             switch self {
-            case .annual: return "BEST VALUE · 7-DAY FREE TRIAL"
+            case .annual: return String(localized: "BEST VALUE · 7-DAY FREE TRIAL")
             default: return nil
             }
         }
@@ -110,7 +110,7 @@ final class Entitlements {
     func purchase(_ plan: ProPlan) async {
         if products.isEmpty { await loadProducts() }
         guard let product = product(for: plan) else {
-            purchaseError = "The App Store isn't reachable right now. Check your connection and try again."
+            purchaseError = String(localized: "The App Store isn't reachable right now. Check your connection and try again.")
             return
         }
         isPurchasing = true
@@ -145,7 +145,7 @@ final class Entitlements {
         }
         await refreshEntitlements()
         if !isPro {
-            purchaseError = "No previous purchases found for this Apple Account."
+            purchaseError = String(localized: "No previous purchases found for this Apple Account.")
         }
     }
 

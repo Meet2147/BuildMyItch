@@ -69,7 +69,9 @@ struct ExerciseDetailView: View {
                 Button {
                     timerRunning ? stopTimer() : startTimer()
                 } label: {
-                    Label(timerRunning ? "Pause" : (remaining == exercise.durationSeconds ? "Start" : "Resume"),
+                    Label(timerRunning
+                          ? String(localized: "Pause")
+                          : (remaining == exercise.durationSeconds ? String(localized: "Start") : String(localized: "Resume")),
                           systemImage: timerRunning ? "pause.fill" : "play.fill")
                         .font(.headline)
                         .frame(maxWidth: .infinity)

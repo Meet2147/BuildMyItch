@@ -27,8 +27,9 @@ struct PlanView: View {
                                 .padding(.horizontal)
                         }
 
-                        section("Today's routine", exercises: routine, showCheck: true)
-                        section("Exercise library", exercises: otherExercises, showCheck: false)
+                        section(String(localized: "Today's routine"), exercises: routine, showCheck: true)
+                        habitsSection
+                        section(String(localized: "Exercise library"), exercises: otherExercises, showCheck: false)
                     }
                     .padding(.vertical)
                     .readableWidth()
@@ -56,6 +57,48 @@ struct PlanView: View {
         }
         .card()
         .padding(.horizontal)
+    }
+
+    private var habitsSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Daily habits")
+                .font(.headline)
+                .padding(.horizontal)
+            Text("The all-day work that moves the needle more than any 60-second set.")
+                .font(.caption)
+                .foregroundStyle(Theme.textSecondary)
+                .padding(.horizontal)
+            ForEach(HabitCatalog.all) { habit in
+                let done = store.isCompleted(habit.id)
+                HStack(spacing: 14) {
+                    Image(systemName: habit.icon)
+                        .font(.title3)
+                        .foregroundStyle(Theme.accent)
+                        .frame(width: 40, height: 40)
+                        .neuInset(cornerRadius: 12)
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(habit.name)
+                            .font(.subheadline.bold())
+                            .strikethrough(done, color: Theme.textSecondary)
+                        Text(habit.detail)
+                            .font(.caption)
+                            .foregroundStyle(Theme.textSecondary)
+                    }
+                    Spacer()
+                    Button {
+                        store.toggleCompletion(habit.id)
+                    } label: {
+                        Image(systemName: done ? "checkmark.circle.fill" : "circle")
+                            .font(.title2)
+                            .foregroundStyle(done ? Theme.good : Theme.textSecondary)
+                    }
+                    .buttonStyle(.plain)
+                }
+                .card()
+                .opacity(done ? 0.65 : 1)
+                .padding(.horizontal)
+            }
+        }
     }
 
     private func section(_ title: String, exercises: [Exercise], showCheck: Bool) -> some View {

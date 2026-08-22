@@ -5,6 +5,7 @@ struct ResultsView: View {
     @Environment(\.dismiss) private var dismiss
     let metrics: JawlineMetrics
     @State private var saved = false
+    @State private var shareImage: UIImage?
 
     private var recommendations: [Recommendation] {
         GuidanceEngine.recommendations(for: metrics)
@@ -17,6 +18,12 @@ struct ResultsView: View {
                 VStack(spacing: 20) {
                     scoreRing
                         .padding(.top, 12)
+
+                    VStack(spacing: 12) {
+                        potentialCard
+                        faceShapeCard
+                    }
+                    .padding(.horizontal)
 
                     VStack(spacing: 12) {
                         ForEach(metrics.readings) { reading in
@@ -49,8 +56,74 @@ struct ResultsView: View {
                 saveButton.readableWidth()
             }
         }
-        .navigationTitle("Your results")
+        .navigationTitle(Text("Your results"))
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                if let shareImage {
+                    ShareLink(
+                        item: Image(uiImage: shareImage),
+                        preview: SharePreview(Text("My JawForge score"), image: Image(uiImage: shareImage))
+                    ) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                }
+            }
+        }
+        .onAppear { renderShareCard() }
+    }
+
+    @MainActor
+    private func renderShareCard() {
+        let renderer = ImageRenderer(content: ScoreShareCard(metrics: metrics))
+        renderer.scale = 3
+        shareImage = renderer.uiImage
+    }
+
+    private var potentialCard: some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Your potential").font(.subheadline.bold())
+                Text("Where consistent training can take you")
+                    .font(.caption)
+                    .foregroundStyle(Theme.textSecondary)
+            }
+            Spacer()
+            Text("\(Int(metrics.overallScore.rounded()))")
+                .font(.title3.bold())
+                .foregroundStyle(Theme.textSecondary)
+            Image(systemName: "arrow.right")
+                .font(.caption.bold())
+                .foregroundStyle(Theme.accent)
+            Text("\(Int(metrics.potentialScore.rounded()))")
+                .font(.system(size: 30, weight: .black, design: .rounded))
+                .foregroundStyle(Theme.accent)
+        }
+        .card()
+    }
+
+    private var faceShapeCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Face shape")
+                        .font(.caption)
+                        .foregroundStyle(Theme.textSecondary)
+                    Text(metrics.faceShape.name)
+                        .font(.headline)
+                }
+                Spacer()
+                Image(systemName: "person.crop.square")
+                    .font(.title2)
+                    .foregroundStyle(Theme.accentGradient)
+            }
+            Text(metrics.faceShape.detail)
+                .font(.caption)
+                .foregroundStyle(Theme.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .card()
     }
 
     private var scoreRing: some View {
@@ -193,6 +266,65 @@ struct RecommendationCard: View {
             }
         }
         .card()
+    }
+}
+
+/// The image people share — dark, branded, and readable in a feed.
+struct ScoreShareCard: View {
+    let metrics: JawlineMetrics
+
+    var body: some View {
+        VStack(spacing: 18) {
+            HStack(spacing: 6) {
+                Image(systemName: "faceid")
+                Text(verbatim: "JawForge").font(.system(.headline, design: .rounded).weight(.black))
+                Spacer()
+                Text(metrics.faceShape.name)
+                    .font(.caption.bold())
+                    .padding(.horizontal, 10).padding(.vertical, 5)
+                    .background(.white.opacity(0.12), in: Capsule())
+            }
+            .foregroundStyle(.white)
+
+            VStack(spacing: 2) {
+                Text("\(Int(metrics.overallScore.rounded()))")
+                    .font(.system(size: 88, weight: .black, design: .rounded))
+                    .foregroundStyle(
+                        LinearGradient(colors: [Color(red: 0.18, green: 0.83, blue: 0.94), Color(red: 0.56, green: 0.42, blue: 1.0)],
+                                       startPoint: .topLeading, endPoint: .bottomTrailing)
+                    )
+                Text("Jawline score")
+                    .font(.caption)
+                    .foregroundStyle(.white.opacity(0.6))
+            }
+
+            VStack(spacing: 8) {
+                ForEach(metrics.readings) { reading in
+                    HStack {
+                        Text(reading.name).font(.caption)
+                        Spacer()
+                        Text(reading.valueText).font(.caption.monospacedDigit())
+                        Text(reading.band)
+                            .font(.system(size: 9, weight: .heavy))
+                            .padding(.horizontal, 7).padding(.vertical, 3)
+                            .background(Theme.scoreColor(reading.score).opacity(0.25), in: Capsule())
+                    }
+                    .foregroundStyle(.white.opacity(0.85))
+                }
+            }
+            .padding(14)
+            .background(.white.opacity(0.07), in: RoundedRectangle(cornerRadius: 14))
+
+            Text("Scanned on-device with JawForge")
+                .font(.system(size: 10))
+                .foregroundStyle(.white.opacity(0.45))
+        }
+        .padding(26)
+        .frame(width: 360)
+        .background(
+            LinearGradient(colors: [Color(red: 0.09, green: 0.11, blue: 0.16), Color(red: 0.05, green: 0.06, blue: 0.10)],
+                           startPoint: .top, endPoint: .bottom)
+        )
     }
 }
 

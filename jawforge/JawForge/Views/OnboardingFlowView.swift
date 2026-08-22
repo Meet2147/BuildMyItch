@@ -67,7 +67,7 @@ struct OnboardingFlowView: View {
 
     private var footer: some View {
         NeuPrimaryButton(
-            title: page == pageCount - 1 ? "Build my plan" : "Continue",
+            title: page == pageCount - 1 ? String(localized: "Build my plan") : String(localized: "Continue"),
             icon: page == pageCount - 1 ? "wand.and.stars" : nil
         ) {
             if page < pageCount - 1 { page += 1 } else { onFinish(profile) }
@@ -117,12 +117,12 @@ struct OnboardingFlowView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 18) {
-                    welcomeRow(icon: "camera.viewfinder", title: "Scan your face",
-                               text: "One selfie, measured on-device. Photos never leave your phone.")
-                    welcomeRow(icon: "list.clipboard", title: "Know your numbers",
-                               text: "Jaw angle, width, proportion and symmetry — scored and explained.")
-                    welcomeRow(icon: "flame", title: "Train with a plan",
-                               text: "A routine built from your scan and the answers you're about to give.")
+                    welcomeRow(icon: "camera.viewfinder", title: String(localized: "Scan your face"),
+                               text: String(localized: "One selfie, measured on-device. Photos never leave your phone."))
+                    welcomeRow(icon: "list.clipboard", title: String(localized: "Know your numbers"),
+                               text: String(localized: "Jaw angle, width, proportion and symmetry — scored and explained."))
+                    welcomeRow(icon: "flame", title: String(localized: "Train with a plan"),
+                               text: String(localized: "A routine built from your scan and the answers you're about to give."))
                 }
                 .padding(18)
                 .neuRaised()
@@ -153,9 +153,9 @@ struct OnboardingFlowView: View {
     }
 
     private var aboutYouPage: some View {
-        pageLayout("About you", "Age changes how fast muscle and posture respond — we tune expectations, not judgment.") {
-            OptionGrid(title: "Your age", options: UserProfile.AgeRange.allCases,
-                       selection: $profile.ageRange) { $0.rawValue }
+        pageLayout(String(localized: "About you"), String(localized: "Age changes how fast muscle and posture respond — we tune expectations, not judgment.")) {
+            OptionGrid(title: String(localized: "Your age"), options: UserProfile.AgeRange.allCases,
+                       selection: $profile.ageRange) { $0.label }
 
             VStack(alignment: .leading, spacing: 12) {
                 Text("Height & weight — optional")
@@ -175,31 +175,31 @@ struct OnboardingFlowView: View {
     }
 
     private var lifestylePage: some View {
-        pageLayout("Your lifestyle", "Daily habits quietly shape the lower face — these tell us where to look.") {
-            OptionGrid(title: "How do you usually sleep?", options: UserProfile.SleepPosition.allCases,
-                       selection: $profile.sleepPosition) { $0.rawValue }
-            OptionGrid(title: "Which side do you chew on?", options: UserProfile.ChewingSide.allCases,
-                       selection: $profile.chewingSide) { $0.rawValue }
-            OptionGrid(title: "Do you breathe through your mouth?", options: UserProfile.MouthBreathing.allCases,
-                       selection: $profile.mouthBreathing) { $0.rawValue }
-            OptionGrid(title: "Screen time per day", options: UserProfile.ScreenHours.allCases,
-                       selection: $profile.screenHours) { $0.rawValue }
+        pageLayout(String(localized: "Your lifestyle"), String(localized: "Daily habits quietly shape the lower face — these tell us where to look.")) {
+            OptionGrid(title: String(localized: "How do you usually sleep?"), options: UserProfile.SleepPosition.allCases,
+                       selection: $profile.sleepPosition) { $0.label }
+            OptionGrid(title: String(localized: "Which side do you chew on?"), options: UserProfile.ChewingSide.allCases,
+                       selection: $profile.chewingSide) { $0.label }
+            OptionGrid(title: String(localized: "Do you breathe through your mouth?"), options: UserProfile.MouthBreathing.allCases,
+                       selection: $profile.mouthBreathing) { $0.label }
+            OptionGrid(title: String(localized: "Screen time per day"), options: UserProfile.ScreenHours.allCases,
+                       selection: $profile.screenHours) { $0.label }
         }
     }
 
     private var trainingPage: some View {
-        pageLayout("Your training", "We match the routine to the time you'll actually give it — small and daily beats big and abandoned.") {
-            OptionGrid(title: "How often do you work out?", options: UserProfile.WorkoutFrequency.allCases,
-                       selection: $profile.workoutFrequency) { $0.rawValue }
-            OptionGrid(title: "Time for jaw training each day", options: UserProfile.DailyMinutes.allCases,
+        pageLayout(String(localized: "Your training"), String(localized: "We match the routine to the time you'll actually give it — small and daily beats big and abandoned.")) {
+            OptionGrid(title: String(localized: "How often do you work out?"), options: UserProfile.WorkoutFrequency.allCases,
+                       selection: $profile.workoutFrequency) { $0.label }
+            OptionGrid(title: String(localized: "Time for jaw training each day"), options: UserProfile.DailyMinutes.allCases,
                        selection: $profile.dailyMinutes) { $0.label }
         }
     }
 
     private var goalPage: some View {
-        pageLayout("Your goal", "One primary focus — the routine leans toward it while still covering the fundamentals.") {
-            OptionGrid(title: "What matters most to you?", options: UserProfile.Goal.allCases,
-                       selection: $profile.goal) { $0.rawValue }
+        pageLayout(String(localized: "Your goal"), String(localized: "One primary focus — the routine leans toward it while still covering the fundamentals.")) {
+            OptionGrid(title: String(localized: "What matters most to you?"), options: UserProfile.Goal.allCases,
+                       selection: $profile.goal) { $0.label }
 
             HStack {
                 VStack(alignment: .leading, spacing: 3) {
@@ -214,6 +214,17 @@ struct OnboardingFlowView: View {
             }
             .padding(16)
             .neuRaised()
+
+            if profile.remindersEnabled {
+                OptionGrid(
+                    title: String(localized: "When should we nudge you?"),
+                    options: UserProfile.ReminderTime.allCases,
+                    selection: .init(
+                        get: { profile.reminderTime ?? .evening },
+                        set: { profile.reminderTime = $0 }
+                    )
+                ) { $0.label }
+            }
         }
     }
 }

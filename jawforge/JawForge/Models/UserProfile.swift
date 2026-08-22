@@ -23,7 +23,17 @@ struct UserProfile: Codable, Equatable {
     }
     enum DailyMinutes: Int, Codable, CaseIterable {
         case five = 5, ten = 10, fifteen = 15
-        var label: String { "\(rawValue) min / day" }
+        var label: String { String(localized: "\(rawValue) min / day") }
+    }
+    enum ReminderTime: Int, Codable, CaseIterable {
+        case morning = 8, afternoon = 14, evening = 19
+        var label: String {
+            switch self {
+            case .morning: return String(localized: "Morning (8 AM)")
+            case .afternoon: return String(localized: "Afternoon (2 PM)")
+            case .evening: return String(localized: "Evening (7 PM)")
+            }
+        }
     }
     enum Goal: String, Codable, CaseIterable {
         case sharper = "Sharper jaw angle"
@@ -43,6 +53,8 @@ struct UserProfile: Codable, Equatable {
     var dailyMinutes: DailyMinutes = .ten
     var goal: Goal = .overall
     var remindersEnabled = true
+    /// Optional so profiles saved before this field existed still decode.
+    var reminderTime: ReminderTime?
 
     /// Rough BMI, when the user shared height & weight — used only to decide
     /// how prominently to surface the body-fat guidance, never shown as a
@@ -53,3 +65,21 @@ struct UserProfile: Codable, Equatable {
         return Double(w) / (meters * meters)
     }
 }
+
+/// Enum raw values stay English for stable Codable storage; `label` looks the
+/// same text up in the string catalog for display.
+protocol LocalizedOptionLabel {
+    var rawValue: String { get }
+}
+
+extension LocalizedOptionLabel {
+    var label: String { String(localized: String.LocalizationValue(rawValue)) }
+}
+
+extension UserProfile.AgeRange: LocalizedOptionLabel {}
+extension UserProfile.SleepPosition: LocalizedOptionLabel {}
+extension UserProfile.ChewingSide: LocalizedOptionLabel {}
+extension UserProfile.MouthBreathing: LocalizedOptionLabel {}
+extension UserProfile.ScreenHours: LocalizedOptionLabel {}
+extension UserProfile.WorkoutFrequency: LocalizedOptionLabel {}
+extension UserProfile.Goal: LocalizedOptionLabel {}

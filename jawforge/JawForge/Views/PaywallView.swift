@@ -8,11 +8,11 @@ struct PaywallView: View {
     @State private var selectedPlan: Entitlements.ProPlan = .annual
 
     private let features: [(String, String, String)] = [
-        ("infinity", "Unlimited scans", "Free tier is 1 scan a week — Pro scans as often as you like and catches every change."),
-        ("chart.line.uptrend.xyaxis", "Full progress history", "Every scan kept forever with trend deltas, not just your last 3."),
-        ("wand.and.stars", "Adaptive routine", "Your plan re-personalizes after every scan and quiz answer."),
-        ("list.clipboard", "Complete breakdowns", "All four metrics with explanations and a targeted game plan."),
-        ("bell.badge", "Smart reminders", "Nudges tuned to the time you actually train."),
+        ("infinity", String(localized: "Unlimited scans"), String(localized: "Free tier is 1 scan a week — Pro scans as often as you like and catches every change.")),
+        ("chart.line.uptrend.xyaxis", String(localized: "Full progress history"), String(localized: "Every scan kept forever with trend deltas, not just your last 3.")),
+        ("wand.and.stars", String(localized: "Adaptive routine"), String(localized: "Your plan re-personalizes after every scan and quiz answer.")),
+        ("list.clipboard", String(localized: "Complete breakdowns"), String(localized: "All four metrics with explanations and a targeted game plan.")),
+        ("bell.badge", String(localized: "Smart reminders"), String(localized: "Nudges tuned to the time you actually train.")),
     ]
 
     var body: some View {
@@ -147,7 +147,9 @@ struct PaywallView: View {
         VStack(spacing: 10) {
             ZStack {
                 NeuPrimaryButton(
-                    title: selectedPlan == .annual ? "Start 7-day free trial" : "Unlock JawForge Pro",
+                    title: selectedPlan == .annual
+                        ? String(localized: "Start 7-day free trial")
+                        : String(localized: "Unlock JawForge Pro"),
                     icon: "lock.open.fill"
                 ) {
                     Task { await entitlements.purchase(selectedPlan) }

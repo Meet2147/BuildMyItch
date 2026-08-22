@@ -344,7 +344,7 @@ struct AnalyzingOverlay: View {
                 }
 
                 VStack(spacing: 8) {
-                    Text(Self.stages[stage])
+                    Text(LocalizedStringKey(Self.stages[stage]))
                         .font(.headline)
                         .foregroundStyle(Theme.ink)
                         .contentTransition(.opacity)

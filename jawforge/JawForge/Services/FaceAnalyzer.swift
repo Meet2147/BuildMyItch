@@ -11,10 +11,10 @@ enum FaceAnalyzerError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .badImage: return "Couldn't read that photo. Try again."
-        case .noFaceFound: return "No face detected. Face the camera straight on in good light."
-        case .faceTooSmall: return "You're too far away. Bring the camera to about arm's length."
-        case .landmarksMissing: return "Couldn't trace your jawline. Remove anything covering your jaw and try again."
+        case .badImage: return String(localized: "Couldn't read that photo. Try again.")
+        case .noFaceFound: return String(localized: "No face detected. Face the camera straight on in good light.")
+        case .faceTooSmall: return String(localized: "You're too far away. Bring the camera to about arm's length.")
+        case .landmarksMissing: return String(localized: "Couldn't trace your jawline. Remove anything covering your jaw and try again.")
         }
     }
 }

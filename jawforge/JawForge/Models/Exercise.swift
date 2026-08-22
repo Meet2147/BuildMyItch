@@ -2,7 +2,7 @@ import Foundation
 
 /// One jawline workout. `durationSeconds` drives the in-app timer;
 /// `targets` links the exercise back to the metric it helps most.
-struct Exercise: Identifiable, Codable, Equatable {
+struct Exercise: Identifiable, Equatable {
     let id: String
     let name: String
     let icon: String
@@ -18,135 +18,174 @@ enum ExerciseCatalog {
     static let all: [Exercise] = [
         Exercise(
             id: "mewing",
-            name: "Mewing (tongue posture)",
+            name: String(localized: "Mewing (tongue posture)"),
             icon: "mouth",
-            tagline: "The foundation — proper resting tongue posture.",
-            targets: "Lower-face balance · overall definition",
+            tagline: String(localized: "The foundation — proper resting tongue posture."),
+            targets: String(localized: "Lower-face balance · overall definition"),
             durationSeconds: 120,
-            sets: "Hold 2 min · practice until it's your default",
+            sets: String(localized: "Hold 2 min · practice until it's your default"),
             steps: [
-                "Close your lips, teeth lightly touching or slightly apart.",
-                "Press the ENTIRE tongue — tip, middle and back — flat against the roof of your mouth.",
-                "The tip sits just behind the front teeth, not touching them.",
-                "Breathe through your nose and hold. Your goal is for this to become your resting posture all day.",
+                String(localized: "Close your lips, teeth lightly touching or slightly apart."),
+                String(localized: "Press the ENTIRE tongue — tip, middle and back — flat against the roof of your mouth."),
+                String(localized: "The tip sits just behind the front teeth, not touching them."),
+                String(localized: "Breathe through your nose and hold. Your goal is for this to become your resting posture all day."),
             ],
             caution: nil
         ),
         Exercise(
             id: "chin_tucks",
-            name: "Chin tucks",
+            name: String(localized: "Chin tucks"),
             icon: "arrow.down.to.line",
-            tagline: "Fixes forward-head posture that hides your jawline.",
-            targets: "Jaw angle · submental (under-chin) area",
+            tagline: String(localized: "Fixes forward-head posture that hides your jawline."),
+            targets: String(localized: "Jaw angle · under-chin area"),
             durationSeconds: 60,
-            sets: "3 sets × 10 reps",
+            sets: String(localized: "3 sets × 10 reps"),
             steps: [
-                "Sit or stand tall, shoulders relaxed, gaze straight ahead.",
-                "Draw your chin straight back, as if making a double chin on purpose.",
-                "You should feel a stretch at the base of the skull and tension under the chin.",
-                "Hold 3 seconds, release. That's one rep.",
+                String(localized: "Sit or stand tall, shoulders relaxed, gaze straight ahead."),
+                String(localized: "Draw your chin straight back, as if making a double chin on purpose."),
+                String(localized: "You should feel a stretch at the base of the skull and tension under the chin."),
+                String(localized: "Hold 3 seconds, release. That's one rep."),
             ],
             caution: nil
         ),
         Exercise(
             id: "jaw_resistance",
-            name: "Resistance press",
+            name: String(localized: "Resistance press"),
             icon: "hand.raised",
-            tagline: "Strength work for the muscles that shape the jaw corner.",
-            targets: "Jaw angle · jaw width",
+            tagline: String(localized: "Strength work for the muscles that shape the jaw corner."),
+            targets: String(localized: "Jaw angle · jaw width"),
             durationSeconds: 90,
-            sets: "3 sets × 8 slow reps",
+            sets: String(localized: "3 sets × 8 slow reps"),
             steps: [
-                "Place a fist under your chin.",
-                "Slowly open your mouth while your fist resists the movement.",
-                "Open over a 3-second count, then close over 3 seconds, keeping tension the whole way.",
-                "Rest 15 seconds between sets.",
+                String(localized: "Place a fist under your chin."),
+                String(localized: "Slowly open your mouth while your fist resists the movement."),
+                String(localized: "Open over a 3-second count, then close over 3 seconds, keeping tension the whole way."),
+                String(localized: "Rest 15 seconds between sets."),
             ],
-            caution: "Stop if you feel clicking or pain in the jaw joint (TMJ)."
+            caution: String(localized: "Stop if you feel clicking or pain in the jaw joint (TMJ).")
         ),
         Exercise(
             id: "chewing",
-            name: "Chewing training",
+            name: String(localized: "Chewing training"),
             icon: "circle.grid.cross",
-            tagline: "Progressive overload for the masseter — the jaw's 'bicep'.",
-            targets: "Jaw width · jaw angle",
+            tagline: String(localized: "Progressive overload for the masseter — the jaw's 'bicep'."),
+            targets: String(localized: "Jaw width · jaw angle"),
             durationSeconds: 300,
-            sets: "5–10 min · alternate sides evenly",
+            sets: String(localized: "5–10 min · alternate sides evenly"),
             steps: [
-                "Use a firm sugar-free gum (or mastic gum once conditioned).",
-                "Chew with slow, deliberate full closures — quality over speed.",
-                "Switch sides every minute so both masseters grow evenly.",
-                "Build up duration over weeks like any other muscle.",
+                String(localized: "Use a firm sugar-free gum (or mastic gum once conditioned)."),
+                String(localized: "Chew with slow, deliberate full closures — quality over speed."),
+                String(localized: "Switch sides every minute so both masseters grow evenly."),
+                String(localized: "Build up duration over weeks like any other muscle."),
             ],
-            caution: "Overdoing it causes TMJ soreness — start with 5 minutes a day."
+            caution: String(localized: "Overdoing it causes TMJ soreness — start with 5 minutes a day.")
         ),
         Exercise(
             id: "neck_curls",
-            name: "Neck curls",
+            name: String(localized: "Neck curls"),
             icon: "figure.strengthtraining.traditional",
-            tagline: "Builds the neck that frames a sharp jawline.",
-            targets: "Under-chin area · overall definition",
+            tagline: String(localized: "Builds the neck that frames a sharp jawline."),
+            targets: String(localized: "Under-chin area · overall definition"),
             durationSeconds: 90,
-            sets: "2 sets × 10 reps",
+            sets: String(localized: "2 sets × 10 reps"),
             steps: [
-                "Lie on your back, knees bent, tongue pressed to the roof of your mouth.",
-                "Tuck your chin, then curl just your head up toward your chest.",
-                "Lower back down with control. Keep shoulders on the floor.",
-                "Only the neck moves — no jerking.",
+                String(localized: "Lie on your back, knees bent, tongue pressed to the roof of your mouth."),
+                String(localized: "Tuck your chin, then curl just your head up toward your chest."),
+                String(localized: "Lower back down with control. Keep shoulders on the floor."),
+                String(localized: "Only the neck moves — no jerking."),
             ],
-            caution: "Skip this one if you have any neck injury history."
+            caution: String(localized: "Skip this one if you have any neck injury history.")
         ),
         Exercise(
             id: "vowel_stretch",
-            name: "O-E vowel stretch",
+            name: String(localized: "O-E vowel stretch"),
             icon: "waveform",
-            tagline: "Dynamic stretch that wakes up the whole lower face.",
-            targets: "Symmetry · lower-face balance",
+            tagline: String(localized: "Dynamic stretch that wakes up the whole lower face."),
+            targets: String(localized: "Symmetry · lower-face balance"),
             durationSeconds: 60,
-            sets: "3 sets × 15 reps",
+            sets: String(localized: "3 sets × 15 reps"),
             steps: [
-                "Exaggerate saying \"O\" — lips in a tight round shape.",
-                "Snap to an exaggerated \"E\" — corners of the mouth pulled wide.",
-                "Keep every movement symmetric; watch yourself in a mirror.",
-                "Alternate O-E at one rep per second.",
+                String(localized: "Exaggerate saying \"O\" — lips in a tight round shape."),
+                String(localized: "Snap to an exaggerated \"E\" — corners of the mouth pulled wide."),
+                String(localized: "Keep every movement symmetric; watch yourself in a mirror."),
+                String(localized: "Alternate O-E at one rep per second."),
             ],
             caution: nil
         ),
         Exercise(
             id: "platysma_flex",
-            name: "Platysma flex",
+            name: String(localized: "Platysma flex"),
             icon: "bolt",
-            tagline: "Tightens the sheet muscle running from jaw to collarbone.",
-            targets: "Under-chin area · jaw angle",
+            tagline: String(localized: "Tightens the sheet muscle running from jaw to collarbone."),
+            targets: String(localized: "Under-chin area · jaw angle"),
             durationSeconds: 60,
-            sets: "3 holds × 10 seconds",
+            sets: String(localized: "3 holds × 10 seconds"),
             steps: [
-                "Tilt your head back slightly and jut the lower jaw forward.",
-                "Pull the corners of your mouth down hard — the neck bands should pop out.",
-                "Hold 10 seconds, feeling tension from jawline to collarbone.",
-                "Relax fully between holds.",
+                String(localized: "Tilt your head back slightly and jut the lower jaw forward."),
+                String(localized: "Pull the corners of your mouth down hard — the neck bands should pop out."),
+                String(localized: "Hold 10 seconds, feeling tension from jawline to collarbone."),
+                String(localized: "Relax fully between holds."),
             ],
             caution: nil
         ),
         Exercise(
             id: "side_glide",
-            name: "Side-to-side glide",
+            name: String(localized: "Side-to-side glide"),
             icon: "arrow.left.and.right",
-            tagline: "Evens out left/right imbalance in jaw musculature.",
-            targets: "Symmetry",
+            tagline: String(localized: "Evens out left/right imbalance in jaw musculature."),
+            targets: String(localized: "Symmetry"),
             durationSeconds: 60,
-            sets: "2 sets × 12 glides per side",
+            sets: String(localized: "2 sets × 12 glides per side"),
             steps: [
-                "Relax your jaw with lips gently closed.",
-                "Glide the lower jaw slowly to the left as far as comfortable.",
-                "Return to center, then glide right. Keep it slow and controlled.",
-                "If one side feels tighter, give it two extra glides.",
+                String(localized: "Relax your jaw with lips gently closed."),
+                String(localized: "Glide the lower jaw slowly to the left as far as comfortable."),
+                String(localized: "Return to center, then glide right. Keep it slow and controlled."),
+                String(localized: "If one side feels tighter, give it two extra glides."),
             ],
-            caution: "Keep the range comfortable — never force the glide."
+            caution: String(localized: "Keep the range comfortable — never force the glide.")
         ),
     ]
 
     static func byID(_ id: String) -> Exercise? {
         all.first { $0.id == id }
     }
+}
+
+/// Daily lifestyle habits tracked alongside exercises — the "all-day" work
+/// that moves the needle more than any 60-second set. Completion is stored
+/// through the same per-day mechanism as exercises.
+struct Habit: Identifiable, Equatable {
+    let id: String
+    let name: String
+    let detail: String
+    let icon: String
+}
+
+enum HabitCatalog {
+    static let all: [Habit] = [
+        Habit(
+            id: "habit_mewing",
+            name: String(localized: "All-day tongue posture"),
+            detail: String(localized: "Tongue on the roof, lips closed, nasal breathing"),
+            icon: "mouth"
+        ),
+        Habit(
+            id: "habit_water",
+            name: String(localized: "Drink 2L+ of water"),
+            detail: String(localized: "Water retention from dehydration hides definition"),
+            icon: "drop"
+        ),
+        Habit(
+            id: "habit_sleep",
+            name: String(localized: "Sleep on your back"),
+            detail: String(localized: "Side and stomach sleeping press the jaw unevenly"),
+            icon: "bed.double"
+        ),
+        Habit(
+            id: "habit_chew",
+            name: String(localized: "Chew meals evenly"),
+            detail: String(localized: "Alternate sides at every meal for symmetry"),
+            icon: "arrow.left.arrow.right"
+        ),
+    ]
 }

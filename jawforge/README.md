@@ -46,7 +46,24 @@ lifetime. The paywall (`PaywallView.swift`) ships with a demo purchase flow;
    step-by-step instructions, per-exercise timers, TMJ cautions, daily
    check-offs and a streak.
 5. **Track** — every saved scan charts your score over time (Swift Charts),
-   with a since-first-scan delta.
+   with a since-first-scan delta and a first-vs-latest per-metric compare.
+
+Beyond the scan loop (features informed by the looksmaxxing category leaders):
+
+- **Face shape classification** (Square / Oval / Round / Heart / Diamond /
+  Oblong) derived from the same landmarks, with per-shape guidance
+- **Potential score** — "you're 62, your ceiling is 78": a modeled projection
+  of trainable gains, shown on every result
+- **Daily habits tracker** — all-day tongue posture, hydration, back
+  sleeping, even chewing — checked off alongside exercises and feeding the
+  same streak
+- **Shareable score card** — a branded image of your score and metrics via
+  the system share sheet (rendered on-device with ImageRenderer)
+- **Daily reminder notifications** at a time chosen during onboarding
+  (local notifications only — no push infrastructure)
+- **6 languages**: English, Hindi, Marathi, French, Spanish, Italian —
+  a full `Localizable.xcstrings` catalog (257 keys) covering every screen,
+  exercise step, recommendation and notification
 
 ## Project layout
 

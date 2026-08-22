@@ -39,6 +39,30 @@ extension JawlineMetrics {
             + lowerFaceScore * 0.15
     }
 
+    /// Projected ceiling with consistent training: each metric gets a
+    /// realistic trainable gain (masseter growth moves angle and width the
+    /// most; habits move symmetry; posture nudges proportion), capped at 100
+    /// and never below the current score.
+    var potentialScore: Double {
+        let projected = min(100, gonialAngleScore + 18) * 0.35
+            + min(100, widthRatioScore + 14) * 0.25
+            + min(100, symmetryScore + 8) * 0.25
+            + min(100, lowerFaceScore + 6) * 0.15
+        return max(projected, overallScore)
+    }
+
+    /// Coarse face-shape read from the same measurements.
+    var faceShape: FaceShape {
+        if lowerFaceRatio >= 0.56 { return .oblong }
+        if jawToFaceWidthRatio >= 0.90 {
+            return gonialAngle <= 128 ? .square : .round
+        }
+        if jawToFaceWidthRatio <= 0.78 {
+            return lowerFaceRatio <= 0.48 ? .heart : .diamond
+        }
+        return .oval
+    }
+
     /// 100 inside the ideal band, falling linearly to 25 at the floor band's
     /// edges, clamped to 25...100 beyond it.
     static func bandScore(_ value: Double, ideal: ClosedRange<Double>, floor: ClosedRange<Double>) -> Double {
@@ -58,10 +82,42 @@ extension JawlineMetrics {
 
     static func band(for score: Double) -> String {
         switch score {
-        case 85...: return "Sharp"
-        case 70..<85: return "Defined"
-        case 55..<70: return "Developing"
-        default: return "Needs work"
+        case 85...: return String(localized: "Sharp")
+        case 70..<85: return String(localized: "Defined")
+        case 55..<70: return String(localized: "Developing")
+        default: return String(localized: "Needs work")
+        }
+    }
+}
+
+enum FaceShape: String, Codable, CaseIterable {
+    case square, oval, round, heart, diamond, oblong
+
+    var name: String {
+        switch self {
+        case .square: return String(localized: "Square")
+        case .oval: return String(localized: "Oval")
+        case .round: return String(localized: "Round")
+        case .heart: return String(localized: "Heart")
+        case .diamond: return String(localized: "Diamond")
+        case .oblong: return String(localized: "Oblong")
+        }
+    }
+
+    var detail: String {
+        switch self {
+        case .square:
+            return String(localized: "Wide, angular jaw close to your cheekbone width — the classic strong-jaw canvas. Definition work shows fast on this shape.")
+        case .oval:
+            return String(localized: "Balanced proportions with a gently tapered jaw — most styles suit this shape, and jaw training adds edge without hardening it.")
+        case .round:
+            return String(localized: "Soft angles with similar width and height — sharpening the jaw corner gives this shape the most visible payoff.")
+        case .heart:
+            return String(localized: "Wider upper face tapering to a narrow chin — masseter work balances the taper with a stronger jaw base.")
+        case .diamond:
+            return String(localized: "Prominent cheekbones with a narrower jaw and forehead — building jaw width frames the cheekbones even better.")
+        case .oblong:
+            return String(localized: "Longer than wide with an extended lower third — width-building work suits this shape more than length-adding habits.")
         }
     }
 }
@@ -82,31 +138,31 @@ extension JawlineMetrics {
         [
             MetricReading(
                 id: "angle",
-                name: "Jaw angle",
+                name: String(localized: "Jaw angle"),
                 valueText: String(format: "%.0f°", gonialAngle),
                 score: gonialAngleScore,
-                explanation: "The corner angle of your jaw. Around 112–127° reads as a sharp, chiseled hinge; larger angles read as a softer slope from ear to chin."
+                explanation: String(localized: "The corner angle of your jaw. Around 112–127° reads as a sharp, chiseled hinge; larger angles read as a softer slope from ear to chin.")
             ),
             MetricReading(
                 id: "width",
-                name: "Jaw width",
-                valueText: String(format: "%.0f%% of face", jawToFaceWidthRatio * 100),
+                name: String(localized: "Jaw width"),
+                valueText: String(format: "%.0f%%", jawToFaceWidthRatio * 100),
                 score: widthRatioScore,
-                explanation: "How wide your jaw corners sit relative to your upper face. 80–94% gives the classic tapered-but-strong look; well below that reads narrow, above it reads blocky."
+                explanation: String(localized: "How wide your jaw corners sit relative to your upper face. 80–94% gives the classic tapered-but-strong look; well below that reads narrow, above it reads blocky.")
             ),
             MetricReading(
                 id: "proportion",
-                name: "Lower-face balance",
+                name: String(localized: "Lower-face balance"),
                 valueText: String(format: "%.0f%%", lowerFaceRatio * 100),
                 score: lowerFaceScore,
-                explanation: "Nose-to-chin height as a share of eyes-to-chin height. Close to 50% is the balanced classical proportion."
+                explanation: String(localized: "Nose-to-chin height as a share of eyes-to-chin height. Close to 50% is the balanced classical proportion.")
             ),
             MetricReading(
                 id: "symmetry",
-                name: "Symmetry",
+                name: String(localized: "Symmetry"),
                 valueText: String(format: "%.0f%%", symmetry * 100),
                 score: symmetryScore,
-                explanation: "How evenly your jaw sits around your facial midline. One-sided chewing and sleeping habits show up here first."
+                explanation: String(localized: "How evenly your jaw sits around your facial midline. One-sided chewing and sleeping habits show up here first.")
             ),
         ]
     }

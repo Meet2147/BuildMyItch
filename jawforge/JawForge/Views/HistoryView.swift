@@ -28,6 +28,7 @@ struct HistoryView: View {
                         VStack(alignment: .leading, spacing: 20) {
                             chartCard
                             deltaCard
+                            compareCard
                             scanList
                         }
                         .padding()
@@ -91,7 +92,7 @@ struct HistoryView: View {
                     Text("Since your first scan")
                         .font(.caption)
                         .foregroundStyle(Theme.textSecondary)
-                    Text(String(format: "%+.1f points", delta))
+                    Text(String(format: String(localized: "%+.1f points"), delta))
                         .font(.title3.bold())
                         .foregroundStyle(delta >= 0 ? Theme.good : Theme.bad)
                 }
@@ -99,6 +100,38 @@ struct HistoryView: View {
                 Image(systemName: delta >= 0 ? "arrow.up.right.circle.fill" : "arrow.down.right.circle.fill")
                     .font(.system(size: 30))
                     .foregroundStyle(delta >= 0 ? Theme.good : Theme.bad)
+            }
+            .card()
+        }
+    }
+
+    /// Per-metric before/after: first scan vs the latest one.
+    @ViewBuilder
+    private var compareCard: some View {
+        if sortedScans.count >= 2, let first = sortedScans.last {
+            let latest = sortedScans[0]
+            VStack(alignment: .leading, spacing: 12) {
+                Text("First scan vs latest")
+                    .font(.headline)
+                ForEach(Array(zip(first.metrics.readings, latest.metrics.readings)), id: \.0.id) { before, after in
+                    let improved = after.score >= before.score
+                    HStack {
+                        Text(after.name)
+                            .font(.caption)
+                        Spacer()
+                        Text(before.valueText)
+                            .font(.caption.monospacedDigit())
+                            .foregroundStyle(Theme.textSecondary)
+                        Image(systemName: "arrow.right")
+                            .font(.system(size: 9, weight: .bold))
+                            .foregroundStyle(Theme.textSecondary)
+                        Text(after.valueText)
+                            .font(.caption.bold().monospacedDigit())
+                        Image(systemName: improved ? "arrow.up.circle.fill" : "arrow.down.circle.fill")
+                            .font(.caption)
+                            .foregroundStyle(improved ? Theme.good : Theme.bad)
+                    }
+                }
             }
             .card()
         }
@@ -113,7 +146,10 @@ struct HistoryView: View {
                     VStack(alignment: .leading, spacing: 3) {
                         Text(scan.date.formatted(date: .abbreviated, time: .shortened))
                             .font(.subheadline.bold())
-                        Text("Angle \(Int(scan.metrics.gonialAngle))° · Width \(Int(scan.metrics.jawToFaceWidthRatio * 100))% · Sym \(Int(scan.metrics.symmetry * 100))%")
+                        Text(String(format: String(localized: "Angle %d° · Width %d%% · Sym %d%%"),
+                                    Int(scan.metrics.gonialAngle),
+                                    Int(scan.metrics.jawToFaceWidthRatio * 100),
+                                    Int(scan.metrics.symmetry * 100)))
                             .font(.caption)
                             .foregroundStyle(Theme.textSecondary)
                     }
@@ -139,7 +175,7 @@ struct HistoryView: View {
                         Image(systemName: "lock.fill")
                             .foregroundStyle(Theme.accent)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("\(lockedCount) older scan\(lockedCount == 1 ? "" : "s") locked")
+                            Text("\(lockedCount) older scans locked")
                                 .font(.subheadline.bold())
                             Text("JawForge Pro keeps your full history and trends")
                                 .font(.caption)

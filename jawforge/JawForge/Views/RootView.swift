@@ -23,6 +23,7 @@ struct RootView: View {
         )) {
             OnboardingFlowView { profile in
                 store.setProfile(profile)
+                ReminderService.sync(with: profile)
                 hasOnboarded = true
                 // Give the cover a beat to dismiss before the paywall slides up.
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
@@ -32,6 +33,10 @@ struct RootView: View {
         }
         .sheet(isPresented: $showPostOnboardingPaywall) {
             PaywallView()
+        }
+        .task {
+            // Keep the daily reminder in sync (e.g. after reinstall).
+            ReminderService.sync(with: store.profile)
         }
     }
 }
