@@ -179,3 +179,156 @@ only standard HTTPS. No upload-time questions, no French declaration.
 6. Xcode: Product → Archive → Distribute App → App Store Connect.
 7. Attach the build + the 3 IAPs to version 1.0, add review notes, submit.
 ```
+
+---
+
+## 5b · Full localized metadata (Connect requires these per added locale)
+
+**Support URL — same for every locale:** `https://github.com/Meet2147/BuildMyItch`
+
+> Note: **Marathi is not an App Store listing language.** The app UI ships in
+> Marathi, but Connect only offers store pages for hi/fr/es/it among our set.
+
+### Hindi (hi)
+
+Keywords (72 chars):
+```
+जॉलाइन,mewing,जबड़ा,फेस,चेहरा,एक्सरसाइज़,jawline,looksmax,फिटनेस,glowup
+```
+
+Description:
+```
+आपकी जॉलाइन — अंदाज़ा नहीं, माप।
+
+JawForge आपके चेहरे को Apple के ऑन-डिवाइस Vision इंजन से स्कैन करता है और 60+ फेशियल लैंडमार्क्स को चार ईमानदार मेट्रिक्स में बदलता है:
+
+• जॉ एंगल — आपके जबड़े के कोने की तीक्ष्णता
+• जॉ चौड़ाई — जबड़े और चेहरे की चौड़ाई का अनुपात
+• निचले चेहरे का संतुलन — क्लासिकल फेशियल अनुपात
+• सममिति — जबड़ा मध्य रेखा पर कितना संतुलित है
+
+इनसे बनता है आपका जॉलाइन स्कोर (0–100), साथ में आपका पोटेंशियल स्कोर — नियमित ट्रेनिंग से हासिल होने वाली ऊँचाई — और आपके चेहरे का आकार (स्क्वायर, ओवल, राउंड, हार्ट, डायमंड, लंबा)।
+
+आपके चेहरे के लिए बना प्लान
+5 सवालों की शुरुआत (जीवनशैली, सोने की स्थिति, चबाने की आदतें, स्क्रीन टाइम, समय, लक्ष्य) और आपके स्कैन नतीजे मिलकर रोज़ का रूटीन बनाते हैं: म्यूइंग, चिन टक्स, रेज़िस्टेंस प्रेस, च्यूइंग ट्रेनिंग, नेक कर्ल और भी — हर एक में स्टेप-बाय-स्टेप निर्देश, टाइमर और TMJ-सुरक्षा नोट्स।
+
+आदत बनाएँ
+डेली हैबिट ट्रैकर (दिनभर टंग पोस्चर, पानी, पीठ के बल सोना, दोनों तरफ़ चबाना), स्ट्रीक्स, स्मार्ट रिमाइंडर और प्रगति चार्ट जो हर स्कैन के साथ आपका स्कोर बढ़ता दिखाता है।
+
+ईमानदार डिज़ाइन
+JawForge वह सच बताता है जो बाकी ऐप्स छोड़ देते हैं: बॉडी-फैट प्रतिशत और पोस्चर किसी भी एक्सरसाइज़ से ज़्यादा असर करते हैं। हड्डियों की बनावट आनुवंशिक है — ट्रेनिंग मांसपेशी, पोस्चर और आदतें बदलती है। यह चिकित्सकीय सलाह नहीं है।
+
+प्राइवेट डिज़ाइन
+विश्लेषण 100% आपके iPhone पर होता है। फ़ोटो कभी अपलोड या स्टोर नहीं होती। कोई अकाउंट नहीं। कोई ट्रैकिंग नहीं।
+
+JAWFORGE PRO
+अनलिमिटेड स्कैन, पूरी हिस्ट्री, अडैप्टिव रूटीन और स्मार्ट रिमाइंडर। साप्ताहिक, वार्षिक (7 दिन फ्री ट्रायल) या लाइफटाइम। फ्री में हफ़्ते में 1 स्कैन और आख़िरी 3 स्कैन।
+```
+
+### French (fr)
+
+Keywords (84 chars):
+```
+machoire,mewing,jawline,visage,scanner,exercice,symetrie,menton,fitness,glowup
+```
+
+Description:
+```
+Votre mâchoire, mesurée — pas devinée.
+
+JawForge scanne votre visage avec le moteur Vision d'Apple, directement sur l'appareil, et transforme plus de 60 points de repère faciaux en quatre mesures honnêtes :
+
+• ANGLE DE LA MÂCHOIRE — la netteté de votre angle mandibulaire
+• LARGEUR — le rapport mâchoire/visage
+• ÉQUILIBRE DU BAS DU VISAGE — la proportion classique
+• SYMÉTRIE — l'équilibre autour de l'axe du visage
+
+Le tout devient votre score de mâchoire (0–100), accompagné de votre score POTENTIEL — le plafond qu'un entraînement régulier peut atteindre — et de la forme de votre visage.
+
+UN PLAN FAIT POUR VOTRE VISAGE
+Cinq questions (mode de vie, sommeil, mastication, temps d'écran, budget temps, objectif) plus vos résultats de scan personnalisent une routine quotidienne : mewing, rentrées de menton, presses de résistance, mastication, curls de nuque — avec instructions détaillées, minuteurs et précautions ATM.
+
+CONSTRUISEZ L'HABITUDE
+Suivi d'habitudes quotidiennes, séries, rappels intelligents et un graphique de progression qui montre votre score grimper scan après scan.
+
+HONNÊTE PAR CONCEPTION
+JawForge dit ce que les autres taisent : le taux de masse grasse et la posture comptent plus que n'importe quel exercice. L'ossature est génétique. Ceci n'est pas un avis médical.
+
+PRIVÉ PAR CONCEPTION
+L'analyse s'effectue à 100 % sur votre iPhone. Les photos ne sont jamais envoyées ni stockées. Pas de compte. Pas de suivi.
+
+JAWFORGE PRO
+Scans illimités, historique complet, routine adaptative et rappels intelligents. Hebdomadaire, annuel (essai gratuit de 7 jours) ou à vie. Gratuit : 1 scan/semaine et vos 3 derniers scans.
+```
+
+### Spanish (es)
+
+Keywords (85 chars):
+```
+mandibula,mewing,jawline,rostro,escaner,cara,ejercicio,simetria,menton,fitness,glowup
+```
+
+Description:
+```
+Tu mandíbula, medida — no adivinada.
+
+JawForge escanea tu rostro con el motor Vision de Apple, directamente en el dispositivo, y convierte más de 60 puntos faciales en cuatro métricas honestas:
+
+• ÁNGULO MANDIBULAR — la definición de la esquina de tu mandíbula
+• ANCHURA — la proporción mandíbula/rostro
+• EQUILIBRIO DEL TERCIO INFERIOR — la proporción clásica
+• SIMETRÍA — el equilibrio respecto al eje facial
+
+Todo se convierte en tu Puntuación de Mandíbula (0–100), junto con tu puntuación POTENCIAL — el techo que puede alcanzar el entrenamiento constante — y la forma de tu rostro.
+
+UN PLAN HECHO PARA TU CARA
+Cinco preguntas (estilo de vida, sueño, masticación, tiempo de pantalla, tiempo disponible, objetivo) más tus resultados personalizan una rutina diaria: mewing, chin tucks, presiones de resistencia, masticación, curls de cuello — con instrucciones paso a paso, temporizadores y precauciones de ATM.
+
+CREA EL HÁBITO
+Registro de hábitos diarios, rachas, recordatorios inteligentes y una gráfica de progreso que muestra tu puntuación subir escaneo a escaneo.
+
+HONESTO POR DISEÑO
+JawForge dice la verdad que otras apps omiten: el porcentaje de grasa corporal y la postura influyen más que cualquier ejercicio. La estructura ósea es genética. No es consejo médico.
+
+PRIVADO POR DISEÑO
+El análisis se realiza al 100 % en tu iPhone. Las fotos nunca se suben ni se guardan. Sin cuenta. Sin rastreo.
+
+JAWFORGE PRO
+Escaneos ilimitados, historial completo, rutina adaptativa y recordatorios inteligentes. Semanal, anual (prueba gratis de 7 días) o de por vida. Gratis: 1 escaneo/semana y tus últimos 3.
+```
+
+### Italian (it)
+
+Keywords (76 chars):
+```
+mascella,mewing,jawline,viso,scanner,esercizi,simmetria,mento,fitness,glowup
+```
+
+Description:
+```
+La tua mascella, misurata — non indovinata.
+
+JawForge scansiona il tuo viso con il motore Vision di Apple, direttamente sul dispositivo, e trasforma oltre 60 punti di riferimento facciali in quattro metriche oneste:
+
+• ANGOLO MANDIBOLARE — la nitidezza dell'angolo della mascella
+• LARGHEZZA — il rapporto mascella/viso
+• EQUILIBRIO DEL VOLTO INFERIORE — la proporzione classica
+• SIMMETRIA — l'equilibrio rispetto all'asse del viso
+
+Tutto diventa il tuo punteggio jawline (0–100), insieme al punteggio POTENZIALE — il tetto raggiungibile con un allenamento costante — e alla forma del tuo viso.
+
+UN PIANO FATTO PER IL TUO VISO
+Cinque domande (stile di vita, sonno, masticazione, tempo davanti allo schermo, tempo disponibile, obiettivo) più i risultati della scansione personalizzano una routine quotidiana: mewing, chin tuck, pressioni di resistenza, masticazione, curl del collo — con istruzioni passo passo, timer e precauzioni ATM.
+
+COSTRUISCI L'ABITUDINE
+Tracker di abitudini quotidiane, serie, promemoria intelligenti e un grafico dei progressi che mostra il punteggio salire scansione dopo scansione.
+
+ONESTO PER PROGETTAZIONE
+JawForge dice la verità che altre app tacciono: grasso corporeo e postura contano più di qualsiasi esercizio. La struttura ossea è genetica. Non è un consiglio medico.
+
+PRIVATO PER PROGETTAZIONE
+L'analisi avviene al 100 % sul tuo iPhone. Le foto non vengono mai caricate né salvate. Nessun account. Nessun tracciamento.
+
+JAWFORGE PRO
+Scansioni illimitate, cronologia completa, routine adattiva e promemoria intelligenti. Settimanale, annuale (prova gratuita di 7 giorni) o a vita. Gratis: 1 scansione a settimana e le ultime 3.
+```
