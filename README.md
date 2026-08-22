@@ -11,6 +11,12 @@ touch what you've granted them. The admin has every permission.
 | 💸 **QuickPay** | `quickpay/` | One-tap payroll for teams under 10 — handles unpaid days, overtime, festival bonuses. |
 | 📦 **StockSense** | `stocksense/` | Reads your sales trend and tells you what to reorder before you run out. |
 
+Also in this repo (separate from the shop-owner suite):
+
+| App | Directory | Solves |
+|-----|-----------|--------|
+| 🦴 **JawForge** | `jawforge/` | Native SwiftUI iOS app — scan your face, get an on-device jawline analysis and a daily training routine. See `jawforge/README.md`. |
+
 Everything is deliberately **smooth and low-friction** — email-first login, one-click
 actions, sensible defaults — because shopkeepers don't like fiddly software.
 
