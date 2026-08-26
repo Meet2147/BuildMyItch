@@ -1,7 +1,7 @@
 //  SoftStone.swift
 //  Token layer + surface modifier for the Soft Stone design language.
 //  Sketch quality: enough to prove the elevation ladder is a real system and
-//  not a pile of ad-hoc shadows. Shared by Cairn and Aubade.
+//  not a pile of ad-hoc shadows. Shared by Sill and Aubade.
 
 import SwiftUI
 
@@ -44,12 +44,20 @@ public enum Elevation: Int, CaseIterable {
 
     var offset: CGFloat {
         switch self {
-        case .carved: 3; case .flush: 0; case .lifted: 3; case .raised: 6; case .floating: 12
+        case .carved: 3
+        case .flush: 0
+        case .lifted: 3
+        case .raised: 6
+        case .floating: 12
         }
     }
     var blur: CGFloat {
         switch self {
-        case .carved: 6; case .flush: 0; case .lifted: 9; case .raised: 16; case .floating: 28
+        case .carved: 6
+        case .flush: 0
+        case .lifted: 9
+        case .raised: 16
+        case .floating: 28
         }
     }
     var isInset: Bool { self == .carved }

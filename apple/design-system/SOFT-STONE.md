@@ -1,6 +1,6 @@
 # Soft Stone
 
-The shared design language for Cairn and Aubade.
+The shared design language for Sill and Aubade.
 
 Neumorphism has a bad reputation and it earned it. The 2020 wave of it was
 unusable: soft-on-soft buttons with 2:1 contrast, no visible focus state, and
@@ -112,7 +112,7 @@ The ground is grey. Ink is a dark warm grey (`#3A3833`), not black. Secondary
 ink is 58% of that. **One accent per app, used in at most three places on any
 screen.**
 
-- Cairn: **slate blue** `#5B6BA8` (`#4A5A96` when it carries text) — calm, recedes, doesn't compete with content.
+- Sill: **slate blue** `#5B6BA8` (`#4A5A96` when it carries text) — calm, recedes, doesn't compete with content.
 - Aubade: **low amber** `#C98A4B` (`#96601F` when it carries text) — warm, works at 3am without hurting, and is
   the colour of the sunrise gradient it shares a screen with.
 
@@ -160,7 +160,7 @@ vibe-coded" is won or lost.
 
 - **iPhone** — one column, thumb-reachable primary action in the bottom third,
   sheet-based navigation, no toolbar clutter.
-- **iPad** — a three-column split view on Cairn (perspectives / list / detail),
+- **iPad** — a three-column split view on Sill (perspectives / list / detail),
   full keyboard shortcut coverage, pointer hover states (surfaces lift 1 level
   on hover), Apple Pencil scribble into the capture field, drag-and-drop of a
   task onto Calendar.

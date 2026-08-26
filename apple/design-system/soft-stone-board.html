@@ -7,7 +7,7 @@
 :root{
   --ground:#ECE9E4; --raised:#F0EDE8; --hi:#FFFFFF; --sh:#C9C4BB;
   --ink:#3A3833; --ink-2:rgba(58,56,51,.62); --ink-3:rgba(58,56,51,.40);
-  --cairn:#5B6BA8; --cairn-ink:#4A5A96;
+  --sill:#5B6BA8; --sill-ink:#4A5A96;
   --aubade:#C98A4B; --aubade-ink:#8F5B1C;
   --hair:rgba(58,56,51,.16);
   --relief:1;
@@ -23,7 +23,7 @@
   :root:not([data-theme="light"]){
     --ground:#232220; --raised:#2A2926; --hi:#38352F; --sh:#141311;
     --ink:#E7E3DA; --ink-2:rgba(231,227,218,.60); --ink-3:rgba(231,227,218,.38);
-    --cairn:#8E9CD8; --cairn-ink:#9CA9E0;
+    --sill:#8E9CD8; --sill-ink:#9CA9E0;
     --aubade:#DFA860; --aubade-ink:#E5B476;
     --hair:rgba(231,227,218,.18);
   }
@@ -31,7 +31,7 @@
 :root[data-theme="dark"]{
   --ground:#232220; --raised:#2A2926; --hi:#38352F; --sh:#141311;
   --ink:#E7E3DA; --ink-2:rgba(231,227,218,.60); --ink-3:rgba(231,227,218,.38);
-  --cairn:#8E9CD8; --cairn-ink:#9CA9E0;
+  --sill:#8E9CD8; --sill-ink:#9CA9E0;
   --aubade:#DFA860; --aubade-ink:#E5B476;
   --hair:rgba(231,227,218,.18);
 }
@@ -45,8 +45,8 @@ body{
 }
 h1,h2,h3,h4{margin:0; text-wrap:balance; font-weight:400;}
 p{margin:0;}
-a{color:var(--cairn-ink);}
-:focus-visible{outline:2px solid var(--cairn-ink); outline-offset:3px; border-radius:4px;}
+a{color:var(--sill-ink);}
+:focus-visible{outline:2px solid var(--sill-ink); outline-offset:3px; border-radius:4px;}
 
 /* ── the elevation ladder, as CSS ─────────────────────────── */
 .lift,.raise,.float,.carve{
@@ -89,7 +89,7 @@ header.top{
   position:absolute; top:3px; left:3px; width:14px; height:14px; border-radius:50%;
   background:var(--ink-3); transition:transform .22s cubic-bezier(.3,1.2,.5,1), background .2s;
 }
-.sw[aria-pressed="true"] .knob{transform:translateX(16px); background:var(--cairn);}
+.sw[aria-pressed="true"] .knob{transform:translateX(16px); background:var(--sill);}
 
 /* ── sections ─────────────────────────────────────────────── */
 section{padding:76px 0;}
@@ -181,7 +181,7 @@ code,.mono{font-family:var(--f-mono); font-size:13px;}
 .task .tx{font-size:13.5px; flex:1; line-height:1.3;}
 .task .mt{font-family:var(--f-mono); font-size:10px; color:var(--ink-3); flex:none;}
 .task.done .tx{color:var(--ink-3); font-weight:500;}
-.task.done .o{background:var(--cairn); box-shadow:none; position:relative;}
+.task.done .o{background:var(--sill); box-shadow:none; position:relative;}
 .task.done .o::after{content:"✓"; position:absolute; inset:0; display:grid; place-items:center; color:var(--raised); font-size:11px; font-weight:700;}
 .well{
   margin-top:auto; padding:11px 15px; border-radius:14px; background:var(--ground);
@@ -201,7 +201,7 @@ code,.mono{font-family:var(--f-mono); font-size:13px;}
   box-shadow:2px 2px 5px var(--shc), -2px -2px 5px var(--hic);
 }
 .flat .pchip{border-color:var(--hair);}
-.pchip.acc{color:var(--cairn-ink);}
+.pchip.acc{color:var(--sill-ink);}
 
 /* aubade screens */
 .alarm-row{
@@ -281,7 +281,7 @@ tr:last-child td{border-bottom:0;}
 
 .ramp{width:100%; height:130px; display:block;}
 footer{padding:56px 0 74px; color:var(--ink-3); font-size:14px;}
-.accent-c{color:var(--cairn-ink);} .accent-a{color:var(--aubade-ink);}
+.accent-c{color:var(--sill-ink);} .accent-a{color:var(--aubade-ink);}
 </style>
 
 <header class="top">
@@ -296,7 +296,7 @@ footer{padding:56px 0 74px; color:var(--ink-3); font-size:14px;}
 
 <section class="hero">
   <div class="wrap">
-    <div class="eyebrow">Concept board · iPhone · iPad · Mac</div>
+    <div class="eyebrow">Concept board · Sill: iPhone, iPad, Mac · Aubade: iPhone</div>
     <div class="cols">
       <div>
         <h1>Neumorphism that <em>survived</em> accessibility review.</h1>
@@ -309,8 +309,8 @@ footer{padding:56px 0 74px; color:var(--ink-3); font-size:14px;}
       </div>
     </div>
     <div class="apps">
-      <div class="chip"><span class="dot" style="background:var(--cairn)"></span><b>Cairn</b><span>plans your day, then leaves</span></div>
-      <div class="chip"><span class="dot" style="background:var(--aubade)"></span><b>Aubade</b><span>waking up, designed</span></div>
+      <div class="chip"><span class="dot" style="background:var(--sill)"></span><b>Sill</b><span>plans your day, then leaves · iPhone, iPad, Mac</span></div>
+      <div class="chip"><span class="dot" style="background:var(--aubade)"></span><b>Aubade</b><span>waking up, designed · iPhone</span></div>
       <div class="chip"><span class="dot" style="background:var(--ink-3)"></span><b>Keystone</b><span>CloudKit, no server, no account</span></div>
     </div>
   </div>
@@ -361,7 +361,7 @@ footer{padding:56px 0 74px; color:var(--ink-3); font-size:14px;}
       <div class="swatch"><div class="fill" style="background:#F0EDE8"></div><div class="lb">#F0EDE8 raised</div></div>
       <div class="swatch"><div class="fill" style="background:#C9C4BB"></div><div class="lb">#C9C4BB shade</div></div>
       <div class="swatch"><div class="fill" style="background:#232220"></div><div class="lb">#232220 dark gnd</div></div>
-      <div class="swatch"><div class="fill" style="background:#5B6BA8"></div><div class="lb">#5B6BA8 cairn</div></div>
+      <div class="swatch"><div class="fill" style="background:#5B6BA8"></div><div class="lb">#5B6BA8 sill</div></div>
       <div class="swatch"><div class="fill" style="background:#C98A4B"></div><div class="lb">#C98A4B aubade</div></div>
     </div>
     <div class="grid3">
@@ -386,9 +386,9 @@ footer{padding:56px 0 74px; color:var(--ink-3); font-size:14px;}
 <section>
   <div class="wrap stack" style="gap:32px">
     <div class="stack-sm">
-      <div class="eyebrow accent-c">Cairn · the todo app</div>
+      <div class="eyebrow accent-c">Sill · the todo app</div>
       <h2 class="sec">Capture is easy. <em>Deciding is the job.</em></h2>
-      <p class="body">Every todo app is good at capture and punts the hard part back to you — here are your tags, your priorities, your 87 overdue items, good luck. The list becomes a monument to what you haven't done and you stop opening it. Cairn takes the deciding job: you throw things in with no structure, and once a day it produces <strong>one screen — today</strong>, with a realistic number of things on it. Everything else is deliberately hard to look at.</p>
+      <p class="body">Every todo app is good at capture and punts the hard part back to you — here are your tags, your priorities, your 87 overdue items, good luck. The list becomes a monument to what you haven't done and you stop opening it. Sill takes the deciding job: you throw things in with no structure, and once a day it produces <strong>one screen — today</strong>, with a realistic number of things on it. Everything else is deliberately hard to look at.</p>
     </div>
 
     <div style="display:flex; gap:34px; flex-wrap:wrap; align-items:flex-start">
@@ -417,7 +417,7 @@ footer{padding:56px 0 74px; color:var(--ink-3); font-size:14px;}
           <div class="capture" style="margin:4px 0">pick up parcel, gym, book flights, reply to Sam</div>
           <div class="parse">
             <span class="pchip">Pick up parcel · errand</span>
-            <span class="pchip">Gym · 1h · idle</span>
+            <span class="pchip">Gym · 30m · errand</span>
             <span class="pchip acc">Book flights · admin · 20m</span>
             <span class="pchip">Reply to Sam · social</span>
           </div>
@@ -426,7 +426,7 @@ footer{padding:56px 0 74px; color:var(--ink-3); font-size:14px;}
 
         <div class="card raise stack-sm">
           <h3 class="sub">Energy, not priority</h3>
-          <p style="font-size:14.5px;color:var(--ink-2)">Priority flags fail because everything becomes P1. Cairn classifies by the shape of attention a thing needs, which is observable and doesn't inflate.</p>
+          <p style="font-size:14.5px;color:var(--ink-2)">Priority flags fail because everything becomes P1. Sill classifies by the shape of attention a thing needs, which is observable and doesn't inflate.</p>
           <div class="tbl-wrap">
             <table>
               <tr><td>Deep</td><td>Uninterrupted hour+ → your best focus window, max two a day</td></tr>
@@ -443,11 +443,11 @@ footer{padding:56px 0 74px; color:var(--ink-3); font-size:14px;}
     <div class="grid2">
       <div class="card lift stack-sm">
         <h3 class="sub">A day that actually fits</h3>
-        <p style="font-size:15px;color:var(--ink-2)">Cairn reads your calendar and knows how much unscheduled time you have. Ninety free minutes means ninety minutes of tasks — three items, not eleven. Drag between bands to re-plan and the rest reflows. That's the entire planning interface.</p>
+        <p style="font-size:15px;color:var(--ink-2)">Sill reads your calendar and knows how much unscheduled time you have. Ninety free minutes means ninety minutes of tasks — three items, not eleven. Drag between bands to re-plan and the rest reflows. That's the entire planning interface.</p>
       </div>
       <div class="card lift stack-sm">
         <h3 class="sub">The backlog is not a debt</h3>
-        <p style="font-size:15px;color:var(--ink-2)">Nothing goes red. Nothing grows an overdue badge. An old task loses contrast on a curve, and at thirty days Cairn asks once, on a quiet card: <em>still real?</em> Letting go isn't deleting — it goes somewhere you never have to look at.</p>
+        <p style="font-size:15px;color:var(--ink-2)">Nothing goes red. Nothing grows an overdue badge. An old task loses contrast on a curve, and at thirty days Sill asks once, on a quiet card: <em>still real?</em> Letting go isn't deleting — it goes somewhere you never have to look at.</p>
       </div>
     </div>
 
@@ -510,7 +510,7 @@ footer{padding:56px 0 74px; color:var(--ink-3); font-size:14px;}
               <div><div class="t">5:30</div><div class="meta">Flight · one-shot</div></div>
               <div class="toggle"><i></i></div>
             </div>
-            <div class="well" style="margin-top:auto"><span>Bedside device</span><span style="font-family:var(--f-mono)">iPad Pro</span></div>
+            <div class="well" style="margin-top:auto"><span>Next wake</span><span style="font-family:var(--f-mono)">7h 42m</span></div>
           </div>
         </div>
       </div>
@@ -529,7 +529,7 @@ footer{padding:56px 0 74px; color:var(--ink-3); font-size:14px;}
     <div class="grid2">
       <div class="card raise stack-sm">
         <h3 class="sub">You set “by 6:40”, not 6:40</h3>
-        <p style="font-size:15px;color:var(--ink-2)">Aubade rings at the best moment inside a window and never later than the hard time. With a Watch it uses heart rate and motion; with the phone on the mattress, movement clustering; with nothing, it rings at the hard time and <strong>says so during setup</strong>. Pretending to detect sleep from a phone across the room is the kind of lie that makes an app feel cheap.</p>
+        <p style="font-size:15px;color:var(--ink-2)">Aubade rings at the best moment inside a window and never later than the hard time. With the phone on the mattress it uses movement clustering; with the phone across the room it rings at the hard time and <strong>says so during setup</strong>. Pretending to detect sleep from a phone across the room is the kind of lie that makes an app feel cheap.</p>
       </div>
       <div class="card raise stack-sm">
         <h3 class="sub">Sound that starts under your threshold</h3>
@@ -570,8 +570,8 @@ footer{padding:56px 0 74px; color:var(--ink-3); font-size:14px;}
   <div class="wrap stack" style="gap:26px">
     <div class="stack-sm">
       <div class="eyebrow">Keystone · sync</div>
-      <h2 class="sec">Four devices, one alarm. <em>That's the real engineering.</em></h2>
-      <p class="body">SwiftData locally, CloudKit private database for transport, the user's own Apple Account for identity. No login screen, no server, no subscription to pay for one. The interesting problem isn't moving records — it's arbitration. Set an alarm on your Mac and without it, four devices ring at 6:40 and dismissing one leaves three going. That is a one-star review.</p>
+      <h2 class="sec">Sync less. <em>Derive more.</em></h2>
+      <p class="body">SwiftData locally, CloudKit private database for transport, the user's own Apple Account for identity. No login screen, no server, no subscription to pay for one. Two apps, two containers, two very different jobs: Sill genuinely syncs across three devices, while Aubade has exactly one writer, so its “sync” is a backup that happens to use the same machinery.</p>
     </div>
     <div class="grid2">
       <div class="card lift stack-sm">
@@ -579,15 +579,15 @@ footer{padding:56px 0 74px; color:var(--ink-3); font-size:14px;}
         <p style="font-size:15px;color:var(--ink-2)">Every device schedules its own OS-level alarm from local data. Sync only ever changes the schedule. If CloudKit is down, if you're on a plane, if iCloud is full — every device still rings on the last schedule it knew. Sync degrades to “your devices disagree”, never to “nothing rang”.</p>
       </div>
       <div class="card lift stack-sm">
-        <h3 class="sub">Dismissal takes three paths</h3>
-        <p style="font-size:15px;color:var(--ink-2)">A local-network beacon between your own devices handles the bedside case in under a second with no internet at all. A CloudKit silent push is the durable fallback. And anything still ringing 90 seconds after another device dismissed stops itself regardless — the failure mode of an alarm app must never be “it wouldn't stop”.</p>
+        <h3 class="sub">The hardest problem, deleted</h3>
+        <p style="font-size:15px;color:var(--ink-2)">Four devices holding one alarm need arbitration — which one rings, and what silences the other three when you dismiss. Aubade is iPhone-only, so none of that exists: one writer, one ringer, no merge. The design is kept on file rather than thrown away, because a Watch app brings every bit of it back.</p>
       </div>
     </div>
     <div class="tbl-wrap">
       <table>
         <thead><tr><th>Conflict</th><th>Resolution</th><th>Why</th></tr></thead>
         <tbody>
-          <tr><td>Toggled off on phone, on elsewhere</td><td>Off wins</td><td>Asymmetric on purpose — a spurious 6am alarm is far worse than a missed one you thought you'd killed</td></tr>
+          <tr><td>Alarms restored to a new phone</td><td>They arrive switched off</td><td>Silently arming an alarm on a device still being set up is exactly the surprise an alarm clock can't afford</td></tr>
           <tr><td>Completed here, edited there</td><td>Completion wins</td><td><code>completedAt</code> is only ever set by a merge, never cleared</td></tr>
           <tr><td>Deleted here, edited there</td><td>Soft-deleted, recoverable</td><td>Silent data loss is the one outcome a personal list can't survive</td></tr>
           <tr><td>Two devices plan the same day</td><td>Nothing to conflict</td><td>The plan is derived from tasks + calendar, not stored — derive more, sync less</td></tr>

@@ -1,22 +1,23 @@
 # Soft Stone — two Apple-native apps
 
-Two small, opinionated apps for iPhone, iPad and Mac that share one design
-language, one sync spine, and one point of view about time.
+Two small, opinionated apps that share one design language, one sync spine, and
+one point of view about time. Sill runs on iPhone, iPad and Mac; Aubade is
+iPhone-only, on purpose.
 
 | App | Directory | One line |
 |-----|-----------|----------|
-| 🪨 **Cairn** | `cairn/` | A todo app that plans your day for you, then gets out of the way. |
-| 🌅 **Aubade** | `aubade/` | An alarm clock that treats waking up as something worth designing. |
+| 🪨 **Sill** | `sill/` | A todo app that plans your day for you, then gets out of the way. iPhone, iPad, Mac. |
+| 🌅 **Aubade** | `aubade/` | An alarm clock that treats waking up as something worth designing. iPhone only. |
 
 They ship separately, install separately, and are useful alone. If you have
 both, they know about each other: Aubade knows when your first hard task is,
-Cairn knows when you actually got up.
+Sill knows when you actually got up.
 
 ```
 apple/
   design-system/   Soft Stone — the shared visual + motion language
   architecture/    Keystone — the shared CloudKit sync spine
-  cairn/           Todo app concept
+  sill/            Todo app — concept, and the code
   aubade/          Alarm app concept
 ```
 
@@ -80,7 +81,7 @@ But **relief carries structure, not meaning**: text, icons and state always
 carry their own contrast, so the app is fully usable if you strip every shadow
 away (and it does strip them, automatically, under Increase Contrast and
 Reduce Transparency). Colour is used almost nowhere. Each app gets exactly one
-accent — Cairn a slate blue, Aubade a low amber — and spends it carefully.
+accent — Sill a slate blue, Aubade a low amber — and spends it carefully.
 
 Full spec: [`design-system/SOFT-STONE.md`](design-system/SOFT-STONE.md).
 
@@ -88,10 +89,11 @@ Full spec: [`design-system/SOFT-STONE.md`](design-system/SOFT-STONE.md).
 
 One CloudKit private database per app, SwiftData for the local store, CloudKit
 mirroring for transport. No accounts, no server, no subscription infrastructure
-to run — you sign in with the Apple Account you already have. The interesting
-problem isn't moving records, it's **arbitration**: which of your four devices
-actually rings at 6:40am, and what happens to the other three when you dismiss
-it. That's the part worth engineering.
+to run — you sign in with the Apple Account you already have. For Sill that
+means your list is the same on all three devices; for Aubade, which lives on one
+device, it means a new phone comes back with your alarms already set. The
+interesting problem is **deriving more so there's less to sync** — Sill's day
+plan is recomputed on each device rather than stored, so it can't conflict.
 
 Full spec: [`architecture/SYNC.md`](architecture/SYNC.md).
 
@@ -102,23 +104,25 @@ Full spec: [`architecture/SYNC.md`](architecture/SYNC.md).
 | UI | SwiftUI, one codebase, three tuned layouts | Fastest path to a consistent design system across all three platforms |
 | Local store | SwiftData | Native, observable, integrates with CloudKit mirroring for free |
 | Sync | CloudKit private DB | Free at our scale, no backend to run, user already has an account |
-| Alarms | AlarmKit (iOS/iPadOS), helper + notifications (Mac) | Only way to ring through silent mode and Focus |
+| Alarms | AlarmKit, iPhone only | Only way to ring through silent mode and Focus; macOS has no equivalent |
 | Intelligence | Foundation Models (on-device) | Natural-language capture with zero cost, zero latency, zero privacy story to write |
 | Surfaces | WidgetKit, App Intents, Live Activities, Control Center | Where the apps actually live day to day |
 
 > API-availability note: AlarmKit and the on-device Foundation Models framework
 > are both recent (iOS 26 era). Everything here should be checked against the
 > current SDK before it becomes a plan — capabilities, entitlements and review
-> requirements in these two areas move fast.
+> requirements in these two areas move fast. AlarmKit is also the reason Aubade
+> is iPhone-only: there is no macOS equivalent, and an alarm clock that works
+> four nights out of five is worse than no alarm clock.
 
 ## Business shape
 
 Both apps: paid up front, no subscription, no accounts, no telemetry.
-Roughly $12 for Cairn, $8 for Aubade, a bundle at $16. There is no server cost
+Roughly $12 for Sill, $8 for Aubade, a bundle at $16. There is no server cost
 to amortise, so a subscription would be rent-seeking and users can smell it.
 A one-time price is also the strongest possible signal that the app is finished
 and won't grow a "Pro" upsell inside itself.
 
 ---
 
-Concept docs: [Cairn](cairn/CONCEPT.md) · [Aubade](aubade/CONCEPT.md)
+Concept docs: [Sill](sill/CONCEPT.md) · [Aubade](aubade/CONCEPT.md)

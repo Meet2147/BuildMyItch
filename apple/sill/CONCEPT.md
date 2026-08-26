@@ -1,7 +1,8 @@
-# 🪨 Cairn
+# 🪨 Sill
 
-> A cairn is a stack of stones that marks a path. You add one when you pass.
-> It doesn't tell you where to go — it tells you someone got this far.
+> *sill* (n.) — the ledge beneath a window, where you set things down and
+> where the morning light lands. Also, in geology, a sheet of stone that
+> intruded sideways between older layers.
 
 **A todo app that plans your day for you, then gets out of the way.**
 
@@ -18,7 +19,7 @@ The result is a well-documented failure mode: the list becomes a monument to
 everything you haven't done, you stop opening it, and you go back to a notes
 file.
 
-Cairn takes the deciding job. You throw things in with no structure at all.
+Sill takes the deciding job. You throw things in with no structure at all.
 Once a day it produces **one screen: today**, with a realistic number of things
 on it, ordered by when you're actually capable of doing them. Everything else
 is deliberately hard to look at.
@@ -29,9 +30,9 @@ is deliberately hard to look at.
    but you have to go looking for them.
 2. **Capture costs nothing, structure costs nothing.** You never have to pick a
    project, a tag, or a priority. You type a sentence. If it contains structure,
-   we extract it. If it doesn't, it goes in the pile and Cairn figures it out.
+   we extract it. If it doesn't, it goes in the pile and Sill figures it out.
 3. **The backlog is not a debt.** Nothing goes red. Nothing accumulates an
-   overdue count. An old task gets quieter, not louder, and eventually Cairn
+   overdue count. An old task gets quieter, not louder, and eventually Sill
    asks you once whether it's still real.
 
 ## 2. What "smart" actually means here
@@ -62,7 +63,7 @@ change it. Nothing is ever silently assigned.
 
 ### 2.2 Energy, not priority
 
-Priority flags fail because everything becomes P1. Cairn classifies by **shape
+Priority flags fail because everything becomes P1. Sill classifies by **shape
 of attention required**, which is observable and doesn't inflate:
 
 | Type | Meaning | When it gets scheduled |
@@ -78,7 +79,7 @@ intelligent without any UI for intelligence.
 
 ### 2.3 A day that fits
 
-Cairn reads your calendar (read-only, EventKit) and knows how much unscheduled
+Sill reads your calendar (read-only, EventKit) and knows how much unscheduled
 time you actually have. If today has 90 free minutes, today gets 90 minutes of
 tasks. Not eleven items — three.
 
@@ -154,7 +155,7 @@ Search is fast and full-text. There's one grouping control — by type — and
 that's it.
 
 Old items lose contrast on a curve. At 30 days a task fades to the point where
-Cairn asks, once, on a quiet card: *"Still real?"* → **Keep / Let go**. Letting
+Sill asks, once, on a quiet card: *"Still real?"* → **Keep / Let go**. Letting
 go is not deleting; it goes to a "let go" archive you never have to see.
 This is the anti-guilt mechanism and it's a real feature, not a gimmick.
 

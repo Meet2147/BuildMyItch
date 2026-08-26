@@ -68,8 +68,10 @@ volume with a hard attack. Aubade's tones are **generative and rising**:
 ### Light
 
 Full-screen sunrise gradient starting at the same time as the first tone.
-Screen brightness ramps from ~2% to ~85% over the ramp period. On iPad — often
-the bedside device — this is genuinely effective as a wake light. The gradient
+Screen brightness ramps from ~2% to ~85% over the ramp period. A phone screen
+is a small wake light, but at 20cm from your face on a nightstand it does real
+work — and in StandBy, propped and charging, it's pointing right at you. The
+gradient
 uses the same amber as the app's accent and moves with `Motion.drift`, slow
 enough that you can't see it move but it's never the same twice.
 
@@ -90,7 +92,7 @@ each time. Rewarding the snooze less each time is more honest than removing it.
 ### The first 30 seconds after
 
 The screen you see when you dismiss is the one design opportunity nobody uses.
-Aubade shows a single quiet card: the time, the weather line, and — if Cairn is
+Aubade shows a single quiet card: the time, the weather line, and — if Sill is
 installed — **the first real thing on today**. One sentence. Then it gets out of
 the way. No dashboard, no sleep score, no graph of your night.
 
@@ -116,56 +118,65 @@ An alarm app that only exists at 6am has no way to help you.
 |--------|----------|
 | **Alarms** | 2–4 lifted cards. Each is time (large, monospaced), repeat days as small caps, sound palette, and a real physical-feeling toggle that carves in when off. Not a table view. |
 | **Editor** | A carved circular dial for time — drag with 5-minute haptic detents, or tap the numerals to type. Below: window size, days, palette (with instant preview), ring policy. |
-| **Night face** | The bedside clock. Also the app's screensaver-equivalent on Mac and StandBy mode on iPhone. |
+| **Night face** | The bedside clock, and what StandBy shows while the phone charges on its side overnight. |
 | **Ringing** | Full-bleed sunrise gradient, time, the breathe ring, snooze. Nothing else on screen at all. |
 | **Wind-down** | One card, appears on schedule, dismissible forever with one tap. |
 | **Settings** | Grouped, written, with real explanatory text — not a stack of toggles. Includes the honest "what can this device detect?" panel. |
 
-## 6. The hard part: cross-device arbitration
+## 6. One device, on purpose
 
-Four devices, one alarm. This is the real engineering in the app and it's what
-separates it from a weekend project.
+**Aubade is an iPhone app. Not iPad, not Mac.**
 
-The **schedule** syncs. The **firing** is local — each device materialises its
-own OS-level alarm from the synced schedule. So without arbitration, an alarm
-set on your Mac rings on your iPhone, iPad, Mac and Watch simultaneously at
-6:40am, and dismissing one leaves three going. That is a one-star review.
+That's a scope decision, and it's the right one for three reasons.
 
-Each alarm carries a **ring policy**:
+**It deletes the hardest engineering in the app.** Four devices holding the same
+alarm need arbitration: which one actually rings at 6:40, and what silences the
+other three when you dismiss it. Getting that wrong — three phones still going
+after you've hit dismiss — is a one-star review, and getting it right needs a
+local-network beacon, a push fallback, and a self-stop timeout. On one device
+that entire subsystem doesn't exist.
 
-- **Bedside** (default) — rings on the device you designate per-location. Aubade
-  learns this: the device that has been stationary, charging, and face-down/idle
-  through the night is the bedside device. Others stay silent.
-- **All devices** — for people who need it. Dismissal propagates.
-- **This device only** — for a nap timer or a Mac-side reminder.
+**It deletes the biggest external risk.** macOS has no AlarmKit. A Mac alarm
+means a resident login-item helper holding an audio session, waking the display,
+and hoping the machine isn't asleep — a chain of things the OS doesn't
+guarantee. An alarm app that works four nights out of five is worse than no
+alarm app.
 
-**Dismissal propagation** can't rely on CloudKit push latency (seconds to
-minutes, not guaranteed). Layered approach:
-1. Local network — a small Bonjour/Network.framework beacon between your own
-   devices on the same Wi-Fi, which is the case for ~all bedside scenarios.
-   Sub-second, works with no internet.
-2. CloudKit silent push as the durable fallback.
-3. **A device that has been ringing for >90s with no local ack from a device
-   that dismissed it stops itself anyway.** Fail quiet, not fail loud — the
-   failure mode of an alarm app must never be "it wouldn't stop".
+**Nobody wants it.** People wake up next to a phone. The iPad and the Mac are
+in another room, and an alarm that might ring in another room is a liability,
+not a feature.
 
-The inverse failure — it doesn't ring at all — is handled by never depending on
-sync for firing. Each device schedules its own alarm from local data. If sync is
-broken for a week, every device still rings on last-known schedule.
+What sync is still for: **restore**. Your alarms, sound palettes and wind-down
+settings live in your iCloud private database so a new phone comes back with
+your alarms already set. No arbitration, no cross-device state, no
+"which device is bedside" logic. See
+[`../architecture/SYNC.md`](../architecture/SYNC.md) §5.
+
+The design that was ripped out is written down in that file rather than deleted,
+because the day Aubade earns a Watch app it comes straight back — the Watch is
+the best wake surface there is and the best sleep signal, and a phone-plus-watch
+pair is exactly the two-device case arbitration exists for.
+
+### What stays local no matter what
+
+Firing never depends on the network. The phone schedules its own OS-level alarm
+from local data, and if iCloud is unreachable for a month it still rings on the
+schedule it last knew. Sync degrades to "your new phone doesn't have your
+alarms yet", never to "nothing rang".
 
 ## 7. Platform reality check
 
-| Platform | How alarms actually fire |
-|----------|--------------------------|
-| **iPhone / iPad** | AlarmKit. Rings through silent mode and Focus, presents the system alert UI and a Lock Screen / Dynamic Island Live Activity, supports a custom sound and a secondary button that opens the app for our full ringing screen. Requires explicit user authorization. |
-| **Apple Watch** | Haptic wake is the best wake there is. Also the best sleep-stage signal. Check current SDK for AlarmKit availability on watchOS; fall back to a paired-device haptic notification if unavailable. |
-| **Mac** | No AlarmKit. Alarms fire via a `SMAppService` login-item helper that stays resident, plays audio through a dedicated `AVAudioEngine` session, wakes the display, and brings the app forward. Reliable while the Mac is awake; if it's asleep, an `IOPMScheduleUserWakeRequest`-style wake schedule is needed — verify what's still permitted, and **be honest in the UI** about Mac reliability rather than promising something the OS won't guarantee. |
+| Surface | How it works |
+|---------|--------------|
+| **iPhone** | AlarmKit. Rings through silent mode and Focus, presents the system alert UI and a Lock Screen / Dynamic Island Live Activity, supports a custom sound and a secondary button that opens the app for our full ringing screen. Requires explicit user authorization. |
+| **StandBy** | The night face becomes the bedside clock when the phone is charging on its side. This is where Aubade earns its place on the nightstand. |
+| **Apple Watch** | Not in v1. When it comes, it brings back the arbitration design above, and it's worth it: haptic wake is the gentlest wake there is and the wrist is the only reliable sleep-stage signal. |
+| **iPad, Mac** | No. See §6. |
 
-> Treat this whole table as needing verification against the current SDK before
-> committing. AlarmKit's entitlements, review requirements and platform coverage
-> are the single biggest external risk to the project, and a "we'll figure the
-> Mac out later" attitude here is exactly how a beautiful alarm app ends up
-> with a one-star average.
+> Treat this as needing verification against the current SDK before it becomes a
+> plan. AlarmKit's entitlements, review requirements and exact capabilities are
+> the single biggest external dependency in the project, and they should be
+> proven in week one rather than assumed.
 
 ## 8. Data model (sketch)
 
@@ -179,10 +190,8 @@ broken for a week, every device still rings on last-known schedule.
     var palette: SoundPalette
     var rampMinutes: Int             // default 5
     var lightWake: Bool
-    var ringPolicy: RingPolicy       // .bedside / .allDevices / .thisDevice(deviceID)
     var isEnabled: Bool
     var modifiedAt: Date
-    var modifiedBy: String           // device ID — needed for conflict resolution
 }
 
 @Model final class WakeEvent {       // local, not synced
@@ -195,7 +204,11 @@ broken for a week, every device still rings on last-known schedule.
 ```
 
 `WakeEvent` stays on-device deliberately. Sleep timing is the most sensitive
-data either app touches, and there is no feature that justifies syncing it.
+data either app touches, and there is no feature that justifies syncing it —
+not even restore. A new phone starts your wake history over, and that's fine.
+
+There is no `ringPolicy` and no `modifiedBy` device field, because there is only
+ever one device. Both come back the day a Watch app does.
 
 ## 9. Deliberately not doing
 
@@ -207,14 +220,16 @@ data either app touches, and there is no feature that justifies syncing it.
 - ❌ Guided meditations or a content library.
 - ❌ Health claims of any kind. We say "light sleep", never "REM", and we never
   imply a medical benefit.
+- ❌ An iPad app or a Mac app. See §6 — this is the decision that makes the rest
+  of the app buildable by one person.
 
 ## 10. Build order
 
-1. Local alarms on iOS with AlarmKit, one sound, plain UI. Prove the hard part first — if AlarmKit doesn't do what we need, we want to know in week one, not month three.
+1. Local alarms with AlarmKit, one sound, plain UI. Prove the hard part first — if AlarmKit doesn't do what we need, we want to know in week one, not month three.
 2. Sound engine: generative palettes, ramp curve.
 3. Ringing screen, breathe-to-dismiss, sunrise gradient, night face.
 4. Soft Stone applied; night variant.
-5. CloudKit schedule sync + ring arbitration (the local-network beacon).
-6. Watch app: haptic wake + sleep signal.
-7. Wind-down, StandBy, HomeKit scene hook.
-8. Mac helper — last, because it's the least certain.
+5. Wake window: motion clustering from the phone on the mattress, and the honest "what can this device detect?" panel.
+6. Wind-down, StandBy, HomeKit scene hook.
+7. CloudKit backup of the schedule, for restore onto a new phone.
+8. Watch app — and with it, the arbitration design from `SYNC.md` §5.
