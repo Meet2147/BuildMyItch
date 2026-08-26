@@ -116,8 +116,9 @@ public struct TaskRow: View {
     }
 
     private func complete() {
+        // The row doesn't animate itself out — it changes state, and the list
+        // slides it down into the done well. Motion follows the data.
         withAnimation(reduceMotion ? nil : Motion.settle) {
-            completing = true
             onComplete()
         }
     }
