@@ -25,14 +25,14 @@ suite that runs in that mode.
 One material, two grounds, per platform appearance.
 
 ```
-Light   ground   #E9EBF0   warm neutral grey, ~92% L
-        raised   #EDEFF4   the surface sits *slightly lighter* than ground
+Light   ground   #ECE9E4   warm neutral grey, ~91% L
+        raised   #F0EDE8   the surface sits *slightly lighter* than ground
         light    #FFFFFF   top-left highlight
-        dark     #C3C7D2   bottom-right shadow
-Dark    ground   #22242B   not black — pure black kills the effect entirely
-        raised   #282B33
-        light    #34373F   in dark mode the "light" is a lifted grey, not white
-        dark     #15171C
+        dark     #C9C4BB   bottom-right shadow
+Dark    ground   #232220   not black — pure black kills the effect entirely
+        raised   #2A2926
+        light    #38352F   in dark mode the "light" is a lifted grey, not white
+        dark     #141311
 ```
 
 Two notes that matter more than they look:
@@ -108,12 +108,12 @@ does:
 
 ## 6. Colour discipline
 
-The ground is grey. Ink is a dark warm grey (`#3A3D46`), not black. Secondary
+The ground is grey. Ink is a dark warm grey (`#3A3833`), not black. Secondary
 ink is 58% of that. **One accent per app, used in at most three places on any
 screen.**
 
-- Cairn: **slate blue** `#5B6BA8` — calm, recedes, doesn't compete with content.
-- Aubade: **low amber** `#C98A4B` — warm, works at 3am without hurting, and is
+- Cairn: **slate blue** `#5B6BA8` (`#4A5A96` when it carries text) — calm, recedes, doesn't compete with content.
+- Aubade: **low amber** `#C98A4B` (`#96601F` when it carries text) — warm, works at 3am without hurting, and is
   the colour of the sunrise gradient it shares a screen with.
 
 Semantic colour (a red for a destructive action, a green for a completion) is

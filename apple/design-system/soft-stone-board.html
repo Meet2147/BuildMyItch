@@ -1,0 +1,680 @@
+<title>Soft Stone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,400;0,500;1,6..72,300;1,400&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --ground:#ECE9E4; --raised:#F0EDE8; --hi:#FFFFFF; --sh:#C9C4BB;
+  --ink:#3A3833; --ink-2:rgba(58,56,51,.62); --ink-3:rgba(58,56,51,.40);
+  --cairn:#5B6BA8; --cairn-ink:#4A5A96;
+  --aubade:#C98A4B; --aubade-ink:#8F5B1C;
+  --hair:rgba(58,56,51,.16);
+  --relief:1;
+  --shc:color-mix(in srgb, var(--sh) calc(var(--relief) * 100%), transparent);
+  --hic:color-mix(in srgb, var(--hi) calc(var(--relief) * 100%), transparent);
+  --f-display:"Newsreader",Georgia,"Times New Roman",serif;
+  --f-body:"Hanken Grotesk","Helvetica Neue",Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --maxw:1080px;
+}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#232220; --raised:#2A2926; --hi:#38352F; --sh:#141311;
+    --ink:#E7E3DA; --ink-2:rgba(231,227,218,.60); --ink-3:rgba(231,227,218,.38);
+    --cairn:#8E9CD8; --cairn-ink:#9CA9E0;
+    --aubade:#DFA860; --aubade-ink:#E5B476;
+    --hair:rgba(231,227,218,.18);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#232220; --raised:#2A2926; --hi:#38352F; --sh:#141311;
+  --ink:#E7E3DA; --ink-2:rgba(231,227,218,.60); --ink-3:rgba(231,227,218,.38);
+  --cairn:#8E9CD8; --cairn-ink:#9CA9E0;
+  --aubade:#DFA860; --aubade-ink:#E5B476;
+  --hair:rgba(231,227,218,.18);
+}
+:root.flat{ --relief:.07; }
+
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--f-body); font-size:16.5px; line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{margin:0; text-wrap:balance; font-weight:400;}
+p{margin:0;}
+a{color:var(--cairn-ink);}
+:focus-visible{outline:2px solid var(--cairn-ink); outline-offset:3px; border-radius:4px;}
+
+/* ── the elevation ladder, as CSS ─────────────────────────── */
+.lift,.raise,.float,.carve{
+  background:var(--raised); border:1px solid transparent; border-radius:18px;
+}
+.lift {box-shadow:3px 3px 9px var(--shc), -3px -3px 9px var(--hic);}
+.raise{box-shadow:6px 6px 16px var(--shc), -6px -6px 16px var(--hic);}
+.float{box-shadow:12px 12px 28px var(--shc), -10px -10px 24px var(--hic);}
+.carve{background:var(--ground); box-shadow:inset 3px 3px 7px var(--shc), inset -3px -3px 7px var(--hic);}
+.flat .lift,.flat .raise,.flat .float,.flat .carve{border-color:var(--hair);}
+
+/* ── shell ────────────────────────────────────────────────── */
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px;}
+header.top{
+  position:sticky; top:0; z-index:40; background:var(--ground);
+  border-bottom:1px solid transparent; backdrop-filter:saturate(1.2);
+}
+.top .wrap{display:flex; align-items:center; gap:18px; height:64px;}
+.mark{font-family:var(--f-display); font-size:19px; letter-spacing:.01em; margin-right:auto;}
+.mark em{font-style:italic; color:var(--ink-2);}
+
+.eyebrow{
+  font-family:var(--f-mono); font-size:11px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+.sw{
+  display:inline-flex; align-items:center; gap:10px; cursor:pointer;
+  font-size:13px; color:var(--ink-2); user-select:none; padding:6px 12px 6px 8px;
+  border-radius:999px; background:var(--raised);
+  box-shadow:3px 3px 8px var(--shc), -3px -3px 8px var(--hic);
+  border:1px solid transparent;
+}
+.flat .sw{border-color:var(--hair);}
+.sw .track{
+  width:36px; height:20px; border-radius:999px; background:var(--ground);
+  box-shadow:inset 2px 2px 5px var(--shc), inset -2px -2px 5px var(--hic);
+  position:relative; flex:none;
+}
+.sw .knob{
+  position:absolute; top:3px; left:3px; width:14px; height:14px; border-radius:50%;
+  background:var(--ink-3); transition:transform .22s cubic-bezier(.3,1.2,.5,1), background .2s;
+}
+.sw[aria-pressed="true"] .knob{transform:translateX(16px); background:var(--cairn);}
+
+/* ── sections ─────────────────────────────────────────────── */
+section{padding:76px 0;}
+.rule{height:1px; background:var(--hair); border:0; margin:0;}
+h2.sec{font-family:var(--f-display); font-size:clamp(30px,4.4vw,44px); line-height:1.12; letter-spacing:-.012em;}
+h2.sec em{font-style:italic; color:var(--ink-2);}
+h3.sub{font-family:var(--f-display); font-size:23px; line-height:1.25;}
+.lede{font-size:18.5px; color:var(--ink-2); max-width:63ch;}
+.body{max-width:65ch; color:var(--ink-2);}
+.body strong{color:var(--ink); font-weight:600;}
+.stack{display:flex; flex-direction:column; gap:18px;}
+.stack-sm{display:flex; flex-direction:column; gap:10px;}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(310px,1fr)); gap:26px;}
+.grid3{display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:18px;}
+.card{padding:26px;}
+code,.mono{font-family:var(--f-mono); font-size:13px;}
+
+/* ── hero ─────────────────────────────────────────────────── */
+.hero{padding:88px 0 60px;}
+.hero h1{
+  font-family:var(--f-display); font-weight:300;
+  font-size:clamp(46px,8.2vw,86px); line-height:.98; letter-spacing:-.028em;
+}
+.hero h1 em{font-style:italic;}
+.hero .cols{display:grid; grid-template-columns:1.15fr .85fr; gap:44px; align-items:end; margin-top:34px;}
+@media(max-width:820px){.hero .cols{grid-template-columns:1fr;}}
+.apps{display:flex; gap:14px; flex-wrap:wrap; margin-top:26px;}
+.chip{
+  display:flex; align-items:center; gap:11px; padding:13px 19px 13px 15px; border-radius:16px;
+  background:var(--raised); box-shadow:3px 3px 9px var(--shc), -3px -3px 9px var(--hic);
+  border:1px solid transparent;
+}
+.flat .chip{border-color:var(--hair);}
+.chip .dot{width:9px; height:9px; border-radius:50%; flex:none;}
+.chip b{font-weight:600; font-size:15px;}
+.chip span{color:var(--ink-3); font-size:13.5px;}
+
+/* pressable demo button */
+.press{
+  font:inherit; font-weight:600; font-size:15px; color:var(--ink); cursor:pointer;
+  padding:14px 26px; border-radius:15px; border:1px solid transparent;
+  background:var(--raised); box-shadow:5px 5px 13px var(--shc), -5px -5px 13px var(--hic);
+  transition:box-shadow .13s ease, transform .13s ease;
+}
+.flat .press{border-color:var(--hair);}
+.press:active{
+  background:var(--ground); transform:scale(.986);
+  box-shadow:inset 3px 3px 7px var(--shc), inset -3px -3px 7px var(--hic);
+}
+@media(prefers-reduced-motion:reduce){.press{transition:none;} .press:active{transform:none;}}
+
+/* ── ladder specimens ─────────────────────────────────────── */
+.ladder{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:16px;}
+.spec{padding:20px 16px; text-align:center; border-radius:16px;}
+.spec .lvl{font-family:var(--f-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3);}
+.spec .nm{font-family:var(--f-display); font-size:19px; margin-top:6px;}
+.spec .use{font-size:12.5px; color:var(--ink-3); margin-top:4px; line-height:1.4;}
+
+/* swatches */
+.sws{display:grid; grid-template-columns:repeat(auto-fit,minmax(112px,1fr)); gap:12px;}
+.swatch{border-radius:14px; overflow:hidden; border:1px solid var(--hair);}
+.swatch .fill{height:56px;}
+.swatch .lb{padding:8px 10px; font-family:var(--f-mono); font-size:11px; color:var(--ink-2); background:var(--raised);}
+
+/* ── device mock ──────────────────────────────────────────── */
+.phone{
+  width:296px; border-radius:44px; padding:11px; flex:none;
+  background:var(--raised); border:1px solid transparent;
+  box-shadow:14px 14px 32px var(--shc), -12px -12px 28px var(--hic);
+}
+.flat .phone{border-color:var(--hair);}
+.screen{
+  border-radius:34px; background:var(--ground); height:592px; overflow:hidden;
+  position:relative; display:flex; flex-direction:column;
+  box-shadow:inset 2px 2px 6px var(--shc), inset -2px -2px 6px var(--hic);
+}
+.st{display:flex; justify-content:space-between; padding:14px 22px 4px; font-size:11.5px; color:var(--ink-3); font-variant-numeric:tabular-nums;}
+.scr-pad{padding:6px 18px 18px; display:flex; flex-direction:column; gap:12px; flex:1; min-height:0;}
+.scr-h{font-family:var(--f-display); font-size:27px; letter-spacing:-.01em; line-height:1.1;}
+.scr-h small{display:block; font-family:var(--f-mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); margin-bottom:5px;}
+.band{font-family:var(--f-mono); font-size:9.5px; letter-spacing:.17em; text-transform:uppercase; color:var(--ink-3); margin:6px 0 -3px;}
+.task{
+  display:flex; align-items:center; gap:11px; padding:11px 13px; border-radius:14px;
+  background:var(--raised); border:1px solid transparent;
+  box-shadow:2px 2px 7px var(--shc), -2px -2px 7px var(--hic);
+}
+.flat .task{border-color:var(--hair);}
+.task .o{width:17px; height:17px; border-radius:50%; flex:none; background:var(--ground); box-shadow:inset 2px 2px 4px var(--shc), inset -1px -1px 3px var(--hic);}
+.task .tx{font-size:13.5px; flex:1; line-height:1.3;}
+.task .mt{font-family:var(--f-mono); font-size:10px; color:var(--ink-3); flex:none;}
+.task.done .tx{color:var(--ink-3); font-weight:500;}
+.task.done .o{background:var(--cairn); box-shadow:none; position:relative;}
+.task.done .o::after{content:"✓"; position:absolute; inset:0; display:grid; place-items:center; color:var(--raised); font-size:11px; font-weight:700;}
+.well{
+  margin-top:auto; padding:11px 15px; border-radius:14px; background:var(--ground);
+  box-shadow:inset 3px 3px 7px var(--shc), inset -3px -3px 7px var(--hic);
+  display:flex; align-items:center; justify-content:space-between;
+  font-size:12px; color:var(--ink-3);
+}
+.capture{
+  display:flex; align-items:center; gap:9px; padding:12px 15px; border-radius:15px;
+  background:var(--ground); box-shadow:inset 3px 3px 7px var(--shc), inset -3px -3px 7px var(--hic);
+  font-size:13.5px; color:var(--ink-3);
+}
+.parse{display:flex; gap:6px; flex-wrap:wrap;}
+.pchip{
+  font-family:var(--f-mono); font-size:10px; padding:4px 9px; border-radius:999px;
+  background:var(--raised); color:var(--ink-2); border:1px solid transparent;
+  box-shadow:2px 2px 5px var(--shc), -2px -2px 5px var(--hic);
+}
+.flat .pchip{border-color:var(--hair);}
+.pchip.acc{color:var(--cairn-ink);}
+
+/* aubade screens */
+.alarm-row{
+  display:flex; align-items:center; gap:12px; padding:14px 15px; border-radius:16px;
+  background:var(--raised); border:1px solid transparent;
+  box-shadow:3px 3px 9px var(--shc), -3px -3px 9px var(--hic);
+}
+.flat .alarm-row{border-color:var(--hair);}
+.alarm-row .t{font-family:var(--f-display); font-size:31px; line-height:1; letter-spacing:-.02em; font-variant-numeric:tabular-nums;}
+.alarm-row .meta{font-family:var(--f-mono); font-size:9.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); margin-top:5px;}
+.alarm-row.off .t,.alarm-row.off .meta{color:var(--ink-3);}
+.toggle{
+  width:44px; height:26px; border-radius:999px; flex:none; margin-left:auto; position:relative;
+  background:var(--ground); box-shadow:inset 2px 2px 5px var(--shc), inset -2px -2px 5px var(--hic);
+}
+.toggle i{position:absolute; top:4px; left:4px; width:18px; height:18px; border-radius:50%; background:var(--ink-3);}
+.toggle.on i{left:auto; right:4px; background:var(--aubade);}
+
+.ring-screen{
+  position:absolute; inset:0; border-radius:34px; overflow:hidden;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:26px;
+  background:
+    radial-gradient(120% 78% at 50% 118%, #E8A24C 0%, #C2743C 34%, #6A4634 62%, #2A2320 88%);
+}
+.ring-screen::after{
+  content:""; position:absolute; inset:0;
+  background:radial-gradient(90% 55% at 50% 112%, rgba(255,214,150,.85), transparent 70%);
+  animation:breath 9s ease-in-out infinite;
+}
+@keyframes breath{0%,100%{opacity:.35;} 50%{opacity:.9;}}
+@media(prefers-reduced-motion:reduce){.ring-screen::after{animation:none; opacity:.6;}}
+.ring-screen>*{position:relative; z-index:2;}
+.ring-time{font-family:var(--f-display); font-size:64px; color:#FFF3E2; letter-spacing:-.03em; line-height:1; font-variant-numeric:tabular-nums; text-shadow:0 2px 22px rgba(60,26,0,.4);}
+.ring-sub{font-family:var(--f-mono); font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,238,215,.8);}
+.breathe{width:118px; height:118px; position:relative; cursor:pointer; touch-action:none;}
+.breathe svg{width:100%; height:100%; transform:rotate(-90deg);}
+.breathe .bg{fill:none; stroke:rgba(255,235,205,.28); stroke-width:5;}
+.breathe .fg{fill:none; stroke:#FFF1DC; stroke-width:5; stroke-linecap:round; stroke-dasharray:339; stroke-dashoffset:339; transition:stroke-dashoffset .7s ease;}
+.breathe.holding .fg{stroke-dashoffset:0; transition:stroke-dashoffset 3.6s linear;}
+.breathe .lbl{position:absolute; inset:0; display:grid; place-items:center; font-size:12px; color:#FFF1DC; letter-spacing:.04em; text-align:center; padding:0 20px; line-height:1.3;}
+.snooze{font-family:var(--f-mono); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:rgba(255,238,215,.72);}
+
+.night{background:#151311; box-shadow:none;}
+.night .nt{font-family:var(--f-display); font-size:74px; color:#C08640; letter-spacing:-.035em; font-variant-numeric:tabular-nums; line-height:1;}
+.night .nm2{font-family:var(--f-mono); font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:rgba(192,134,64,.5); margin-top:12px;}
+.night-wrap{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+
+/* ── tables / lists ───────────────────────────────────────── */
+.tbl-wrap{overflow-x:auto;}
+table{border-collapse:collapse; width:100%; font-size:14.5px; min-width:480px;}
+th{
+  text-align:left; font-family:var(--f-mono); font-size:10.5px; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:400; padding:0 14px 10px 0;
+  border-bottom:1px solid var(--hair);
+}
+td{padding:13px 14px 13px 0; border-bottom:1px solid var(--hair); color:var(--ink-2); vertical-align:top;}
+td:first-child{color:var(--ink); font-weight:600; white-space:nowrap;}
+tr:last-child td{border-bottom:0;}
+
+.nots{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:11px;}
+.not{
+  display:flex; gap:11px; align-items:flex-start; padding:13px 15px; border-radius:13px;
+  font-size:14px; color:var(--ink-2); background:var(--ground);
+  box-shadow:inset 2px 2px 6px var(--shc), inset -2px -2px 6px var(--hic);
+}
+.not b{color:var(--ink-3); font-family:var(--f-mono); font-size:12px; flex:none; padding-top:1px;}
+
+.steps{counter-reset:s; display:grid; gap:2px;}
+.step{display:grid; grid-template-columns:44px 1fr; gap:16px; padding:14px 0; border-bottom:1px solid var(--hair);}
+.step:last-child{border-bottom:0;}
+.step::before{
+  counter-increment:s; content:counter(s,decimal-leading-zero);
+  font-family:var(--f-mono); font-size:12px; color:var(--ink-3); padding-top:2px;
+}
+.step b{font-weight:600; color:var(--ink);}
+.step span{color:var(--ink-2);}
+
+.ramp{width:100%; height:130px; display:block;}
+footer{padding:56px 0 74px; color:var(--ink-3); font-size:14px;}
+.accent-c{color:var(--cairn-ink);} .accent-a{color:var(--aubade-ink);}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="mark">Soft&nbsp;Stone <em>— a design language for two apps</em></div>
+    <button class="sw" id="flatBtn" aria-pressed="false">
+      <span class="track"><span class="knob"></span></span>
+      <span>Flatten relief</span>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Concept board · iPhone · iPad · Mac</div>
+    <div class="cols">
+      <div>
+        <h1>Neumorphism that <em>survived</em> accessibility review.</h1>
+      </div>
+      <div class="stack">
+        <p class="lede">One warm ground, lit from the top-left, that things are pushed out of or pressed into. The catch that killed the 2020 wave: relief has to encode <strong>structure</strong>, never meaning.</p>
+        <div>
+          <button class="press">Press me — this is the whole idea</button>
+        </div>
+      </div>
+    </div>
+    <div class="apps">
+      <div class="chip"><span class="dot" style="background:var(--cairn)"></span><b>Cairn</b><span>plans your day, then leaves</span></div>
+      <div class="chip"><span class="dot" style="background:var(--aubade)"></span><b>Aubade</b><span>waking up, designed</span></div>
+      <div class="chip"><span class="dot" style="background:var(--ink-3)"></span><b>Keystone</b><span>CloudKit, no server, no account</span></div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <div class="wrap stack" style="gap:30px">
+    <div class="stack-sm">
+      <div class="eyebrow">The rule</div>
+      <h2 class="sec">Flip that switch. <em>Nothing should break.</em></h2>
+      <p class="body">Elevation tells you what is a surface, what is a container, what is a control. It never tells you what is selected, urgent, done, or disabled — those are always carried by contrast, weight, or a glyph. So the app has to stay completely usable with every shadow at zero, and it does: turn relief off and hairlines take over. There is a debug flag in the real app that does exactly this, and a screenshot suite that runs in it. If a state vanishes when you flatten, it was encoded in relief, and that's a bug.</p>
+    </div>
+
+    <div class="ladder">
+      <div class="spec carve"><div class="lvl">−1</div><div class="nm">Carved</div><div class="use">Fields, tracks, the well a control sits in</div></div>
+      <div class="spec" style="border:1px solid var(--hair)"><div class="lvl">0</div><div class="nm">Flush</div><div class="use">The ground itself</div></div>
+      <div class="spec lift"><div class="lvl">1</div><div class="nm">Lifted</div><div class="use">Rows, chips, secondary buttons</div></div>
+      <div class="spec raise"><div class="lvl">2</div><div class="nm">Raised</div><div class="use">Cards, primary button, clock face</div></div>
+      <div class="spec float"><div class="lvl">3</div><div class="nm">Floating</div><div class="use">Sheets, popovers, a ringing alarm</div></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card raise stack-sm">
+        <h3 class="sub">The press is the point</h3>
+        <p style="color:var(--ink-2); font-size:15px">Raised → carved over 120ms, back over 220ms with a slight overshoot. That transition <em>is</em> the button feedback, and it's the only reason to use this language at all. A <code>.impact(.soft)</code> haptic on the down transition — never on release.</p>
+      </div>
+      <div class="card raise stack-sm">
+        <h3 class="sub">Light comes from the top-left</h3>
+        <p style="color:var(--ink-2); font-size:15px">On every element, in both apps, in every locale. Offsets are always <code>(−x,−y)</code> highlight and <code>(+x,+y)</code> shadow, and they are <em>not</em> mirrored for RTL — light doesn't flip when the language does. One inconsistent element and the material stops reading as material.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <div class="wrap stack" style="gap:28px">
+    <div class="stack-sm">
+      <div class="eyebrow">Material</div>
+      <h2 class="sec">A warm ground, <em>not a blue one</em></h2>
+      <p class="body">Almost every neumorphism demo uses a cool blue-grey. On an OLED panel it reads cold and plastic. Pulling a few points of yellow in makes the same effect read as paper or clay. In dark mode the highlight becomes a lifted grey rather than white — a white highlight on a dark ground reads as a glow, not a bevel — so the whole effect gets subtler after dark, which is correct.</p>
+    </div>
+    <div class="sws">
+      <div class="swatch"><div class="fill" style="background:#ECE9E4"></div><div class="lb">#ECE9E4 ground</div></div>
+      <div class="swatch"><div class="fill" style="background:#F0EDE8"></div><div class="lb">#F0EDE8 raised</div></div>
+      <div class="swatch"><div class="fill" style="background:#C9C4BB"></div><div class="lb">#C9C4BB shade</div></div>
+      <div class="swatch"><div class="fill" style="background:#232220"></div><div class="lb">#232220 dark gnd</div></div>
+      <div class="swatch"><div class="fill" style="background:#5B6BA8"></div><div class="lb">#5B6BA8 cairn</div></div>
+      <div class="swatch"><div class="fill" style="background:#C98A4B"></div><div class="lb">#C98A4B aubade</div></div>
+    </div>
+    <div class="grid3">
+      <div class="card lift stack-sm" style="padding:22px">
+        <div class="eyebrow">Type</div>
+        <p style="font-size:14.5px;color:var(--ink-2)">SF Pro, used properly. Monospaced digits everywhere a number changes. Tightened tracking on the big clock. Small caps for metadata — the trick that makes a minimal UI look typeset instead of unfinished.</p>
+      </div>
+      <div class="card lift stack-sm" style="padding:22px">
+        <div class="eyebrow">Colour</div>
+        <p style="font-size:14.5px;color:var(--ink-2)">One accent per app, in at most three places per screen. Semantic reds and greens are desaturated to sit inside the material — full-saturation system red on a soft grey ground looks like a rendering bug.</p>
+      </div>
+      <div class="card lift stack-sm" style="padding:22px">
+        <div class="eyebrow">Motion</div>
+        <p style="font-size:14.5px;color:var(--ink-2)">One spring, three tunings: <code>snap</code> for controls, <code>settle</code> for rows and sheets, <code>drift</code> for ambient. Nothing on an interactive path lasts over 500ms. Motion is causal — a sheet grows from the control you tapped.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <div class="wrap stack" style="gap:32px">
+    <div class="stack-sm">
+      <div class="eyebrow accent-c">Cairn · the todo app</div>
+      <h2 class="sec">Capture is easy. <em>Deciding is the job.</em></h2>
+      <p class="body">Every todo app is good at capture and punts the hard part back to you — here are your tags, your priorities, your 87 overdue items, good luck. The list becomes a monument to what you haven't done and you stop opening it. Cairn takes the deciding job: you throw things in with no structure, and once a day it produces <strong>one screen — today</strong>, with a realistic number of things on it. Everything else is deliberately hard to look at.</p>
+    </div>
+
+    <div style="display:flex; gap:34px; flex-wrap:wrap; align-items:flex-start">
+      <div class="phone">
+        <div class="screen">
+          <div class="st"><span>9:41</span><span>􀙇 􀛨</span></div>
+          <div class="scr-pad">
+            <div class="scr-h"><small>Tuesday · 3h 10m free</small>Today</div>
+            <div class="band">This morning</div>
+            <div class="task"><span class="o"></span><span class="tx">Finish Q3 deck</span><span class="mt">2h</span></div>
+            <div class="band">After lunch</div>
+            <div class="task"><span class="o"></span><span class="tx">Reply to Sam</span><span class="mt">10m</span></div>
+            <div class="task"><span class="o"></span><span class="tx">Expenses</span><span class="mt">15m</span></div>
+            <div class="band">Whenever</div>
+            <div class="task"><span class="o"></span><span class="tx">Pick up parcel</span><span class="mt">errand</span></div>
+            <div class="task done"><span class="o"></span><span class="tx">Chase the invoice</span><span class="mt"></span></div>
+            <div class="well"><span>Done today</span><span style="font-family:var(--f-mono)">4</span></div>
+            <div class="capture">􀅼&nbsp; Add anything…</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack" style="flex:1; min-width:300px">
+        <div class="card raise stack-sm">
+          <h3 class="sub">One sentence in, real tasks out</h3>
+          <div class="capture" style="margin:4px 0">pick up parcel, gym, book flights, reply to Sam</div>
+          <div class="parse">
+            <span class="pchip">Pick up parcel · errand</span>
+            <span class="pchip">Gym · 1h · idle</span>
+            <span class="pchip acc">Book flights · admin · 20m</span>
+            <span class="pchip">Reply to Sam · social</span>
+          </div>
+          <p style="font-size:14.5px;color:var(--ink-2);margin-top:6px">Nobody thinks in single tasks — people think in dumps. Handling one comma-separated brain-dump correctly is the whole difference between capture and typing into a form. Parsing runs on-device; task text never leaves the phone.</p>
+        </div>
+
+        <div class="card raise stack-sm">
+          <h3 class="sub">Energy, not priority</h3>
+          <p style="font-size:14.5px;color:var(--ink-2)">Priority flags fail because everything becomes P1. Cairn classifies by the shape of attention a thing needs, which is observable and doesn't inflate.</p>
+          <div class="tbl-wrap">
+            <table>
+              <tr><td>Deep</td><td>Uninterrupted hour+ → your best focus window, max two a day</td></tr>
+              <tr><td>Admin</td><td>Short, boring, low stakes → batched into one afternoon block</td></tr>
+              <tr><td>Errand</td><td>Requires being somewhere → grouped by location</td></tr>
+              <tr><td>Social</td><td>Requires another person → inside their working hours</td></tr>
+              <tr><td>Idle</td><td>Doable in a queue → lives on the widget, never scheduled</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card lift stack-sm">
+        <h3 class="sub">A day that actually fits</h3>
+        <p style="font-size:15px;color:var(--ink-2)">Cairn reads your calendar and knows how much unscheduled time you have. Ninety free minutes means ninety minutes of tasks — three items, not eleven. Drag between bands to re-plan and the rest reflows. That's the entire planning interface.</p>
+      </div>
+      <div class="card lift stack-sm">
+        <h3 class="sub">The backlog is not a debt</h3>
+        <p style="font-size:15px;color:var(--ink-2)">Nothing goes red. Nothing grows an overdue badge. An old task loses contrast on a curve, and at thirty days Cairn asks once, on a quiet card: <em>still real?</em> Letting go isn't deleting — it goes somewhere you never have to look at.</p>
+      </div>
+    </div>
+
+    <div class="stack-sm">
+      <div class="eyebrow">Deliberately absent</div>
+      <div class="nots">
+        <div class="not"><b>—</b><span>Collaboration, sharing, assigning</span></div>
+        <div class="not"><b>—</b><span>Projects and nested subtasks</span></div>
+        <div class="not"><b>—</b><span>Tags</span></div>
+        <div class="not"><b>—</b><span>Streaks, points, confetti</span></div>
+        <div class="not"><b>—</b><span>A priority field, at all</span></div>
+        <div class="not"><b>—</b><span>Chat with your tasks</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <div class="wrap stack" style="gap:32px">
+    <div class="stack-sm">
+      <div class="eyebrow accent-a">Aubade · the alarm app</div>
+      <h2 class="sec">The most-used app on the phone, <em>and the least considered.</em></h2>
+      <p class="body">Third parties couldn't fix the alarm clock for a decade, because an app that wasn't Clock couldn't ring through silent mode or a Focus. AlarmKit changed that, and the category still hasn't produced a beautiful one. Aubade does three things: wakes you at the right <strong>moment</strong> rather than the exact minute you typed, wakes you <strong>gradually</strong> with light and sound that start below your waking threshold, and owns the <strong>night before</strong>, because that's what actually determines the morning.</p>
+    </div>
+
+    <div style="display:flex; gap:26px; flex-wrap:wrap; align-items:flex-start">
+      <div class="phone">
+        <div class="screen">
+          <div class="ring-screen">
+            <div class="ring-sub">6:26 · light sleep</div>
+            <div class="ring-time">6:26</div>
+            <div class="breathe" id="breathe" role="button" tabindex="0" aria-label="Hold to wake">
+              <svg viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="bg" cx="60" cy="60" r="54"></circle>
+                <circle class="fg" cx="60" cy="60" r="54"></circle>
+              </svg>
+              <span class="lbl" id="breatheLbl">Hold to wake</span>
+            </div>
+            <div class="snooze">Snooze · 12 min</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone">
+        <div class="screen">
+          <div class="st"><span>10:58</span><span>􀙇 􀛨</span></div>
+          <div class="scr-pad">
+            <div class="scr-h"><small>Three set</small>Alarms</div>
+            <div class="alarm-row">
+              <div><div class="t">6:40</div><div class="meta">By · 20 min window · Ember</div></div>
+              <div class="toggle on"><i></i></div>
+            </div>
+            <div class="alarm-row">
+              <div><div class="t">7:15</div><div class="meta">Sat Sun · Tide</div></div>
+              <div class="toggle on"><i></i></div>
+            </div>
+            <div class="alarm-row off">
+              <div><div class="t">5:30</div><div class="meta">Flight · one-shot</div></div>
+              <div class="toggle"><i></i></div>
+            </div>
+            <div class="well" style="margin-top:auto"><span>Bedside device</span><span style="font-family:var(--f-mono)">iPad Pro</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone">
+        <div class="screen night">
+          <div class="night-wrap">
+            <div class="nt">3:14</div>
+            <div class="nm2">Alarm in 3h 26m</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="body" style="font-size:14.5px">Left: the wake ritual — hold the ring and a slow haptic paces an inhale-hold-exhale for eight seconds. You can't do that in your sleep, but it's calm rather than punitive, and it leaves you more awake than shouting at a QR code does. Right: the night face. Amber-only ink at near-invisible brightness, relief dialled almost to nothing because heavy shadows at low brightness just read as smudges. It's a bedside clock worth leaving out.</p>
+
+    <div class="grid2">
+      <div class="card raise stack-sm">
+        <h3 class="sub">You set “by 6:40”, not 6:40</h3>
+        <p style="font-size:15px;color:var(--ink-2)">Aubade rings at the best moment inside a window and never later than the hard time. With a Watch it uses heart rate and motion; with the phone on the mattress, movement clustering; with nothing, it rings at the hard time and <strong>says so during setup</strong>. Pretending to detect sleep from a phone across the room is the kind of lie that makes an app feel cheap.</p>
+      </div>
+      <div class="card raise stack-sm">
+        <h3 class="sub">Sound that starts under your threshold</h3>
+        <p style="font-size:15px;color:var(--ink-2)">Generative, not looped, so there's no seam and no moment you learn to recognise as “the bit before it gets loud”. It opens at 15% on a low sustained tone; layers enter one at a time; volume ramps shallow for the first 60% and steep at the end. Six palettes — Glass, Ember, Rainfall, Bell Garden, Low Strings, Tide — and a five-minute wake is 40KB of parameters, not five minutes of audio.</p>
+        <svg class="ramp" viewBox="0 0 320 120" preserveAspectRatio="none" aria-label="Volume ramp: shallow, then steep">
+          <defs><linearGradient id="rg" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stop-color="var(--aubade)" stop-opacity=".05"></stop>
+            <stop offset="1" stop-color="var(--aubade)" stop-opacity=".38"></stop>
+          </linearGradient></defs>
+          <line x1="0" y1="103" x2="320" y2="103" stroke="var(--hair)"></line>
+          <line x1="0" y1="58" x2="320" y2="58" stroke="var(--hair)" stroke-dasharray="3 5"></line>
+          <path d="M0,101 C90,97 150,90 200,72 C240,57 268,30 320,8 L320,118 L0,118 Z" fill="url(#rg)"></path>
+          <path d="M0,101 C90,97 150,90 200,72 C240,57 268,30 320,8" fill="none" stroke="var(--aubade)" stroke-width="2.5" stroke-linecap="round"></path>
+          <text x="4" y="52" font-family="IBM Plex Mono" font-size="9" fill="var(--ink-3)">waking threshold</text>
+          <text x="4" y="117" font-family="IBM Plex Mono" font-size="9" fill="var(--ink-3)">−5 min</text>
+          <text x="286" y="117" font-family="IBM Plex Mono" font-size="9" fill="var(--ink-3)">6:40</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="stack-sm">
+      <div class="eyebrow">Deliberately absent</div>
+      <div class="nots">
+        <div class="not"><b>—</b><span>A sleep score or graphs of your night</span></div>
+        <div class="not"><b>—</b><span>Recording audio while you sleep</span></div>
+        <div class="not"><b>—</b><span>Photograph-the-sink dismissal</span></div>
+        <div class="not"><b>—</b><span>A premium sounds pack</span></div>
+        <div class="not"><b>—</b><span>Guided meditation content</span></div>
+        <div class="not"><b>—</b><span>Any health claim, ever</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <div class="wrap stack" style="gap:26px">
+    <div class="stack-sm">
+      <div class="eyebrow">Keystone · sync</div>
+      <h2 class="sec">Four devices, one alarm. <em>That's the real engineering.</em></h2>
+      <p class="body">SwiftData locally, CloudKit private database for transport, the user's own Apple Account for identity. No login screen, no server, no subscription to pay for one. The interesting problem isn't moving records — it's arbitration. Set an alarm on your Mac and without it, four devices ring at 6:40 and dismissing one leaves three going. That is a one-star review.</p>
+    </div>
+    <div class="grid2">
+      <div class="card lift stack-sm">
+        <h3 class="sub">Firing is never the network's job</h3>
+        <p style="font-size:15px;color:var(--ink-2)">Every device schedules its own OS-level alarm from local data. Sync only ever changes the schedule. If CloudKit is down, if you're on a plane, if iCloud is full — every device still rings on the last schedule it knew. Sync degrades to “your devices disagree”, never to “nothing rang”.</p>
+      </div>
+      <div class="card lift stack-sm">
+        <h3 class="sub">Dismissal takes three paths</h3>
+        <p style="font-size:15px;color:var(--ink-2)">A local-network beacon between your own devices handles the bedside case in under a second with no internet at all. A CloudKit silent push is the durable fallback. And anything still ringing 90 seconds after another device dismissed stops itself regardless — the failure mode of an alarm app must never be “it wouldn't stop”.</p>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Conflict</th><th>Resolution</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td>Toggled off on phone, on elsewhere</td><td>Off wins</td><td>Asymmetric on purpose — a spurious 6am alarm is far worse than a missed one you thought you'd killed</td></tr>
+          <tr><td>Completed here, edited there</td><td>Completion wins</td><td><code>completedAt</code> is only ever set by a merge, never cleared</td></tr>
+          <tr><td>Deleted here, edited there</td><td>Soft-deleted, recoverable</td><td>Silent data loss is the one outcome a personal list can't survive</td></tr>
+          <tr><td>Two devices plan the same day</td><td>Nothing to conflict</td><td>The plan is derived from tasks + calendar, not stored — derive more, sync less</td></tr>
+          <tr><td>Sleep timing history</td><td>Never synced</td><td>Most sensitive data either app holds; no feature needs it portable</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <div class="wrap stack" style="gap:26px">
+    <div class="stack-sm">
+      <div class="eyebrow">The bar</div>
+      <h2 class="sec">How you tell hand-made <em>from generated</em></h2>
+      <p class="body">Generated apps share one tell: every element got the same amount of attention. Uniform padding, uniform radius, one shadow on everything, emoji instead of icons, a settings screen that's an undifferentiated stack of toggles. It reads as generated because there's no evidence of anyone having decided what matters. Apps that feel hand-made show their priorities.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div><b>Hierarchy is visible.</b> <span>On any screen you can name the one thing it's for within half a second. Everything else is quieter.</span></div></div>
+      <div class="step"><div><b>The empty state is designed.</b> <span>So is the error state, the first-run state, the 200-tasks state, and the 3am state.</span></div></div>
+      <div class="step"><div><b>Motion is causal.</b> <span>A completed task doesn't fade — it slides into the done well, so you can see where it went.</span></div></div>
+      <div class="step"><div><b>Text is written.</b> <span>“No tasks today” is a placeholder. “Nothing left. You've got 3 hours back.” is a decision.</span></div></div>
+      <div class="step"><div><b>It's fast at the boring moments.</b> <span>Under 400ms to interactive, no dropped frames at 120Hz, a keyboard that arrives already focused. Speed is the most under-rated aesthetic property there is.</span></div></div>
+      <div class="step"><div><b>It respects the platform.</b> <span>Real menus and a menu-bar capture panel on Mac, three columns and pointer hover on iPad, Dynamic Type to AX5 everywhere. One SwiftUI blob identical on all three devices is its own kind of generated.</span></div></div>
+      <div class="step"><div><b>Details nobody asked for.</b> <span>Haptics tuned per gesture. Monospaced digits so the clock never jitters. A share sheet that produces something worth looking at.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<footer>
+  <div class="wrap stack-sm">
+    <div class="eyebrow">Shape of the business</div>
+    <p class="body">Paid once, no subscription, no accounts, no telemetry. Roughly $12 and $8, $16 together. There's no server cost to amortise, so a subscription would be rent-seeking and people can smell it — and a one-time price is the strongest signal available that the app is finished and won't grow a Pro tier inside itself. Privacy label target: <em>Data Not Collected</em>, literally.</p>
+    <p style="margin-top:14px">Full specs live in <code>apple/</code> — design system, both concept docs, and the sync architecture.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btn = document.getElementById('flatBtn');
+  btn.addEventListener('click', function(){
+    var on = btn.getAttribute('aria-pressed') === 'true';
+    btn.setAttribute('aria-pressed', String(!on));
+    document.documentElement.classList.toggle('flat', !on);
+    try { localStorage.setItem('softstone-flat', String(!on)); } catch(e){}
+  });
+  try {
+    if (localStorage.getItem('softstone-flat') === 'true') {
+      btn.setAttribute('aria-pressed','true');
+      document.documentElement.classList.add('flat');
+    }
+  } catch(e){}
+
+  var ring = document.getElementById('breathe');
+  var lbl  = document.getElementById('breatheLbl');
+  var timer = null, awake = false;
+  function hold(e){
+    if (awake) return;
+    if (e && e.preventDefault) e.preventDefault();
+    ring.classList.add('holding');
+    lbl.textContent = 'Breathe in…';
+    timer = setTimeout(function(){
+      awake = true;
+      lbl.textContent = 'Good morning';
+      setTimeout(reset, 2200);
+    }, 3600);
+  }
+  function release(){
+    if (awake) return;
+    clearTimeout(timer);
+    ring.classList.remove('holding');
+    lbl.textContent = 'Hold to wake';
+  }
+  function reset(){
+    awake = false;
+    ring.classList.remove('holding');
+    lbl.textContent = 'Hold to wake';
+  }
+  ring.addEventListener('pointerdown', hold);
+  ring.addEventListener('pointerup', release);
+  ring.addEventListener('pointerleave', release);
+  ring.addEventListener('pointercancel', release);
+  ring.addEventListener('keydown', function(e){ if(e.key===' '||e.key==='Enter'){ hold(e); } });
+  ring.addEventListener('keyup', release);
+})();
+</script>

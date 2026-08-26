@@ -13,22 +13,22 @@ public enum Stone {
     public static let lightAngle = (dx: -1.0, dy: -1.0)
 
     public static func ground(_ s: ColorScheme) -> Color {
-        s == .dark ? Color(hex: 0x22242B) : Color(hex: 0xE9EBF0)
+        s == .dark ? Color(hex: 0x232220) : Color(hex: 0xECE9E4)
     }
     public static func raised(_ s: ColorScheme) -> Color {
-        s == .dark ? Color(hex: 0x282B33) : Color(hex: 0xEDEFF4)
+        s == .dark ? Color(hex: 0x2A2926) : Color(hex: 0xF0EDE8)
     }
     /// In dark mode the highlight is a lifted grey, not white — a white
     /// highlight on a dark ground reads as a glow, not a bevel.
     public static func highlight(_ s: ColorScheme) -> Color {
-        s == .dark ? Color(hex: 0x34373F) : .white
+        s == .dark ? Color(hex: 0x38352F) : .white
     }
     public static func shade(_ s: ColorScheme) -> Color {
-        s == .dark ? Color(hex: 0x15171C) : Color(hex: 0xC3C7D2)
+        s == .dark ? Color(hex: 0x141311) : Color(hex: 0xC9C4BB)
     }
 
     public static func ink(_ s: ColorScheme) -> Color {
-        s == .dark ? Color(hex: 0xE4E6EC) : Color(hex: 0x3A3D46)
+        s == .dark ? Color(hex: 0xE7E3DA) : Color(hex: 0x3A3833)
     }
     public static func inkSoft(_ s: ColorScheme) -> Color { ink(s).opacity(0.58) }
 }
