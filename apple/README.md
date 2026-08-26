@@ -18,7 +18,7 @@ apple/
   design-system/   Soft Stone — the shared visual + motion language
   architecture/    Keystone — the shared CloudKit sync spine
   sill/            Todo app — concept, and the code
-  aubade/          Alarm app concept
+  aubade/          Alarm app — concept, and the code
 ```
 
 ---
