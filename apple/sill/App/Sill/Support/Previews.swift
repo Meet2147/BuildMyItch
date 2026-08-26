@@ -45,11 +45,18 @@ enum PreviewData {
     TodayView().modelContainer(PreviewData.container()).preferredColorScheme(.dark)
 }
 
-#Preview("Today · AX3 + high contrast") {
+#Preview("Today · AX3 type") {
     TodayView()
         .modelContainer(PreviewData.container())
         .environment(\.dynamicTypeSize, .accessibility3)
-        .environment(\.colorSchemeContrast, .increased)
+}
+
+/// The acceptance test for the whole design language: with every shadow gone,
+/// nothing about this screen should become ambiguous.
+#Preview("Today · relief off") {
+    TodayView()
+        .modelContainer(PreviewData.container())
+        .softStoneFlattened()
 }
 
 #Preview("The pile") {

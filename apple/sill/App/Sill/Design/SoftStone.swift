@@ -79,6 +79,39 @@ public enum Elevation: Int, CaseIterable, Sendable {
     var isCarved: Bool { self == .carved }
 }
 
+// MARK: - Relief override
+//
+// The spec claims the app stays fully usable with every shadow at zero, and
+// that there's a flag that proves it. This is that flag. Previews and the
+// screenshot suite switch it on; if a state disappears when they do, it was
+// encoded in relief, and that's a bug.
+//
+// It also stands in for Increase Contrast, which is read-only in the
+// environment and so can't be forced in a preview.
+
+public enum ReliefMode: String, Sendable {
+    case normal
+    case flattened
+}
+
+public struct SoftStoneReliefKey: EnvironmentKey {
+    public static let defaultValue: ReliefMode = .normal
+}
+
+public extension EnvironmentValues {
+    var softStoneRelief: ReliefMode {
+        get { self[SoftStoneReliefKey.self] }
+        set { self[SoftStoneReliefKey.self] = newValue }
+    }
+}
+
+public extension View {
+    /// Strip every shadow in this subtree. The app must remain fully legible.
+    func softStoneFlattened(_ flattened: Bool = true) -> some View {
+        environment(\.softStoneRelief, flattened ? .flattened : .normal)
+    }
+}
+
 // MARK: - Surface
 
 public struct SoftSurface: ViewModifier {
@@ -87,6 +120,7 @@ public struct SoftSurface: ViewModifier {
 
     @Environment(\.colorScheme) private var scheme
     @Environment(\.colorSchemeContrast) private var contrast
+    @Environment(\.softStoneRelief) private var relief
 
     /// Relief is dialled down on the Mac: shadows that read as soft on a 6"
     /// OLED read as muddy on a 27" display at arm's length.
@@ -100,7 +134,8 @@ public struct SoftSurface: ViewModifier {
 
     /// Increase Contrast strips the relief and substitutes a hairline. The app
     /// has to stay fully legible with every shadow at zero, so we test in it.
-    private var reliefOpacity: Double { contrast == .increased ? 0.28 : 1.0 }
+    private var isFlattened: Bool { contrast == .increased || relief == .flattened }
+    private var reliefOpacity: Double { isFlattened ? 0.28 : 1.0 }
 
     public func body(content: Content) -> some View {
         let shape = RoundedRectangle(cornerRadius: radius, style: .continuous)
@@ -138,7 +173,7 @@ public struct SoftSurface: ViewModifier {
                 }
             }
             .overlay {
-                if contrast == .increased {
+                if isFlattened {
                     shape.stroke(Stone.hairline(scheme), lineWidth: 1)
                 }
             }
