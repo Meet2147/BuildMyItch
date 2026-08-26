@@ -1,0 +1,50 @@
+# XcodeGen spec for Aubade. Generated, never checked in.
+#
+#   brew install xcodegen && xcodegen generate && open Aubade.xcodeproj
+#
+# iPhone only, on purpose — macOS has no AlarmKit, and an alarm clock that
+# works four nights out of five is worse than no alarm clock. See CONCEPT.md §6.
+
+name: Aubade
+options:
+  bundleIdPrefix: com.softstone
+  deploymentTarget:
+    iOS: "18.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+packages:
+  AubadeCore:
+    path: .
+
+settings:
+  base:
+    SWIFT_VERSION: "5"
+    SWIFT_STRICT_CONCURRENCY: targeted
+    DEVELOPMENT_TEAM: ""          # set yours, or sign locally in Xcode
+    MARKETING_VERSION: "0.1"
+    CURRENT_PROJECT_VERSION: "1"
+
+targets:
+  Aubade:
+    type: application
+    supportedDestinations: [iOS]
+    sources:
+      - path: App/Aubade
+    dependencies:
+      - package: AubadeCore
+        product: AubadeCore
+    info:
+      path: App/Aubade.plist
+      properties:
+        CFBundleDisplayName: Aubade
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        # The night face is the point of leaving it on the nightstand.
+        UIRequiresFullScreen: false
+        ITSAppUsesNonExemptEncryption: false
+    settings:
+      base:
+        INFOPLIST_KEY_CFBundleDisplayName: Aubade
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon

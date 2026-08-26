@@ -1,0 +1,5 @@
+Aubade.xcodeproj/
+*.xcworkspace/
+.build/
+.swiftpm/
+DerivedData/
