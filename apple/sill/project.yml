@@ -65,3 +65,4 @@ targets:
       base:
         INFOPLIST_KEY_CFBundleDisplayName: Sill
         CODE_SIGN_ENTITLEMENTS: App/Sill.entitlements
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
