@@ -5,6 +5,7 @@
 //  you what it made of your sentence *before* you commit it.
 
 import SwiftUI
+import Combine
 import SillCore
 
 public struct CaptureField: View {
@@ -73,6 +74,10 @@ public struct CaptureField: View {
             try? await Task.sleep(for: .milliseconds(300))
             guard !Task.isCancelled else { return }
             preview = CaptureParser(now: .now).parse(text)
+        }
+        // ⌘N from the menu bar lands here.
+        .onReceive(NotificationCenter.default.publisher(for: .sillFocusCapture)) { _ in
+            focused = true
         }
         #if os(macOS)
         .onExitCommand { text = ""; focused = false }

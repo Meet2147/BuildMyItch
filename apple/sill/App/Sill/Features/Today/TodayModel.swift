@@ -39,14 +39,24 @@ public final class TodayModel {
         )
     }
 
-    /// Everything that belongs to today: planned for today, overdue, or
-    /// unplanned-but-due. Deliberately does *not* include the whole Pile.
+    /// Everything the planner is allowed to consider for today: anything
+    /// planned for today or earlier, anything due, and — the important one —
+    /// anything with no date at all.
+    ///
+    /// That last case is the app's whole thesis. You dump things in without
+    /// structure and Sill decides what today looks like; if undated work sat
+    /// in the Pile until you scheduled it by hand, this would just be a list
+    /// with extra steps. The planner is what stops that flooding the screen:
+    /// it fills to capacity and the rest quietly overflows.
+    ///
+    /// A task planned for a *future* day is excluded — that's the one way to
+    /// tell Sill "not yet".
     public func candidates(from all: [Todo]) -> [Todo] {
         all.filter { todo in
             guard todo.isOpen else { return false }
-            if let planned = todo.plannedDay, planned <= day { return true }
-            if let due = todo.due, due < calendar.date(byAdding: .day, value: 1, to: day) ?? day { return true }
-            return false
+            if let planned = todo.plannedDay { return planned <= day }
+            if let due = todo.due { return due < calendar.date(byAdding: .day, value: 1, to: day) ?? day }
+            return true
         }
     }
 

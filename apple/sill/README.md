@@ -118,13 +118,17 @@ Honest list, roughly in the order it should happen:
 3. **Calibration wiring.** `EstimateCalibrator` is written and tested but
    nothing feeds it `DayOutcome`s yet — `TodayModel.calibration` is still
    `.unknown`.
-4. **Swipe to complete.** Rows complete on tap and via the context menu. The
+4. **Someday.** Every undated task is currently a candidate for today. That's
+   correct for a working list, but there's no way yet to say "one day, not
+   now" other than dating it far out.
+5. **Swipe to complete.** Rows complete on tap and via the context menu. The
    swipe in the concept doc needs a custom gesture, since a `List` background
    fights Soft Stone.
-5. **Drag between bands.** `TodoStore.move(_:to:on:)` exists; nothing calls it.
-6. **CloudKit.** Entitlements and container.
-7. **Someday, Review, widgets, App Intents, Mac menu-bar capture.** All
-   deliberately after the core is good — see `CONCEPT.md` §7.
+6. **Drag between bands.** `TodoStore.move(_:to:on:)` exists; nothing calls it.
+7. **CloudKit.** Entitlements and container.
+8. **Review, widgets, App Intents, the Mac menu-bar panel.** ⌘N focuses the
+   capture field today; the global-hotkey menu-bar extra is still to come.
+   All deliberately after the core is good — see `CONCEPT.md` §7.
 
 ## Notes for whoever picks this up
 
