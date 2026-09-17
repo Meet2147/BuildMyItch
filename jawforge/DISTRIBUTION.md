@@ -143,24 +143,59 @@ Tax, and Banking first.
 
 - Contact: your name, phone, email (⚠️ fill in).
 - Sign-in required: **No** (no accounts).
-- Notes for review:
+- ⚠️ Screen recording: App Review may request one — record on a physical
+  iPhone (launch → onboarding → paywall dismiss → camera scan → results →
+  save → exercise timer → habit → progress → sandbox purchase unlocking
+  Pro) and attach it in the Resolution Center reply.
+- Notes for review (also the reply template for information requests):
 
 ```
-JawForge analyzes a selfie entirely on-device with Apple's Vision framework
-(VNDetectFaceLandmarksRequest). No photo is uploaded or stored — only
-numeric measurements are saved locally. No account or server exists.
+1. The app has NO account system — no registration, login, or account
+deletion — and NO user-generated content or social features, so no
+reporting/blocking mechanisms apply.
 
-To test: complete the 5-screen onboarding, then on the Scan tab either use
-the front camera or tap the photo-library button and pick any clear frontal
-face photo. Results show the metric breakdown; "Save scan" adds it to
-Progress. The paywall (crown icon or after onboarding) sells the Pro
-subscription via StoreKit 2; the free tier is fully functional at 1 scan
-per week.
+2. PURPOSE AND TARGET AUDIENCE — JawForge is a self-improvement fitness
+utility for adults (primarily men 18–40) interested in facial fitness.
+Problem: people follow generic jaw-exercise advice with no way to measure
+whether anything changes. Value: JawForge measures the jawline objectively
+from a selfie — jaw angle, jaw-to-face width ratio, lower-face proportion,
+and left/right symmetry, combined into a 0–100 score — then builds a
+personalized daily routine of recognized facial/posture exercises (tongue
+posture, chin tucks, resistance presses, chewing training, neck curls)
+with timers, habit tracking, streaks, and progress charts. It is
+explicitly a fitness aid, not a medical device: it states that bone
+structure is genetic, that measurements are photo-based estimates, and
+shows TMJ-safety cautions. It does not rate attractiveness.
 
-The app provides fitness/cosmetic guidance only, states prominently that
-bone structure is genetic and that measurements are estimates, and includes
-TMJ-safety cautions on jaw exercises. It does not rate attractiveness and
-is not a medical app.
+3. SETUP — No login credentials, accounts, or sample files required.
+(1) Complete the 5-screen onboarding (any answers). (2) The paywall that
+appears can be dismissed with the X — the free tier is fully functional.
+(3) Scan tab: tap the shutter for a front-camera scan, or the
+photo-library button with any clear front-facing face photo. (4) Results
+show the score, metrics, face shape, recommendations; tap "Save scan to
+progress". (5) Train tab: personalized routine, per-exercise steps and
+timers. (6) Progress tab: score chart. (7) Paid features (unlimited scans
+— free is 1 saved scan per rolling week — and history beyond the latest 3
+scans) are purchased on the paywall (crown button, Scan tab) via StoreKit.
+
+4. EXTERNAL SERVICES — None. Apple frameworks only: Vision (on-device
+face-landmark detection), AVFoundation, PhotosUI, StoreKit 2,
+UserNotifications, SwiftUI/Swift Charts. No third-party SDKs, no data
+providers, no authentication services, no external AI or cloud services,
+no developer servers. The app makes no network calls of its own; the only
+network traffic is StoreKit's communication with the App Store. Payments
+are exclusively Apple In-App Purchase.
+
+5. REGIONAL DIFFERENCES — None. The app functions identically across all
+regions and storefronts. UI localized into English, Hindi, Marathi,
+French, Spanish, and Italian by device language; features and content are
+the same everywhere.
+
+6. REGULATED INDUSTRY / PROTECTED MATERIAL — Not applicable. General
+wellness/fitness app: no diagnosis, treatment, or health claims, with
+disclaimers shown in-app. All content (exercise instructions, guidance
+text, icon, UI) is original work by the developer; no protected
+third-party material is used.
 ```
 
 ## 11 · Export compliance
