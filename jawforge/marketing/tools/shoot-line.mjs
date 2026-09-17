@@ -1,0 +1,10 @@
+import { chromium } from 'playwright-core';
+import path from 'path';
+const dir = path.dirname(new URL(import.meta.url).pathname);
+const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
+const page = await browser.newPage({ viewport: { width: 1100, height: 1100 }, deviceScaleFactor: 1 });
+await page.goto('file://' + path.join(dir, 'icon-line.html'));
+await page.waitForTimeout(300);
+await page.locator('#e').screenshot({ path: path.join(dir, 'icons', 'e.png') });
+console.log('captured e');
+await browser.close();

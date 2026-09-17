@@ -1,0 +1,64 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+  *{margin:0;box-sizing:border-box}
+  body{display:flex;background:#333}
+  .icon{width:1024px;height:1024px;position:relative;overflow:hidden;flex:none;
+    background:
+      radial-gradient(720px 720px at 42% 32%, #232a3d 0%, transparent 70%),
+      radial-gradient(900px 700px at 60% 115%, #1b2450 0%, transparent 65%),
+      linear-gradient(160deg, #161b28 0%, #0d1019 100%);}
+</style></head><body>
+
+<div class="icon" id="e">
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none">
+  <defs>
+    <linearGradient id="gj" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2fd4f0"/><stop offset="1" stop-color="#7a6bff"/>
+    </linearGradient>
+    <linearGradient id="gn" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5f9df8"/><stop offset="1" stop-color="#8f6bff"/>
+    </linearGradient>
+    <filter id="b1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="22"/></filter>
+    <filter id="b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="14"/></filter>
+  </defs>
+
+  <!-- faint corner brackets -->
+  <g stroke="#525c74" stroke-width="12" stroke-linecap="round" opacity=".38">
+    <path d="M128 238 V128 H238"/><path d="M786 128 H896 V238"/>
+    <path d="M896 786 V896 H786"/><path d="M238 896 H128 V786"/>
+  </g>
+
+  <!-- face front line: forehead -> sharp nose -> lips -> chin (soft white ink) -->
+  <path d="M 436 136
+           C 394 196, 370 254, 370 306
+           C 370 336, 360 362, 342 390
+           C 328 412, 310 436, 304 452
+           C 300 462, 310 468, 326 468
+           C 342 470, 348 480, 342 492
+           C 337 500, 338 506, 344 512
+           C 356 520, 360 536, 352 552
+           C 346 562, 348 580, 366 596
+           C 386 612, 416 618, 448 613"
+        stroke="#e8ecf5" stroke-width="24" stroke-linecap="round"/>
+
+  <!-- hero stroke: temple -> jawline -> tucks under the chin (gradient, glow) -->
+  <path d="M 688 268
+           C 676 398, 648 508, 568 572
+           C 526 604, 484 616, 446 612"
+        stroke="url(#gj)" stroke-width="50" stroke-linecap="round" filter="url(#b1)" opacity=".8"/>
+  <path d="M 688 268
+           C 676 398, 648 508, 568 572
+           C 526 604, 484 616, 446 612"
+        stroke="url(#gj)" stroke-width="30" stroke-linecap="round"/>
+
+  <!-- neck line peeling off the jaw's underside, thinner -->
+  <path d="M 512 602
+           C 560 660, 618 718, 650 788
+           C 670 832, 678 878, 676 924"
+        stroke="url(#gn)" stroke-width="36" stroke-linecap="round" filter="url(#b2)" opacity=".55"/>
+  <path d="M 512 602
+           C 560 660, 618 718, 650 788
+           C 670 832, 678 878, 676 924"
+        stroke="url(#gn)" stroke-width="22" stroke-linecap="round"/>
+</svg>
+</div>
+</body></html>

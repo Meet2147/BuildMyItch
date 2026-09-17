@@ -1,0 +1,83 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+  *{margin:0;box-sizing:border-box}
+  body{display:flex;flex-direction:column;background:#333}
+  .icon{width:1024px;height:1024px;position:relative;overflow:hidden;flex:none;
+    background:
+      radial-gradient(720px 720px at 50% 30%, #232a3d 0%, transparent 70%),
+      radial-gradient(900px 700px at 50% 115%, #1b2450 0%, transparent 65%),
+      linear-gradient(160deg, #161b28 0%, #0d1019 100%);}
+</style></head><body>
+
+<div class="icon" id="d">
+<svg width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="gj" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#2fd4f0"/><stop offset="1" stop-color="#8f6bff"/>
+    </linearGradient>
+    <linearGradient id="gs" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b455f"/><stop offset="1" stop-color="#232b40"/>
+    </linearGradient>
+    <linearGradient id="scan" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#2fd4f0" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#2fd4f0" stop-opacity=".8"/>
+      <stop offset="1" stop-color="#2fd4f0" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="b1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="24"/></filter>
+    <filter id="b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8"/></filter>
+  </defs>
+
+  <!-- corner brackets -->
+  <g stroke="#525c74" stroke-width="14" stroke-linecap="round" fill="none" opacity=".5">
+    <path d="M128 238 V128 H238"/><path d="M786 128 H896 V238"/>
+    <path d="M896 786 V896 H786"/><path d="M238 896 H128 V786"/>
+  </g>
+
+  <!-- neck column, set back so the jaw edge reads against the background -->
+  <path fill="url(#gs)" d="
+    M 372 545
+    C 358 700, 350 860, 326 1024
+    L 560 1024
+    C 532 920, 520 830, 528 748
+    C 500 744, 470 734, 452 720
+    C 432 724, 421 714, 417 696
+    C 406 646, 396 596, 372 545 Z"/>
+
+  <!-- male profile silhouette, facing right -->
+  <path fill="url(#gs)" d="
+    M 466 100
+    C 578 84, 672 138, 700 222
+    C 712 262, 706 300, 712 332
+    C 722 342, 724 352, 718 362
+    C 734 392, 782 428, 788 452
+    C 790 468, 760 474, 744 476
+    C 738 494, 754 506, 752 524
+    C 750 538, 736 542, 738 554
+    C 756 566, 762 588, 752 608
+    C 748 628, 744 644, 724 660
+    C 712 670, 700 674, 686 676
+    L 456 720
+    C 438 724, 424 716, 420 698
+    C 414 664, 410 626, 404 590
+    C 384 576, 372 560, 366 540
+    C 330 484, 316 400, 324 318
+    C 334 192, 376 110, 466 100 Z"/>
+
+  <!-- ear hint -->
+  <path fill="#1d2436" opacity=".85" d="
+    M 424 474
+    C 452 454, 468 474, 461 504
+    C 456 532, 436 546, 421 536
+    C 412 518, 414 494, 424 474 Z"/>
+
+  <!-- scan line at brow level -->
+  <rect x="122" y="352" width="780" height="10" fill="url(#scan)" filter="url(#b2)"/>
+  <rect x="162" y="355" width="700" height="4" fill="url(#scan)"/>
+
+  <!-- glowing jawline hugging the mandible edge -->
+  <path d="M 406 592 C 411 634, 415 676, 421 696 C 426 714, 440 722, 458 718 L 686 674 C 710 668, 726 656, 736 638"
+        fill="none" stroke="url(#gj)" stroke-width="54" stroke-linecap="round" filter="url(#b1)" opacity=".85"/>
+  <path d="M 406 592 C 411 634, 415 676, 421 696 C 426 714, 440 722, 458 718 L 686 674 C 710 668, 726 656, 736 638"
+        fill="none" stroke="url(#gj)" stroke-width="32" stroke-linecap="round"/>
+</svg>
+</div>
+</body></html>
